@@ -13,24 +13,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-[tool.poetry]
-name = "wendy"
-version = "0.1.0"
-description = "The reference CLI and Bob's best friend"
-authors = [
-    "Rahul De <rahul080327@gmail.com>",
-    "Prachi Srivastava <prachi.chs.2009@gmail.com>"
-]
-license = "GPL-3.0"
+import json
+from argparse import Namespace
 
-[tool.poetry.dependencies]
-python = "^3.6"
-toml = "^0.10.0"
-requests = "^2.21"
+import requests
 
-[tool.poetry.dev-dependencies]
-pytest = "^4.3"
 
-[build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+def command_can_we_build_it(args: Namespace) -> dict:
+    return requests.get(args.url).json()
+
+
+def dispatch(command: str, args: Namespace):
+    func = globals()[f"command_{command.replace('-', '_')}"]
+    response = func(args)["message"]
+
+    print(json.dumps(response, indent=2, ensure_ascii=False))

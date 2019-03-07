@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-#
+
 # This file is part of Wendy.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from wendy.args import make_arg_parser
 
-if __name__ == '__main__':
-    print("Hello, I'm Wendy!")
+if __name__ == "__main__":
+    parser = make_arg_parser()
+    args = parser.parse_args()
+    args.func(args)
