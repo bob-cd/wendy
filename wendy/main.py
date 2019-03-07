@@ -20,4 +20,8 @@ from wendy.args import make_arg_parser
 if __name__ == "__main__":
     parser = make_arg_parser()
     args = parser.parse_args()
+
+    if not hasattr(args, "func"):
+        parser.error("Invalid options.")
+
     args.func(args)

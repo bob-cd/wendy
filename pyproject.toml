@@ -21,7 +21,7 @@ authors = [
     "Rahul De <rahul080327@gmail.com>",
     "Prachi Srivastava <prachi.chs.2009@gmail.com>"
 ]
-license = "GPL-3.0"
+license = "GPL-3.0+"
 
 [tool.poetry.dependencies]
 python = "^3.6"
