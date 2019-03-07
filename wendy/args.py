@@ -13,11 +13,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from argparse import ArgumentParser
+from argparse import ArgumentParser, _SubParsersAction
 from functools import partial
 
 from wendy.commands import dispatch
 from wendy.config import read_config
+
+
+def _add_ping_parser(subparsers: _SubParsersAction, config: dict):
+    parser = subparsers.add_parser("can-we-build-it")
+    host = config["connection"]["host"]
+    port = config["connection"]["port"]
+    parser.add_argument(
+        "url",
+        type=str,
+        nargs="?",
+        default=f"http://{host}:{port}/api/can-we-build-it",
+    )
+    dispatcher = partial(dispatch, "can-we-build-it")
+    parser.set_defaults(func=dispatcher)
 
 
 def make_arg_parser() -> ArgumentParser:
@@ -26,16 +40,6 @@ def make_arg_parser() -> ArgumentParser:
     parser = ArgumentParser(description="Wendy: Bob's CLI and best friend")
     subparsers = parser.add_subparsers()
 
-    ping_parser = subparsers.add_parser("can-we-build-it")
-    host = config["connection"]["host"]
-    port = config["connection"]["port"]
-    ping_parser.add_argument(
-        "url",
-        type=str,
-        nargs="?",
-        default=f"http://{host}:{port}/api/can-we-build-it",
-    )
-    dispatcher = partial(dispatch, "can-we-build-it")
-    ping_parser.set_defaults(func=dispatcher)
+    _add_ping_parser(subparsers, config)
 
     return parser
