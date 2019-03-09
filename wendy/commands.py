@@ -13,18 +13,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
-from argparse import Namespace
-
 import requests
 
 
-def command_can_we_build_it(args: Namespace) -> dict:
-    return requests.get(args.url).json()
+def _base_url_from(config: dict):
+    host = config["connection"]["host"]
+    port = config["connection"]["port"]
+
+    return f"http://{host}:{port}/api"
 
 
-def dispatch(command: str, args: Namespace):
-    func = globals()[f"command_{command.replace('-', '_')}"]
-    response = func(args)["message"]
+def can_we_build_it(config: dict):
+    url = f"{_base_url_from(config)}/can-we-build-it"
 
-    print(json.dumps(response, indent=2, ensure_ascii=False))
+    return requests.get(url).json()["message"]
+
+
+def pipeline_status(config: dict, group: str, name: str, number: int):
+    url = f"{_base_url_from(config)}/pipeline/status/{group}/{name}/{number}"
+
+    return requests.get(url).json()["message"]

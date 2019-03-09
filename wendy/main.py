@@ -15,13 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from wendy.args import make_arg_parser
+from wendy.cli import cli
 
 if __name__ == "__main__":
-    parser = make_arg_parser()
-    args = parser.parse_args()
-
-    if not hasattr(args, "func"):
-        parser.error("Invalid options.")
-
-    args.func(args)
+    cli()
