@@ -14,6 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+from pathlib import Path
 
 import toml
 
@@ -22,6 +23,6 @@ def read_config() -> dict:
     try:
         path = os.environ["WENDY_CONF"]
     except KeyError:
-        path = "defaults.toml"
+        path = Path.home().joinpath(".wendy.toml")
 
     return toml.load(path, _dict=dict)

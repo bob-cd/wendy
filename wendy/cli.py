@@ -42,6 +42,17 @@ def pipeline():
     pass
 
 
+@click.command(help="Creates a pipeline.")
+@click.option(
+    "--file",
+    "-f",
+    default="build.toml",
+    help="Create a pipeline from the provided toml file.",
+)
+def create(file: str):
+    _respond(commands.pipeline_create(CONFIG, file))
+
+
 @click.command(help="Returns the status of a pipeline.")
 @click.option(
     "--group", "-g", required=True, help="Group of the pipeline.", type=str
@@ -60,6 +71,7 @@ def status(group: str, name: str, number: int):
     _respond(commands.pipeline_status(CONFIG, group, name, number))
 
 
+pipeline.add_command(create)
 pipeline.add_command(status)
 
 cli.add_command(can_we_build_it)
