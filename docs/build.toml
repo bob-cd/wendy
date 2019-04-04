@@ -21,7 +21,7 @@ image = "clojure:latest"
   type = "external"
   provider = "git"
 
-    [[dev.test.resources.params]]
+    [dev.test.resources.params]
     branch = "master"
     url = "https://github.com/bob-cd/bob.git"
 
@@ -47,7 +47,7 @@ image = "clojure:latest"
   type = "external"
   provider = "git"
 
-    [[dev.build-and-push.resources.params]]
+    [dev.build-and-push.resources.params]
     branch = "master"
     url = "https://github.com/bob-cd/bob.git"
 
