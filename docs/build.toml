@@ -54,6 +54,7 @@ image = "clojure:latest"
   [[dev.build-and-push.artifacts]]
   name = "jar"
   path = "target/bob-standalone.jar"
+  provider = "s3"
 
   [[dev.build-and-push.steps]]
 
@@ -76,6 +77,7 @@ image = "debian:latest"
   [[dev.package.artifacts]]
   name = "dev_installer"
   path = "bob.deb"
+  provider = "s3"
 
   [[dev.package.steps]]
   needs-resource = "my-jar"
@@ -87,6 +89,7 @@ image = "debian:latest"
   [[stable.sign.artifacts]]
   name = "my-signature"
   path = "bob.sig"
+  provider = "s3"
 
   [[stable.sign.resources]]
   name = "my-jar"
