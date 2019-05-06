@@ -51,15 +51,11 @@ image = "clojure:latest"
     branch = "master"
     url = "https://github.com/bob-cd/bob.git"
 
-  [[dev.build-and-push.artifacts]]
-  name = "jar"
-  path = "target/bob-standalone.jar"
-  provider = "s3"
-
   [[dev.build-and-push.steps]]
 
   [[dev.build-and-push.steps.in-parallel]]
   needs-resource = "my-source-code"
+  produces-artifact = { name = "jar", path = "target/bob-standalone.jar" }
   cmd = "lein uberjar"
 
   [[dev.build-and-push.steps.in-parallel]]
@@ -72,24 +68,15 @@ image = "debian:latest"
   [[dev.package.resources]]
   name = "my-jar"
   type = "artifact"
-  provider = "dev.build_and_push"
-
-  [[dev.package.artifacts]]
-  name = "dev_installer"
-  path = "bob.deb"
-  provider = "s3"
+  provider = "dev.build-and-push"
 
   [[dev.package.steps]]
   needs-resource = "my-jar"
+  produces-artifact = { name = "dev-installer", path = "bob.deb" }
   cmd = "make deb-package"
 
 [stable.sign]
 image = "debian:latest"
-
-  [[stable.sign.artifacts]]
-  name = "my-signature"
-  path = "bob.sig"
-  provider = "s3"
 
   [[stable.sign.resources]]
   name = "my-jar"
@@ -98,6 +85,7 @@ image = "debian:latest"
 
   [[stable.sign.steps]]
   needs-resource = "my-jar"
+  produces-artifact = { name = "my-sign", path = "bob.sig" }
   cmd = "gpg --output bob.sig --sign bob-standalone.jar"
 
 [stable.deploy]
@@ -106,17 +94,17 @@ image = "ansible:latest"
   [[stable.deploy.resources]]
   name = "my-jar"
   type = "artifact"
-  provider = "dev.build_and_push"
+  provider = "dev.build-and-push"
 
   [[stable.deploy.resources]]
-  name = "my-signature"
+  name = "my-sign"
   type = "artifact"
   provider = "stable.sign"
 
   [[stable.deploy.steps]]
 
   [[stable.deploy.steps.in-parallel]]
-  needs-resource = "my-signature"
+  needs-resource = "my-sign"
   cmd = "scp user@cdn.com *.sig"
 
   [[stable.deploy.steps.in-parallel]]
