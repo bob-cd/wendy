@@ -13,21 +13,10 @@
 ;   You should have received a copy of the GNU General Public License
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
-(ns wendy.conf
-  (:require [clojure.edn :as edn]
-            [clojure.java.io :as io])
-  (:import (java.io File
-                    PushbackReader)))
+(ns wendy.commands-test
+  (:require [clojure.test :refer :all]
+            [wendy.commands :refer :all]))
 
-(def ^:private defaults {:connection {:host "127.0.0.1"
-                                      :port 7777}})
-
-(defn read-conf
-  []
-  (let [path          (str (System/getProperty "user.home")
-                           (File/separator)
-                           ".wendy.edn")
-        external-conf (when (.exists (io/file path))
-                        (with-open [rdr (io/reader path)]
-                          (edn/read (PushbackReader. rdr))))]
-    (merge defaults external-conf)))
+(deftest test-respond
+  (testing "Bob's response message should be formatted"
+    (is (= "\"Hello\"" (respond {:message "Hello"})))))

@@ -32,8 +32,9 @@ encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 ### Running
 
 Clone the repo and in the repo and:
-- Set the `GRAALVM_HOME` env var to the path: `<download_path>/Home`.
-- Run `<donwload_path>/Home/bin/gu install native-image` to get the Graal native compiler.
+- Run `clojure -A:test -m kaocha.runner` to run unit tests.
+- Set the `GRAALVM_HOME` env var to the path: `<graal_download_path>/Home`.
+- Run `<graal_donwload_path>/Home/bin/gu install native-image` to get the Graal native compiler.
 - Run `clojure -A:native-image` to compile it to a native executable. (Warning: Quite resource heavy step)  
 - `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
 
