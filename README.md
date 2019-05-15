@@ -1,6 +1,6 @@
 # Wendy
 
-## Bob's reference CLI and his best friend.
+## Bob's SO and the reference CLI.
 
 [![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
@@ -25,15 +25,16 @@ encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 ## Building and running from source
 
 ### Requirements:
-- [Python](https://www.python.org/downloads/) 3.6+
-- [Poetry](https://poetry.eustace.io/)
+- [Graal VM](https://www.graalvm.org/downloads/)
+- [Clojure CLI](https://clojure.org/guides/getting_started)
 - A running instance of [Bob](https://github.com/bob-cd/bob)
 
 ### Running
 
-Clone the repo and in the repo and in preferably a [virtualenv](https://www.pythonforbeginners.com/basics/how-to-use-python-virtualenv/):
-- `poetry install`
-- It reads its config from `defaults.toml` and can be overridden by CLI options  
-- `python3 wendy/main.py can-we-build-it` should output `"Yes we can! 🔨 🔨"`
+Clone the repo and in the repo and:
+- Set the `GRAALVM_HOME` env var to the path: `<download_path>/Home`.
+- Run `<donwload_path>/Home/bin/gu install native-image` to get the Graal native compiler.
+- Run `clojure -A:native-image` to compile it to a native executable. (Warning: Quite resource heavy step)  
+- `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
 
 #### The full command reference can be found [here](https://github.com/bob-cd/wendy/blob/master/docs/commands.md)
