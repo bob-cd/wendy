@@ -13,8 +13,8 @@
 ;   You should have received a copy of the GNU General Public License
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
-{:deps    {org.clojure/clojure             {:mvn/version "1.9.0"} ; See https://github.com/l3nz/cli-matic/issues/64
-           cli-matic                       {:mvn/version "0.3.7"}
+{:deps    {org.clojure/clojure             {:mvn/version "1.10.0"}
+           org.clojure/tools.cli           {:mvn/version "0.4.2"}
            org.martinklepsch/clj-http-lite {:mvn/version "0.4.1"}
            cheshire                        {:mvn/version "5.8.1"}}
  :paths   ["src" "resources"]

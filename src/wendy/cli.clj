@@ -14,18 +14,56 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.cli
-  (:require [cli-matic.core :as cli]
+  (:require [clojure.tools.cli :as cli]
+            [clojure.string :as string]
             [wendy.commands :as commands]))
 
-(def config
-  {:app      {:command     "wendy"
-              :description "Bob's SO and the reference CLI."
-              :version     "0.1.0"}
+(defn- usage
+  [options-summary]
+  (->> ["wendy 0.1.0 - Bob's SO and the reference CLI."
+        ""
+        "Usage: wendy [options] action [action-options]"
+        ""
+        "Options:"
+        options-summary
+        ""
+        "Actions:"
+        "  can-we-build-it    Perform a health check on Bob."]
+       (string/join \newline)))
 
-   :commands [{:command     "can-we-build-it"
-               :description "Performs a health check on Bob."
-               :runs        commands/can-we-build-it!}]})
+(defn- error-msg
+  [errors]
+  (str "The following errors occurred while parsing your command:\n\n"
+       (string/join \newline errors)))
+
+(def ^:private options
+  [["-h" "--help"]])
+
+(def ^:private commands #{"can-we-build-it"})
+
+(defn- validate-args
+  [args]
+  (let [{:keys [options arguments errors summary]} (cli/parse-opts args options)]
+    (cond
+      (:help options)
+      {:exit-message (usage summary) :ok? true}
+      errors
+      {:exit-message (error-msg errors)}
+      (and (= 1 (count arguments))
+           (commands (first arguments)))
+      {:action (first arguments) :options options}
+      :else
+      {:exit-message (usage summary)})))
+
+(defn exit
+  [status msg]
+  (println msg)
+  (System/exit status))
 
 (defn build-it!
   [args]
-  (cli/run-cmd args config))
+  (let [{:keys [action options exit-message ok?]} (validate-args args)]
+    (if exit-message
+      (exit (if ok? 0 1) exit-message)
+      (case action
+        "can-we-build-it" (commands/can-we-build-it!)))))

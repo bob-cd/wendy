@@ -24,7 +24,7 @@
                         {:pretty true}))
 
 (defn can-we-build-it!
-  [& _]
+  []
   (let [{:keys [host port]} (:connection (conf/read-conf))
         url (format "http://%s:%d/api/can-we-build-it" host port)]
     (println (respond (-> (http/get url)
