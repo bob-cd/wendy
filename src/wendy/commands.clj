@@ -27,6 +27,6 @@
   []
   (let [{:keys [host port]} (:connection (conf/read-conf))
         url (format "http://%s:%d/api/can-we-build-it" host port)]
-    (println (respond (-> (http/get url)
-                          (:body)
-                          (json/parse-string true))))))
+    (respond (-> (http/get url)
+                 (:body)
+                 (json/parse-string true)))))

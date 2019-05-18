@@ -14,56 +14,33 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.cli
-  (:require [clojure.tools.cli :as cli]
-            [clojure.string :as string]
-            [wendy.commands :as commands]))
+  (:require [wendy.commands :as commands])
+  (:import (net.sourceforge.argparse4j ArgumentParsers)
+           (net.sourceforge.argparse4j.inf ArgumentParser Namespace)))
 
-(defn- usage
-  [options-summary]
-  (->> ["wendy 0.1.0 - Bob's SO and the reference CLI."
-        ""
-        "Usage: wendy [options] action [action-options]"
-        ""
-        "Options:"
-        options-summary
-        ""
-        "Actions:"
-        "  can-we-build-it    Perform a health check on Bob."]
-       (string/join \newline)))
+(defn- configured-parser
+  []
+  (let [parser     (-> (ArgumentParsers/newFor "wendy")
+                       (.build)
+                       (.defaultHelp true)
+                       (.description "Bob's reference CLI and his SO."))
+        subparsers (-> parser
+                       (.addSubparsers)
+                       (.description "Things I can make Bob do.")
+                       (.metavar "COMMANDS")
+                       (.dest "command"))
+        _          (-> subparsers
+                       (.addParser "can-we-build-it")
+                       (.help "Perform a health check on Bob."))]
+    parser))
 
-(defn- error-msg
-  [errors]
-  (str "The following errors occurred while parsing your command:\n\n"
-       (string/join \newline errors)))
-
-(def ^:private options
-  [["-h" "--help"]])
-
-(def ^:private commands #{"can-we-build-it"})
-
-(defn- validate-args
-  [args]
-  (let [{:keys [options arguments errors summary]} (cli/parse-opts args options)]
-    (cond
-      (:help options)
-      {:exit-message (usage summary) :ok? true}
-      errors
-      {:exit-message (error-msg errors)}
-      (and (= 1 (count arguments))
-           (commands (first arguments)))
-      {:action (first arguments) :options options}
-      :else
-      {:exit-message (usage summary)})))
-
-(defn exit
-  [status msg]
-  (println msg)
-  (System/exit status))
+(defn dispatch
+  [^Namespace options]
+  (case (.get options "command")
+    "can-we-build-it" (commands/can-we-build-it!)))
 
 (defn build-it!
   [args]
-  (let [{:keys [action options exit-message ok?]} (validate-args args)]
-    (if exit-message
-      (exit (if ok? 0 1) exit-message)
-      (case action
-        "can-we-build-it" (commands/can-we-build-it!)))))
+  (let [parser   ^ArgumentParser (configured-parser)
+        response (dispatch (.parseArgsOrFail parser (into-array String args)))]
+    (println response)))
