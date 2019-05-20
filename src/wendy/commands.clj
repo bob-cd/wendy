@@ -34,16 +34,20 @@
 (defn can-we-build-it!
   []
   (let [url (str (bob-url) "/" "can-we-build-it")]
-    (respond (-> (http/get url)
-                 (:body)
-                 (json/parse-string true)))))
+    (-> (http/get url)
+        (:body)
+        (json/parse-string true)
+        (respond))))
 
 (defn pipeline-create!
   [path]
   (let [conf        (build/read-file path)
         requests    (for [group    (build/groups-in conf)
                           pipeline (build/pipelines-of conf group)]
-                      {:url    (format "%s/pipeline/%s/%s" (bob-url) group pipeline)
+                      {:url    (format "%s/pipeline/%s/%s"
+                                       (bob-url)
+                                       group
+                                       pipeline)
                        :params (build/pipeline-config-of conf group pipeline)})
         successful? (->> requests
                          (map #(http/post (:url %)
@@ -54,3 +58,14 @@
                          (map :message)
                          (every? #(= % "Ok")))]
     (respond {:message (if successful? "Ok" "Failed")})))
+
+(defn pipeline-start!
+  [group name]
+  (let [url (format "%s/pipeline/start/%s/%s"
+                    (bob-url)
+                    group
+                    name)]
+    (-> (http/post url)
+        (:body)
+        (json/parse-string true)
+        (respond))))

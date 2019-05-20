@@ -51,7 +51,16 @@
                              (.setDefault (str (System/getProperty "user.dir")
                                                File/separator
                                                "build.toml"))
-                             (.help "path to the build file"))]
+                             (.help "path to the build file"))
+        start-parser     (-> lifecycle-parser
+                             (.addParser "start" true)
+                             (.help "start a pipeline"))
+        _                (-> start-parser
+                             (.addArgument (into-array String ["-g" "--group"]))
+                             (.help "group of the pipeline"))
+        _                (-> start-parser
+                             (.addArgument (into-array String ["-n" "--name"]))
+                             (.help "name of the pipeline"))]
     parser))
 
 (defn dispatch
@@ -62,7 +71,10 @@
     "pipeline"
     (case (.get options "lifecycle-cmd")
       "create"
-      (commands/pipeline-create! (.get options "config")))))
+      (commands/pipeline-create! (.get options "config"))
+      "start"
+      (commands/pipeline-start! (.get options "group")
+                                (.get options "name")))))
 
 (defn build-it!
   [args]
