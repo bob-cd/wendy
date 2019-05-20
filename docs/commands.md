@@ -16,7 +16,7 @@ Create a pipeline.
 Params:
 - f: String = The path to the `build.toml` file. Will use the `build.toml` in the PWD if unspecified.
 
-$ `wendy pipeline create -f /tmp/build.toml`
+$ `wendy pipeline create -c /tmp/build.toml`
 
 $ `wendy pipeline create`
 

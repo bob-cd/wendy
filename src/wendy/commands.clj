@@ -16,7 +16,15 @@
 (ns wendy.commands
   (:require [cheshire.core :as json]
             [clj-http.lite.client :as http]
-            [wendy.conf :as conf]))
+            [wendy.conf :as conf]
+            [wendy.build-conf :as build]))
+
+;; TODO: HANDLE ERRORS!!
+
+(defn bob-url
+  []
+  (let [{:keys [host port]} (:connection (conf/read-conf))]
+    (format "http://%s:%d/api" host port)))
 
 (defn respond
   [response]
@@ -25,8 +33,24 @@
 
 (defn can-we-build-it!
   []
-  (let [{:keys [host port]} (:connection (conf/read-conf))
-        url (format "http://%s:%d/api/can-we-build-it" host port)]
+  (let [url (str (bob-url) "/" "can-we-build-it")]
     (respond (-> (http/get url)
                  (:body)
                  (json/parse-string true)))))
+
+(defn pipeline-create!
+  [path]
+  (let [conf        (build/read-file path)
+        requests    (for [group    (build/groups-in conf)
+                          pipeline (build/pipelines-of conf group)]
+                      {:url    (format "%s/pipeline/%s/%s" (bob-url) group pipeline)
+                       :params (build/pipeline-config-of conf group pipeline)})
+        successful? (->> requests
+                         (map #(http/post (:url %)
+                                          {:content-type :json
+                                           :accept       :json
+                                           :body         (:params %)}))
+                         (map #(json/parse-string (:body %) true))
+                         (map :message)
+                         (every? #(= % "Ok")))]
+    (respond {:message (if successful? "Ok" "Failed")})))

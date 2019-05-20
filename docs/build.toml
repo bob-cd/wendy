@@ -14,7 +14,11 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [dev.test]
-image = "clojure:latest"
+image = "busybox:musl"
+
+  [dev.test.vars]
+  env = "test"
+  url = "test.com"
 
   [[dev.test.resources]]
   name = "my-source"
@@ -25,91 +29,30 @@ image = "clojure:latest"
     branch = "master"
     url = "https://github.com/bob-cd/bob.git"
 
-  [[dev.test.steps]]
-
-  [[dev.test.steps.in-parallel]]
-  needs-resource = "my-source-code"
-  cmd = "lein test :unit"
-
-  [[dev.test.steps.in-parallel]]
-  needs-resource = "my-source-code"
-  cmd = "lein test :integration"
-
-[dev.build-and-push]
-image = "clojure:latest"
-
-  [[dev.build-and-push.env]]
-  password = "test"
-  user = "test"
-
-  [[dev.build-and-push.resources]]
-  name = "my-source"
+  [[dev.test.resources]]
+  name = "another-source"
   type = "external"
   provider = "git"
 
-    [dev.build-and-push.resources.params]
+    [dev.test.resources.params]
     branch = "master"
-    url = "https://github.com/bob-cd/bob.git"
+    url = "https://github.com/lispyclouds/clj-docker-client.git"
 
-  [[dev.build-and-push.steps]]
+  [dev.test.artifacts]
+  output = "/root/my-source"
 
-  [[dev.build-and-push.steps.in-parallel]]
-  needs-resource = "my-source-code"
-  produces-artifact = { name = "jar", path = "target/bob-standalone.jar" }
-  cmd = "lein uberjar"
+  [[dev.test.steps]]
+  cmd = "echo hello"
 
-  [[dev.build-and-push.steps.in-parallel]]
-  needs-resource = "my-source-code"
-  cmd = "lein deploy clojars"
+  [[dev.test.steps]]
+  cmd = "sleep 10"
 
-[dev.package]
-image = "debian:latest"
+  [[dev.test.steps]]
+  cmd = "sh -c 'touch test.txt && echo $env >> test.txt'"
 
-  [[dev.package.resources]]
-  name = "my-jar"
-  type = "artifact"
-  provider = "dev.build-and-push"
+  [[dev.test.steps]]
+  cmd = "cat test.txt"
 
-  [[dev.package.steps]]
-  needs-resource = "my-jar"
-  produces-artifact = { name = "dev-installer", path = "bob.deb" }
-  cmd = "make deb-package"
-
-[stable.sign]
-image = "debian:latest"
-
-  [[stable.sign.resources]]
-  name = "my-jar"
-  type = "artifact"
-  provider = "dev.build-and-push"
-
-  [[stable.sign.steps]]
-  needs-resource = "my-jar"
-  produces-artifact = { name = "my-sign", path = "bob.sig" }
-  cmd = "gpg --output bob.sig --sign bob-standalone.jar"
-
-[stable.deploy]
-image = "ansible:latest"
-
-  [[stable.deploy.resources]]
-  name = "my-jar"
-  type = "artifact"
-  provider = "dev.build-and-push"
-
-  [[stable.deploy.resources]]
-  name = "my-sign"
-  type = "artifact"
-  provider = "stable.sign"
-
-  [[stable.deploy.steps]]
-
-  [[stable.deploy.steps.in-parallel]]
-  needs-resource = "my-sign"
-  cmd = "scp user@cdn.com *.sig"
-
-  [[stable.deploy.steps.in-parallel]]
-  needs-resource = "my-jar"
-  cmd = "scp user@cdn.com *.jar"
-
-  [[stable.deploy.steps]]
-  cmd = "ansible deploy prod"
+  [[dev.test.steps]]
+  needs_resource = "my-source"
+  cmd = "ls"

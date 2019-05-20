@@ -15,29 +15,54 @@
 
 (ns wendy.cli
   (:require [wendy.commands :as commands])
-  (:import (net.sourceforge.argparse4j ArgumentParsers)
-           (net.sourceforge.argparse4j.inf ArgumentParser Namespace)))
+  (:import (java.io File)
+           (net.sourceforge.argparse4j ArgumentParsers)
+           (net.sourceforge.argparse4j.inf ArgumentParser
+                                           Namespace)))
 
-(defn- configured-parser
+(defn configured-parser
   []
-  (let [parser     (-> (ArgumentParsers/newFor "wendy")
-                       (.build)
-                       (.defaultHelp true)
-                       (.description "Bob's reference CLI and his SO."))
-        subparsers (-> parser
-                       (.addSubparsers)
-                       (.description "Things I can make Bob do.")
-                       (.metavar "COMMANDS")
-                       (.dest "command"))
-        _          (-> subparsers
-                       (.addParser "can-we-build-it")
-                       (.help "Perform a health check on Bob."))]
+  (let [parser           (-> (ArgumentParsers/newFor "wendy")
+                             (.build)
+                             (.defaultHelp true)
+                             (.description "bob's reference CLI and his SO"))
+        subparsers       (-> parser
+                             (.addSubparsers)
+                             (.title "things i can make bob do")
+                             (.metavar "COMMANDS")
+                             (.dest "command"))
+        _                (-> subparsers
+                             (.addParser "can-we-build-it" true)
+                             (.help "perform a health check on bob"))
+        pipeline-parser  (-> subparsers
+                             (.addParser "pipeline" true)
+                             (.help "pipeline lifecycle commands"))
+        lifecycle-parser (-> pipeline-parser
+                             (.addSubparsers)
+                             (.title "pipeline lifecycle")
+                             (.metavar "COMMANDS")
+                             (.dest "lifecycle-cmd"))
+        create-parser    (-> lifecycle-parser
+                             (.addParser "create" true)
+                             (.help "create a pipeline"))
+        _                (-> create-parser
+                             (.addArgument (into-array String ["-c" "--config"]))
+                             (.required false)
+                             (.setDefault (str (System/getProperty "user.dir")
+                                               File/separator
+                                               "build.toml"))
+                             (.help "path to the build file"))]
     parser))
 
 (defn dispatch
   [^Namespace options]
   (case (.get options "command")
-    "can-we-build-it" (commands/can-we-build-it!)))
+    "can-we-build-it"
+    (commands/can-we-build-it!)
+    "pipeline"
+    (case (.get options "lifecycle-cmd")
+      "create"
+      (commands/pipeline-create! (.get options "config")))))
 
 (defn build-it!
   [args]
