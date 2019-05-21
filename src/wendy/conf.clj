@@ -31,3 +31,6 @@
                         (with-open [rdr (io/reader path)]
                           (edn/read (PushbackReader. rdr))))]
     (merge defaults external-conf)))
+
+(comment
+  (read-conf))

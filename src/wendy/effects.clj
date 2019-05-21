@@ -64,3 +64,16 @@
     (if (.exists file)
       {:file file}
       (fail-with (str "No such file: " path)))))
+
+(comment
+  (failed? (unsafe! (/ 5 0)))
+
+  (fail-with "shizzz" 403)
+
+  (request "https://httpbin.org/get")
+
+  (request "https://httpbin.org/bet")
+
+  (file-from "deps.edn")
+
+  (file-from "lulz.edn"))

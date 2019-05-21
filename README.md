@@ -3,6 +3,7 @@
 ## Bob's SO and the reference CLI.
 
 [![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
 
 She is an `opinionated client` for Bob and takes care of the following tasks:
 
@@ -12,7 +13,7 @@ She is an `opinionated client` for Bob and takes care of the following tasks:
     - Bob doesnt know of the order of execution of pipelines
     - Wendy reads the dependencies of a pipeline on other pipelines and schedules them accordingly
     - Trigger all of the upstream pipelines of a pipeline such that Bob can proceed with the builds
-    
+
 Wendy is a reference client for Bob implementing a build with certain opinions but others are
 encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 
@@ -35,7 +36,7 @@ Clone the repo and in the repo and:
 - Run `clojure -A:test -m kaocha.runner` to run unit tests.
 - Set the `GRAALVM_HOME` env var to the path: `<graal_download_path>/Home`.
 - Run `<graal_donwload_path>/Home/bin/gu install native-image` to get the Graal native compiler.
-- Run `clojure -A:native-image` to compile it to a native executable. (Warning: Quite resource heavy step)  
+- Run `clojure -A:native-image` to compile it to a native executable. (Warning: Quite resource heavy step)
 - `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
 
 #### The full command reference can be found [here](https://github.com/bob-cd/wendy/blob/master/docs/commands.md)

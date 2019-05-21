@@ -60,3 +60,18 @@
       ^Config (.get group)
       (.get pipeline)
       (toml->json)))
+
+(comment
+  (read-file "docs/build.toml")
+
+  (->> (read-file "docs/build.toml")
+       (toml->json))
+
+  (->> (read-file "docs/build.toml")
+       (groups-in))
+
+  (-> (read-file "docs/build.toml")
+      (pipelines-of "dev"))
+
+  (-> (read-file "docs/build.toml")
+      (pipeline-config-of "dev" "test")))

@@ -61,3 +61,12 @@
                     group
                     name)]
     (effects/request url :post)))
+
+(comment
+  (bob-url)
+
+  (can-we-build-it!)
+
+  (pipeline-create! "docs/build.toml")
+
+  (pipeline-start! "dev" "test"))

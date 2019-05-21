@@ -89,3 +89,9 @@
     (if (:failed? response)
       (error-out (:reason response))
       (println (json/generate-string (:message response))))))
+
+(comment
+  (try
+    (let [options (into-array String (clojure.string/split "pipeline --help" #" "))]
+      (.parseArgs (configured-parser) options))
+    (catch Exception _)))
