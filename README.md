@@ -3,6 +3,8 @@
 ## Bob's SO and the reference CLI.
 
 [![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![CircleCI](https://circleci.com/gh/bob-cd/wendy/tree/master.svg?style=svg)](https://circleci.com/gh/bob-cd/wendy/tree/master)
+
 [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
 
 She is an `opinionated client` for Bob and takes care of the following tasks:
