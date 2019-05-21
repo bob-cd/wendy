@@ -23,45 +23,44 @@
 
 (defn configured-parser
   []
-  (let [parser           (-> (ArgumentParsers/newFor "wendy")
-                             (.build)
-                             (.defaultHelp true)
-                             (.description "bob's reference CLI and his SO"))
-        subparsers       (-> parser
-                             (.addSubparsers)
-                             (.title "things i can make bob do")
-                             (.metavar "COMMANDS")
-                             (.dest "command"))
-        _                (-> subparsers
-                             (.addParser "can-we-build-it" true)
-                             (.help "perform a health check on bob"))
-        pipeline-parser  (-> subparsers
-                             (.addParser "pipeline" true)
-                             (.help "pipeline lifecycle commands"))
-        lifecycle-parser (-> pipeline-parser
-                             (.addSubparsers)
-                             (.title "pipeline lifecycle")
-                             (.metavar "COMMANDS")
-                             (.dest "lifecycle-cmd"))
-        create-parser    (-> lifecycle-parser
-                             (.addParser "create" true)
-                             (.help "create a pipeline"))
-        _                (-> create-parser
-                             (.addArgument (into-array String ["-c" "--config"]))
-                             (.required false)
-                             (.setDefault (str (System/getProperty "user.dir")
-                                               File/separator
-                                               "build.toml"))
-                             (.help "path to the build file"))
-        start-parser     (-> lifecycle-parser
-                             (.addParser "start" true)
-                             (.help "start a pipeline"))
-        _                (-> start-parser
-                             (.addArgument (into-array String ["-g" "--group"]))
-                             (.help "group of the pipeline"))
-        _                (-> start-parser
-                             (.addArgument (into-array String ["-n" "--name"]))
-                             (.help "name of the pipeline"))]
+  (let [parser          (-> (ArgumentParsers/newFor "wendy")
+                            (.build)
+                            (.defaultHelp true)
+                            (.description "bob's reference CLI and his SO"))
+        subparsers      (-> parser
+                            (.addSubparsers)
+                            (.title "things i can make bob do")
+                            (.metavar "COMMANDS")
+                            (.dest "command"))
+        _               (-> subparsers
+                            (.addParser "can-we-build-it" true)
+                            (.help "perform a health check on bob"))
+        pipeline-parser (-> subparsers
+                            (.addParser "pipeline" true)
+                            (.help "pipeline lifecycle commands")
+                            (.addSubparsers)
+                            (.title "pipeline lifecycle")
+                            (.metavar "COMMANDS")
+                            (.dest "lifecycle-cmd"))
+        create-parser   (-> pipeline-parser
+                            (.addParser "create" true)
+                            (.help "create a pipeline"))
+        _               (-> create-parser
+                            (.addArgument (into-array String ["-c" "--config"]))
+                            (.required false)
+                            (.setDefault (str (System/getProperty "user.dir")
+                                              File/separator
+                                              "build.toml"))
+                            (.help "path to the build file"))
+        start-parser    (-> pipeline-parser
+                            (.addParser "start" true)
+                            (.help "start a pipeline"))
+        _               (-> start-parser
+                            (.addArgument (into-array String ["-g" "--group"]))
+                            (.help "group of the pipeline"))
+        _               (-> start-parser
+                            (.addArgument (into-array String ["-n" "--name"]))
+                            (.help "name of the pipeline"))]
     parser))
 
 (defn dispatch
@@ -91,7 +90,9 @@
       (println (json/generate-string (:message response))))))
 
 (comment
+  (configured-parser)
+
   (try
-    (let [options (into-array String (clojure.string/split "pipeline --help" #" "))]
+    (let [options (into-array String ["pipeline" "--help"])]
       (.parseArgs (configured-parser) options))
     (catch Exception _)))
