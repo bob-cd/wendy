@@ -18,8 +18,6 @@
             [wendy.build-conf :as build]
             [wendy.effects :as effects]))
 
-;; TODO: HANDLE FILE IO ERRORS!!
-
 (defn bob-url
   []
   (let [{:keys [host port]} (:connection (conf/read-conf))]
@@ -32,26 +30,29 @@
 
 (defn pipeline-create!
   [path]
-  (let [conf        (build/read-file path)
-        requests    (for [group    (build/groups-in conf)
-                          pipeline (build/pipelines-of conf group)]
-                      {:url    (format "%s/pipeline/%s/%s"
-                                       (bob-url)
-                                       group
-                                       pipeline)
-                       :params (build/pipeline-config-of conf group pipeline)})
-        responses   (map #(effects/request (:url %)
-                                           :post
-                                           {:content-type :json
-                                            :accept       :json
-                                            :body         (:params %)})
-                         requests)
-        successful? (every? #(= (:message %) "Ok") responses)]
-    (if (not successful?)
-      (effects/fail-with (->> responses
-                              (filter #(not= (:message %) "Ok"))
-                              (clojure.string/join "\n")))
-      {:message "Ok"})))
+  (let [result (build/read-file path)]
+    (if (:failed? result)
+      result
+      (let [conf        result
+            requests    (for [group    (build/groups-in conf)
+                              pipeline (build/pipelines-of conf group)]
+                          {:url    (format "%s/pipeline/%s/%s"
+                                           (bob-url)
+                                           group
+                                           pipeline)
+                           :params (build/pipeline-config-of conf group pipeline)})
+            responses   (map #(effects/request (:url %)
+                                               :post
+                                               {:content-type :json
+                                                :accept       :json
+                                                :body         (:params %)})
+                             requests)
+            successful? (every? #(= (:message %) "Ok") responses)]
+        (if (not successful?)
+          (effects/fail-with (->> responses
+                                  (filter #(not= (:message %) "Ok"))
+                                  (clojure.string/join "\n")))
+          {:message "Ok"})))))
 
 (defn pipeline-start!
   [group name]

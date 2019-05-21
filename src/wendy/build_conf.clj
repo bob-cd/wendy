@@ -14,7 +14,9 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.build-conf
-  (:import (java.io StringWriter)
+  (:require [wendy.effects :as effects])
+  (:import (java.io StringWriter
+                    File)
            (com.electronwill.nightconfig.core.file FileConfig)
            (com.electronwill.nightconfig.toml TomlFormat)
            (com.electronwill.nightconfig.core Config
@@ -32,9 +34,14 @@
 
 (defn read-file
   [^String path]
-  (let [toml (FileConfig/of path (TomlFormat/instance))
-        _    (.load toml)]
-    toml))
+  (let [result (effects/file-from path)]
+    (if (:failed? result)
+      result
+      (let [toml (FileConfig/of
+                   ^File (:file result)
+                   (TomlFormat/instance))
+            _    (.load toml)]
+        toml))))
 
 (defn groups-in
   [^Config conf]

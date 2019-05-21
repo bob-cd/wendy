@@ -14,8 +14,10 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.effects
-  (:require [clj-http.lite.client :as http]
-            [cheshire.core :as json]))
+  (:require [clojure.java.io :as io]
+            [clj-http.lite.client :as http]
+            [cheshire.core :as json])
+  (:import (java.io File)))
 
 (defmacro unsafe!
   [& body]
@@ -55,3 +57,10 @@
        (-> response
            (:body)
            (json/parse-string true))))))
+
+(defn file-from
+  [path]
+  (let [file ^File (io/as-file path)]
+    (if (.exists file)
+      {:file file}
+      (fail-with (str "No such file: " path)))))
