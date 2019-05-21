@@ -14,7 +14,8 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.cli
-  (:require [wendy.commands :as commands])
+  (:require [cheshire.core :as json]
+            [wendy.commands :as commands])
   (:import (java.io File)
            (net.sourceforge.argparse4j ArgumentParsers)
            (net.sourceforge.argparse4j.inf ArgumentParser
@@ -76,8 +77,15 @@
       (commands/pipeline-start! (.get options "group")
                                 (.get options "name")))))
 
+(defn error-out
+  [^String message]
+  (.println System/err message)
+  (System/exit 1))
+
 (defn build-it!
   [args]
   (let [parser   ^ArgumentParser (configured-parser)
         response (dispatch (.parseArgsOrFail parser (into-array String args)))]
-    (println response)))
+    (if (:failed? response)
+      (error-out (:reason response))
+      (println (json/generate-string (:message response))))))
