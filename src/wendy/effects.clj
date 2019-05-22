@@ -17,7 +17,7 @@
   (:require [clojure.java.io :as io]
             [clj-http.lite.client :as http]
             [cheshire.core :as json])
-  (:import (java.io File)))
+  (:import (java.nio.file Files)))
 
 (defmacro unsafe!
   [& body]
@@ -32,10 +32,10 @@
 (defn fail-with
   [reason & status]
   (conj
-    {:failed? true
-     :reason  reason}
-    (when (not-empty status)
-      {:status (first status)})))
+   {:failed? true
+    :reason  reason}
+   (when (not-empty status)
+     {:status (first status)})))
 
 (defn parse-error
   [message]
@@ -66,10 +66,10 @@
 
 (defn file-from
   [path]
-  (let [file ^File (io/as-file path)]
-    (if (.exists file)
+  (let [file (io/as-file path)]
+    (if (Files/isReadable (.toPath file))
       {:file file}
-      (fail-with (str "No such file: " path)))))
+      (fail-with (str "Missing or unreadble file: " path)))))
 
 (comment
   (failed? (unsafe! (/ 5 0)))
