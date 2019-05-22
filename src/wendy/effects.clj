@@ -37,6 +37,12 @@
     (when (not-empty status)
       {:status (first status)})))
 
+(defn parse-error
+  [message]
+  (if (:body message)
+    (json/generate-string (:body message))
+    message))
+
 (defn request
   ([url]
    (request url :get {}))
@@ -51,7 +57,7 @@
          response (unsafe! (req-fn url opts))]
      (if (failed? response)
        (fail-with (if (ex-data response)
-                    (ex-data response)
+                    (parse-error (ex-data response))
                     (ex-message response))
                   (:status (ex-data response)))
        (-> response
@@ -76,4 +82,7 @@
 
   (file-from "deps.edn")
 
-  (file-from "lulz.edn"))
+  (file-from "lulz.edn")
+
+  (request "http://localhost:7777/api/pipeline/stop/dev/test/1"
+           :post))
