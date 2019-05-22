@@ -80,6 +80,17 @@
                     number)]
     (effects/request url :post)))
 
+(defn pipeline-logs!
+  [group name number offset lines]
+  (let [url (format "%s/pipeline/logs/%s/%s/%s/%s/%s"
+                    (bob-url)
+                    group
+                    name
+                    number
+                    offset
+                    lines)]
+    (effects/request url)))
+
 (comment
   (bob-url)
 
@@ -89,4 +100,6 @@
 
   (pipeline-start! "dev" "test")
 
-  (pipeline-status! "dev" "test" 1))
+  (pipeline-status! "dev" "test" "1")
+
+  (pipeline-logs! "dev" "test" "1" "0" "100"))

@@ -21,6 +21,7 @@
            (net.sourceforge.argparse4j.inf ArgumentParser
                                            Namespace)))
 
+;; TODO: Maybe a macro to convert a cute little map to this mess?
 (defn configured-parser
   []
   (let [parser          (-> (ArgumentParsers/newFor "wendy")
@@ -92,7 +93,30 @@
         _               (-> stop-parser
                             (.addArgument (into-array String ["-num" "--number"]))
                             (.required true)
-                            (.help "the run number of the pipeline"))]
+                            (.help "the run number of the pipeline"))
+        logs-parser     (-> pipeline-parser
+                            (.addParser "logs" true)
+                            (.help "logs of a pipeline"))
+        _               (-> logs-parser
+                            (.addArgument (into-array String ["-g" "--group"]))
+                            (.required true)
+                            (.help "group of the pipeline"))
+        _               (-> logs-parser
+                            (.addArgument (into-array String ["-n" "--name"]))
+                            (.required true)
+                            (.help "name of the pipeline"))
+        _               (-> logs-parser
+                            (.addArgument (into-array String ["-num" "--number"]))
+                            (.required true)
+                            (.help "the run number of the pipeline"))
+        _               (-> logs-parser
+                            (.addArgument (into-array String ["-o" "--offset"]))
+                            (.required true)
+                            (.help "the line offset from the beginning of the logs"))
+        _               (-> logs-parser
+                            (.addArgument (into-array String ["-l" "--lines"]))
+                            (.required true)
+                            (.help "the number of lines from the offset"))]
     parser))
 
 (defn dispatch
@@ -114,7 +138,13 @@
       "stop"
       (commands/pipeline-stop! (.get options "group")
                                (.get options "name")
-                               (.get options "number")))))
+                               (.get options "number"))
+      "logs"
+      (commands/pipeline-logs! (.get options "group")
+                               (.get options "name")
+                               (.get options "number")
+                               (.get options "offset")
+                               (.get options "lines")))))
 
 (defn error-out
   [message]
