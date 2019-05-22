@@ -71,6 +71,15 @@
                     number)]
     (effects/request url)))
 
+(defn pipeline-stop!
+  [group name number]
+  (let [url (format "%s/pipeline/stop/%s/%s/%s"
+                    (bob-url)
+                    group
+                    name
+                    number)]
+    (effects/request url :post)))
+
 (comment
   (bob-url)
 

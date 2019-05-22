@@ -70,4 +70,18 @@
         (is (= "status" (.get result "lifecycle-cmd")))
         (is (= "dev" (.get result "group")))
         (is (= "test" (.get result "name")))
+        (is (= "1" (.get result "number")))))
+    (testing "pipeline stop"
+      (let [args   (into-array String ["pipeline"
+                                       "stop"
+                                       "-g"
+                                       "dev"
+                                       "-n"
+                                       "test"
+                                       "-num"
+                                       "1"])
+            result (.parseArgs parser args)]
+        (is (= "stop" (.get result "lifecycle-cmd")))
+        (is (= "dev" (.get result "group")))
+        (is (= "test" (.get result "name")))
         (is (= "1" (.get result "number")))))))

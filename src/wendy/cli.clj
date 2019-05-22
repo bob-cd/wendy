@@ -77,6 +77,21 @@
         _               (-> status-parser
                             (.addArgument (into-array String ["-num" "--number"]))
                             (.required true)
+                            (.help "the run number of the pipeline"))
+        stop-parser     (-> pipeline-parser
+                            (.addParser "stop" true)
+                            (.help "status of a pipeline"))
+        _               (-> stop-parser
+                            (.addArgument (into-array String ["-g" "--group"]))
+                            (.required true)
+                            (.help "group of the pipeline"))
+        _               (-> stop-parser
+                            (.addArgument (into-array String ["-n" "--name"]))
+                            (.required true)
+                            (.help "name of the pipeline"))
+        _               (-> stop-parser
+                            (.addArgument (into-array String ["-num" "--number"]))
+                            (.required true)
                             (.help "the run number of the pipeline"))]
     parser))
 
@@ -95,7 +110,11 @@
       "status"
       (commands/pipeline-status! (.get options "group")
                                  (.get options "name")
-                                 (.get options "number")))))
+                                 (.get options "number"))
+      "stop"
+      (commands/pipeline-stop! (.get options "group")
+                               (.get options "name")
+                               (.get options "number")))))
 
 (defn error-out
   [message]
