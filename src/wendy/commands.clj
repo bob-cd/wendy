@@ -62,6 +62,15 @@
                     name)]
     (effects/request url :post)))
 
+(defn pipeline-status!
+  [group name number]
+  (let [url (format "%s/pipeline/status/%s/%s/%s"
+                    (bob-url)
+                    group
+                    name
+                    number)]
+    (effects/request url)))
+
 (comment
   (bob-url)
 
@@ -69,4 +78,6 @@
 
   (pipeline-create! "docs/build.toml")
 
-  (pipeline-start! "dev" "test"))
+  (pipeline-start! "dev" "test")
+
+  (pipeline-status! "dev" "test" 1))

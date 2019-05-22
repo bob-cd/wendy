@@ -56,4 +56,18 @@
             result (.parseArgs parser args)]
         (is (= "start" (.get result "lifecycle-cmd")))
         (is (= "dev" (.get result "group")))
-        (is (= "test" (.get result "name")))))))
+        (is (= "test" (.get result "name")))))
+    (testing "pipeline status"
+      (let [args   (into-array String ["pipeline"
+                                       "status"
+                                       "-g"
+                                       "dev"
+                                       "-n"
+                                       "test"
+                                       "-num"
+                                       "1"])
+            result (.parseArgs parser args)]
+        (is (= "status" (.get result "lifecycle-cmd")))
+        (is (= "dev" (.get result "group")))
+        (is (= "test" (.get result "name")))
+        (is (= "1" (.get result "number")))))))

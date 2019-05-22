@@ -60,7 +60,19 @@
                             (.help "group of the pipeline"))
         _               (-> start-parser
                             (.addArgument (into-array String ["-n" "--name"]))
-                            (.help "name of the pipeline"))]
+                            (.help "name of the pipeline"))
+        status-parser   (-> pipeline-parser
+                            (.addParser "status" true)
+                            (.help "status of a pipeline"))
+        _               (-> status-parser
+                            (.addArgument (into-array String ["-g" "--group"]))
+                            (.help "group of the pipeline"))
+        _               (-> status-parser
+                            (.addArgument (into-array String ["-n" "--name"]))
+                            (.help "name of the pipeline"))
+        _               (-> status-parser
+                            (.addArgument (into-array String ["-num" "--number"]))
+                            (.help "the run number of the pipeline"))]
     parser))
 
 (defn dispatch
@@ -74,7 +86,11 @@
       (commands/pipeline-create! (.get options "config"))
       "start"
       (commands/pipeline-start! (.get options "group")
-                                (.get options "name")))))
+                                (.get options "name"))
+      "status"
+      (commands/pipeline-status! (.get options "group")
+                                 (.get options "name")
+                                 (.get options "number")))))
 
 (defn error-out
   [^String message]
@@ -93,6 +109,8 @@
   (configured-parser)
 
   (try
-    (let [options (into-array String ["pipeline" "--help"])]
+    (let [options (into-array String ["pipeline" "status" "--help"])]
       (.parseArgs (configured-parser) options))
-    (catch Exception _)))
+    (catch Exception _))
+
+  (build-it! ["pipeline" "status" "-g" "dev" "-n" "test" "-num" "2"]))
