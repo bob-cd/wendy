@@ -57,21 +57,26 @@
                             (.help "start a pipeline"))
         _               (-> start-parser
                             (.addArgument (into-array String ["-g" "--group"]))
+                            (.required true)
                             (.help "group of the pipeline"))
         _               (-> start-parser
                             (.addArgument (into-array String ["-n" "--name"]))
+                            (.required true)
                             (.help "name of the pipeline"))
         status-parser   (-> pipeline-parser
                             (.addParser "status" true)
                             (.help "status of a pipeline"))
         _               (-> status-parser
                             (.addArgument (into-array String ["-g" "--group"]))
+                            (.required true)
                             (.help "group of the pipeline"))
         _               (-> status-parser
                             (.addArgument (into-array String ["-n" "--name"]))
+                            (.required true)
                             (.help "name of the pipeline"))
         _               (-> status-parser
                             (.addArgument (into-array String ["-num" "--number"]))
+                            (.required true)
                             (.help "the run number of the pipeline"))]
     parser))
 
@@ -93,8 +98,8 @@
                                  (.get options "number")))))
 
 (defn error-out
-  [^String message]
-  (.println System/err message)
+  [message]
+  (.println System/err (str message))
   (System/exit 1))
 
 (defn build-it!
