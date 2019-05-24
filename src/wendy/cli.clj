@@ -116,7 +116,18 @@
         _               (-> logs-parser
                             (.addArgument (into-array String ["-l" "--lines"]))
                             (.required true)
-                            (.help "the number of lines from the offset"))]
+                            (.help "the number of lines from the offset"))
+        delete-parser   (-> pipeline-parser
+                            (.addParser "delete" true)
+                            (.help "delete a pipeline"))
+        _               (-> delete-parser
+                            (.addArgument (into-array String ["-g" "--group"]))
+                            (.required true)
+                            (.help "group of the pipeline"))
+        _               (-> delete-parser
+                            (.addArgument (into-array String ["-n" "--name"]))
+                            (.required true)
+                            (.help "name of the pipeline"))]
     parser))
 
 (defn dispatch
@@ -144,7 +155,10 @@
                                (.get options "name")
                                (.get options "number")
                                (.get options "offset")
-                               (.get options "lines")))))
+                               (.get options "lines"))
+      "delete"
+      (commands/pipeline-delete! (.get options "group")
+                                 (.get options "name")))))
 
 (defn error-out
   [message]

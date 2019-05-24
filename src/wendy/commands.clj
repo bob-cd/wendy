@@ -91,6 +91,14 @@
                     lines)]
     (effects/request url)))
 
+(defn pipeline-delete!
+  [group name]
+  (let [url (format "%s/pipeline/%s/%s"
+                    (bob-url)
+                    group
+                    name)]
+    (effects/request url :delete)))
+
 (comment
   (bob-url)
 
@@ -102,4 +110,6 @@
 
   (pipeline-status! "dev" "test" "1")
 
-  (pipeline-logs! "dev" "test" "1" "0" "100"))
+  (pipeline-logs! "dev" "test" "1" "0" "100")
+
+  (pipeline-delete! "dev" "test"))

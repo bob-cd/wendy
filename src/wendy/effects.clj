@@ -53,7 +53,9 @@
                     :get
                     http/get
                     :post
-                    http/post)
+                    http/post
+                    :delete
+                    http/delete)
          response (unsafe! (req-fn url opts))]
      (if (failed? response)
        (fail-with (if (ex-data response)

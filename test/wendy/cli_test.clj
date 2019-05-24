@@ -104,4 +104,15 @@
         (is (= "test" (.get result "name")))
         (is (= "1" (.get result "number")))
         (is (= "10" (.get result "offset")))
-        (is (= "100" (.get result "lines")))))))
+        (is (= "100" (.get result "lines")))))
+    (testing "pipeline delete"
+      (let [args   (into-array String ["pipeline"
+                                       "delete"
+                                       "-g"
+                                       "dev"
+                                       "-n"
+                                       "test"])
+            result (.parseArgs parser args)]
+        (is (= "delete" (.get result "lifecycle-cmd")))
+        (is (= "dev" (.get result "group")))
+        (is (= "test" (.get result "name")))))))

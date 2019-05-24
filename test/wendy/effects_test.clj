@@ -43,4 +43,7 @@
       (is (:failed? (request "some url")))))
   (testing "successful post request"
     (with-redefs [http/post (constantly {:body "[1, 2, 3]"})]
-      (is (= [1, 2, 3] (request "some url" :post))))))
+      (is (= [1, 2, 3] (request "some url" :post)))))
+  (testing "successful delete request"
+    (with-redefs [http/delete (constantly {:body "{\"message\": \"Ok\"}"})]
+      (is (= {:message "Ok"} (request "some url" :delete))))))
