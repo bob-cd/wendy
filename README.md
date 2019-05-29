@@ -4,6 +4,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/license-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![CircleCI](https://circleci.com/gh/bob-cd/wendy/tree/master.svg?style=svg)](https://circleci.com/gh/bob-cd/wendy/tree/master)
+[![Dependencies Status](https://versions.deps.co/bob-cd/wendy/status.svg)](https://versions.deps.co/bob-cd/wendy)
 
 [![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
 
@@ -29,16 +30,18 @@ encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 
 ### Requirements:
 - [Graal VM](https://www.graalvm.org/downloads/)
-- [Clojure CLI](https://clojure.org/guides/getting_started)
+- [Clojure CLI](https://clojure.org/guides/getting_started)(faster) or [Leiningen](https://leiningen.org/)(better Windows support).
 - A running instance of [Bob](https://github.com/bob-cd/bob)
 
 ### Running
 
 Clone the repo and in the repo and:
-- Run `clojure -A:test -m kaocha.runner` to run unit tests.
+- Run `clojure -A:test -m kaocha.runner` if using Clojure CLI or `lein kaocha` with leiningen.
 - Set the `GRAALVM_HOME` env var to the path: `<graal_download_path>/Home`.
 - Run `<graal_donwload_path>/Home/bin/gu install native-image` to get the Graal native compiler.
-- Run `clojure -A:native-image` to compile it to a native executable. (Warning: Quite resource heavy step)
-- `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
+- Run `clojure -A:native-image` if using Clojure CLI or `lein native-image` with leiningen to compile it to a native executable.
+  (Warning: Quite resource heavy step)
+- The executable is found in current dir if compiled via Clojure CLI or in `/target/default+uberjar` with leiningen.
+- Running `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
 
 #### The full command reference can be found [here](https://github.com/bob-cd/wendy/blob/master/docs/commands.md)
