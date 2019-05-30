@@ -99,6 +99,13 @@
                     name)]
     (effects/request url :delete)))
 
+(defn gc!
+  [all?]
+  (let [url (format "%s/gc%s"
+                    (bob-url)
+                    (if all? "/all" ""))]
+    (effects/request url :post)))
+
 (comment
   (bob-url)
 
@@ -112,4 +119,6 @@
 
   (pipeline-logs! "dev" "test" "1" "0" "100")
 
-  (pipeline-delete! "dev" "test"))
+  (pipeline-delete! "dev" "test")
+
+  (gc! true))

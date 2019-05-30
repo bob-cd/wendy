@@ -19,7 +19,8 @@
   (:import (java.io File)
            (net.sourceforge.argparse4j ArgumentParsers)
            (net.sourceforge.argparse4j.inf ArgumentParser
-                                           Namespace)))
+                                           Namespace)
+           (net.sourceforge.argparse4j.impl Arguments)))
 
 ;; TODO: Maybe a macro to convert a cute little map to this mess?
 (defn configured-parser
@@ -27,7 +28,12 @@
   (let [parser          (-> (ArgumentParsers/newFor "wendy")
                             (.build)
                             (.defaultHelp true)
+                            (.version "${prog} 0.1.0")
                             (.description "bob's reference CLI and his SO"))
+        _               (-> parser
+                            (.addArgument (into-array String ["--version"]))
+                            (.action (Arguments/version))
+                            (.help "show the version"))
         subparsers      (-> parser
                             (.addSubparsers)
                             (.title "things i can make bob do")
@@ -127,7 +133,14 @@
         _               (-> delete-parser
                             (.addArgument (into-array String ["-n" "--name"]))
                             (.required true)
-                            (.help "name of the pipeline"))]
+                            (.help "name of the pipeline"))
+        gc-parser       (-> subparsers
+                            (.addParser "gc")
+                            (.help "trigger garbage collection on bob"))
+        _               (-> gc-parser
+                            (.addArgument (into-array String ["-a" "--all"]))
+                            (.action (Arguments/storeTrue))
+                            (.help "trigger full GC resulting in build history loss"))]
     parser))
 
 (defn dispatch
@@ -158,7 +171,9 @@
                                (.get options "lines"))
       "delete"
       (commands/pipeline-delete! (.get options "group")
-                                 (.get options "name")))))
+                                 (.get options "name")))
+    "gc"
+    (commands/gc! (.get options "all"))))
 
 (defn error-out
   [message]
@@ -180,5 +195,8 @@
     (let [options (into-array String ["pipeline" "status" "--help"])]
       (.parseArgs (configured-parser) options))
     (catch Exception _))
+
+  (-> (configured-parser)
+      (.parseArgs (into-array String ["gc" "--all"])))
 
   (build-it! ["pipeline" "status" "-g" "dev" "-n" "test" "-num" "2"]))
