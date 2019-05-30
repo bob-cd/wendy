@@ -14,7 +14,8 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.commands
-  (:require [wendy.conf :as conf]
+  (:require [cheshire.core :as json]
+            [wendy.conf :as conf]
             [wendy.build-conf :as build]
             [wendy.effects :as effects]))
 
@@ -106,6 +107,30 @@
                     (if all? "/all" ""))]
     (effects/request url :post)))
 
+(defn external-resource-register!
+  [name url]
+  (let [url (format "%s/external-resource/%s"
+                    (bob-url)
+                    name)]
+    (effects/request url
+                     :post
+                     {:content-type :json
+                      :accept       :json
+                      :body         (json/generate-string {:url url})})))
+
+(defn external-resource-list!
+  []
+  (let [url (format "%s/external-resources"
+                    (bob-url))]
+    (effects/request url)))
+
+(defn external-resource-delete!
+  [name]
+  (let [url (format "%s/external-resource/%s"
+                    (bob-url)
+                    name)]
+    (effects/request url :delete)))
+
 (comment
   (bob-url)
 
@@ -121,4 +146,11 @@
 
   (pipeline-delete! "dev" "test")
 
-  (gc! true))
+  (gc! true)
+
+  (external-resource-register! "git"
+                               "http://localhost:8000")
+
+  (external-resource-list!)
+
+  (external-resource-delete! "git"))

@@ -25,122 +25,150 @@
 ;; TODO: Maybe a macro to convert a cute little map to this mess?
 (defn configured-parser
   []
-  (let [parser          (-> (ArgumentParsers/newFor "wendy")
-                            (.build)
-                            (.defaultHelp true)
-                            (.version "${prog} 0.1.0")
-                            (.description "bob's reference CLI and his SO"))
-        _               (-> parser
-                            (.addArgument (into-array String ["--version"]))
-                            (.action (Arguments/version))
-                            (.help "show the version"))
-        subparsers      (-> parser
-                            (.addSubparsers)
-                            (.title "things i can make bob do")
-                            (.metavar "COMMANDS")
-                            (.dest "command"))
-        _               (-> subparsers
-                            (.addParser "can-we-build-it" true)
-                            (.help "perform a health check on bob"))
-        pipeline-parser (-> subparsers
-                            (.addParser "pipeline" true)
-                            (.help "pipeline lifecycle commands")
-                            (.addSubparsers)
-                            (.title "pipeline lifecycle")
-                            (.metavar "COMMANDS")
-                            (.dest "lifecycle-cmd"))
-        create-parser   (-> pipeline-parser
-                            (.addParser "create" true)
-                            (.help "create a pipeline"))
-        _               (-> create-parser
-                            (.addArgument (into-array String ["-c" "--config"]))
-                            (.required false)
-                            (.setDefault (str (System/getProperty "user.dir")
-                                              File/separator
-                                              "build.toml"))
-                            (.help "path to the build file"))
-        start-parser    (-> pipeline-parser
-                            (.addParser "start" true)
-                            (.help "start a pipeline"))
-        _               (-> start-parser
-                            (.addArgument (into-array String ["-g" "--group"]))
-                            (.required true)
-                            (.help "group of the pipeline"))
-        _               (-> start-parser
-                            (.addArgument (into-array String ["-n" "--name"]))
-                            (.required true)
-                            (.help "name of the pipeline"))
-        status-parser   (-> pipeline-parser
-                            (.addParser "status" true)
-                            (.help "status of a pipeline"))
-        _               (-> status-parser
-                            (.addArgument (into-array String ["-g" "--group"]))
-                            (.required true)
-                            (.help "group of the pipeline"))
-        _               (-> status-parser
-                            (.addArgument (into-array String ["-n" "--name"]))
-                            (.required true)
-                            (.help "name of the pipeline"))
-        _               (-> status-parser
-                            (.addArgument (into-array String ["-num" "--number"]))
-                            (.required true)
-                            (.help "the run number of the pipeline"))
-        stop-parser     (-> pipeline-parser
-                            (.addParser "stop" true)
-                            (.help "status of a pipeline"))
-        _               (-> stop-parser
-                            (.addArgument (into-array String ["-g" "--group"]))
-                            (.required true)
-                            (.help "group of the pipeline"))
-        _               (-> stop-parser
-                            (.addArgument (into-array String ["-n" "--name"]))
-                            (.required true)
-                            (.help "name of the pipeline"))
-        _               (-> stop-parser
-                            (.addArgument (into-array String ["-num" "--number"]))
-                            (.required true)
-                            (.help "the run number of the pipeline"))
-        logs-parser     (-> pipeline-parser
-                            (.addParser "logs" true)
-                            (.help "logs of a pipeline"))
-        _               (-> logs-parser
-                            (.addArgument (into-array String ["-g" "--group"]))
-                            (.required true)
-                            (.help "group of the pipeline"))
-        _               (-> logs-parser
-                            (.addArgument (into-array String ["-n" "--name"]))
-                            (.required true)
-                            (.help "name of the pipeline"))
-        _               (-> logs-parser
-                            (.addArgument (into-array String ["-num" "--number"]))
-                            (.required true)
-                            (.help "the run number of the pipeline"))
-        _               (-> logs-parser
-                            (.addArgument (into-array String ["-o" "--offset"]))
-                            (.required true)
-                            (.help "the line offset from the beginning of the logs"))
-        _               (-> logs-parser
-                            (.addArgument (into-array String ["-l" "--lines"]))
-                            (.required true)
-                            (.help "the number of lines from the offset"))
-        delete-parser   (-> pipeline-parser
-                            (.addParser "delete" true)
-                            (.help "delete a pipeline"))
-        _               (-> delete-parser
-                            (.addArgument (into-array String ["-g" "--group"]))
-                            (.required true)
-                            (.help "group of the pipeline"))
-        _               (-> delete-parser
-                            (.addArgument (into-array String ["-n" "--name"]))
-                            (.required true)
-                            (.help "name of the pipeline"))
-        gc-parser       (-> subparsers
-                            (.addParser "gc")
-                            (.help "trigger garbage collection on bob"))
-        _               (-> gc-parser
-                            (.addArgument (into-array String ["-a" "--all"]))
-                            (.action (Arguments/storeTrue))
-                            (.help "trigger full GC resulting in build history loss"))]
+  (let [parser                   (-> (ArgumentParsers/newFor "wendy")
+                                     (.build)
+                                     (.defaultHelp true)
+                                     (.version "${prog} 0.1.0")
+                                     (.description "bob's reference CLI and his SO"))
+        _                        (-> parser
+                                     (.addArgument (into-array String ["--version"]))
+                                     (.action (Arguments/version))
+                                     (.help "show the version"))
+        subparsers               (-> parser
+                                     (.addSubparsers)
+                                     (.title "things i can make bob do")
+                                     (.metavar "COMMANDS")
+                                     (.dest "command"))
+        _                        (-> subparsers
+                                     (.addParser "can-we-build-it" true)
+                                     (.help "perform a health check on bob"))
+        pipeline-parser          (-> subparsers
+                                     (.addParser "pipeline" true)
+                                     (.help "pipeline lifecycle commands")
+                                     (.addSubparsers)
+                                     (.title "pipeline lifecycle")
+                                     (.metavar "COMMANDS")
+                                     (.dest "lifecycle-cmd"))
+        create-parser            (-> pipeline-parser
+                                     (.addParser "create" true)
+                                     (.help "create a pipeline"))
+        _                        (-> create-parser
+                                     (.addArgument (into-array String ["-c" "--config"]))
+                                     (.required false)
+                                     (.setDefault (str (System/getProperty "user.dir")
+                                                       File/separator
+                                                       "build.toml"))
+                                     (.help "path to the build file"))
+        start-parser             (-> pipeline-parser
+                                     (.addParser "start" true)
+                                     (.help "start a pipeline"))
+        _                        (-> start-parser
+                                     (.addArgument (into-array String ["-g" "--group"]))
+                                     (.required true)
+                                     (.help "group of the pipeline"))
+        _                        (-> start-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the pipeline"))
+        status-parser            (-> pipeline-parser
+                                     (.addParser "status" true)
+                                     (.help "status of a pipeline"))
+        _                        (-> status-parser
+                                     (.addArgument (into-array String ["-g" "--group"]))
+                                     (.required true)
+                                     (.help "group of the pipeline"))
+        _                        (-> status-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the pipeline"))
+        _                        (-> status-parser
+                                     (.addArgument (into-array String ["-num" "--number"]))
+                                     (.required true)
+                                     (.help "the run number of the pipeline"))
+        stop-parser              (-> pipeline-parser
+                                     (.addParser "stop" true)
+                                     (.help "status of a pipeline"))
+        _                        (-> stop-parser
+                                     (.addArgument (into-array String ["-g" "--group"]))
+                                     (.required true)
+                                     (.help "group of the pipeline"))
+        _                        (-> stop-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the pipeline"))
+        _                        (-> stop-parser
+                                     (.addArgument (into-array String ["-num" "--number"]))
+                                     (.required true)
+                                     (.help "the run number of the pipeline"))
+        logs-parser              (-> pipeline-parser
+                                     (.addParser "logs" true)
+                                     (.help "logs of a pipeline"))
+        _                        (-> logs-parser
+                                     (.addArgument (into-array String ["-g" "--group"]))
+                                     (.required true)
+                                     (.help "group of the pipeline"))
+        _                        (-> logs-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the pipeline"))
+        _                        (-> logs-parser
+                                     (.addArgument (into-array String ["-num" "--number"]))
+                                     (.required true)
+                                     (.help "the run number of the pipeline"))
+        _                        (-> logs-parser
+                                     (.addArgument (into-array String ["-o" "--offset"]))
+                                     (.required true)
+                                     (.help "the line offset from the beginning of the logs"))
+        _                        (-> logs-parser
+                                     (.addArgument (into-array String ["-l" "--lines"]))
+                                     (.required true)
+                                     (.help "the number of lines from the offset"))
+        delete-parser            (-> pipeline-parser
+                                     (.addParser "delete" true)
+                                     (.help "delete a pipeline"))
+        _                        (-> delete-parser
+                                     (.addArgument (into-array String ["-g" "--group"]))
+                                     (.required true)
+                                     (.help "group of the pipeline"))
+        _                        (-> delete-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the pipeline"))
+        gc-parser                (-> subparsers
+                                     (.addParser "gc")
+                                     (.help "trigger garbage collection on bob"))
+        _                        (-> gc-parser
+                                     (.addArgument (into-array String ["-a" "--all"]))
+                                     (.action (Arguments/storeTrue))
+                                     (.help "trigger full GC resulting in build history loss"))
+        external-resource-parser (-> subparsers
+                                     (.addParser "external-resource")
+                                     (.help "external resource commands")
+                                     (.addSubparsers)
+                                     (.title "external resource")
+                                     (.metavar "COMMANDS")
+                                     (.dest "external-resource-command"))
+        register-parser          (-> external-resource-parser
+                                     (.addParser "register" true)
+                                     (.help "register an external resource"))
+        _                        (-> register-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the resource"))
+        _                        (-> register-parser
+                                     (.addArgument (into-array String ["-u" "--url"]))
+                                     (.required true)
+                                     (.help "list all external resources"))
+        list-parser              (-> external-resource-parser
+                                     (.addParser "list" true)
+                                     (.help "list all registered external resources"))
+        delete-parser            (-> external-resource-parser
+                                     (.addParser "delete" true)
+                                     (.help "delete an external resource"))
+        _                        (-> delete-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the resource"))]
     parser))
 
 (defn dispatch
@@ -173,7 +201,16 @@
       (commands/pipeline-delete! (.get options "group")
                                  (.get options "name")))
     "gc"
-    (commands/gc! (.get options "all"))))
+    (commands/gc! (.get options "all"))
+    "external-resource"
+    (case (.get options "external-resource-command")
+      "register"
+      (commands/external-resource-register! (.get options "name")
+                                            (.get options "url"))
+      "list"
+      (commands/external-resource-list!)
+      "delete"
+      (commands/external-resource-delete! (.get options "name")))))
 
 (defn error-out
   [message]
@@ -198,5 +235,8 @@
 
   (-> (configured-parser)
       (.parseArgs (into-array String ["gc" "--all"])))
+
+  (-> (configured-parser)
+      (.parseArgs (into-array String ["external-resource" "list"])))
 
   (build-it! ["pipeline" "status" "-g" "dev" "-n" "test" "-num" "2"]))

@@ -126,4 +126,31 @@
                                        "-a"])
             result (.parseArgs parser args)]
         (is (= "gc" (.get result "command")))
-        (is (.get result "all"))))))
+        (is (.get result "all"))))
+    (testing "external resource register"
+      (let [args   (into-array String ["external-resource"
+                                       "register"
+                                       "-n"
+                                       "git"
+                                       "-u"
+                                       "http://git-host.com:8000"])
+            result (.parseArgs parser args)]
+        (is (= "external-resource" (.get result "command")))
+        (is (= "register" (.get result "external-resource-command")))
+        (is (= "git" (.get result "name")))
+        (is (= "http://git-host.com:8000" (.get result "url")))))
+    (testing "external resource list"
+      (let [args   (into-array String ["external-resource"
+                                       "list"])
+            result (.parseArgs parser args)]
+        (is (= "external-resource" (.get result "command")))
+        (is (= "list" (.get result "external-resource-command")))))
+    (testing "external resource register"
+      (let [args   (into-array String ["external-resource"
+                                       "delete"
+                                       "-n"
+                                       "git"])
+            result (.parseArgs parser args)]
+        (is (= "external-resource" (.get result "command")))
+        (is (= "delete" (.get result "external-resource-command")))
+        (is (= "git" (.get result "name")))))))
