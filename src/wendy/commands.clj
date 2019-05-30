@@ -108,7 +108,7 @@
     (effects/request url :post)))
 
 (defn external-resource-register!
-  [name url]
+  [name resource-url]
   (let [url (format "%s/external-resource/%s"
                     (bob-url)
                     name)]
@@ -116,7 +116,7 @@
                      :post
                      {:content-type :json
                       :accept       :json
-                      :body         (json/generate-string {:url url})})))
+                      :body         (json/generate-string {:url resource-url})})))
 
 (defn external-resource-list!
   []

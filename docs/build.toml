@@ -27,7 +27,7 @@ image = "busybox:musl"
 
     [dev.test.resources.params]
     branch = "master"
-    url = "https://github.com/bob-cd/bob.git"
+    repo = "https://github.com/bob-cd/bob.git"
 
   [[dev.test.resources]]
   name = "another-source"
@@ -36,7 +36,7 @@ image = "busybox:musl"
 
     [dev.test.resources.params]
     branch = "master"
-    url = "https://github.com/lispyclouds/clj-docker-client.git"
+    repo = "https://github.com/lispyclouds/clj-docker-client.git"
 
   [dev.test.artifacts]
   output = "/root/my-source"
