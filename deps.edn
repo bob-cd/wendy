@@ -13,7 +13,7 @@
 ;   You should have received a copy of the GNU General Public License
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
-{:deps    {org.clojure/clojure                   {:mvn/version "1.10.0"}
+{:deps    {org.clojure/clojure                   {:mvn/version "1.10.1"}
            org.martinklepsch/clj-http-lite       {:mvn/version "0.4.1"}
            cheshire                              {:mvn/version "5.8.1"}
            net.sourceforge.argparse4j/argparse4j {:mvn/version "0.8.1"}

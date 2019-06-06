@@ -19,7 +19,7 @@
   :description "Bob's reference CLI and his SO"
   :license {:name "GPL 3.0"
             :url  "https://www.gnu.org/licenses/gpl-3.0.en.html"}
-  :dependencies [[org.clojure/clojure "1.10.0"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [cheshire "5.8.1"]
                  [org.martinklepsch/clj-http-lite "0.4.1"]
                  [net.sourceforge.argparse4j/argparse4j "0.8.1"]
