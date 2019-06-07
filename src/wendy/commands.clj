@@ -131,6 +131,30 @@
                     name)]
     (effects/request url :delete)))
 
+(defn artifact-store-register!
+  [name resource-url]
+  (let [url (format "%s/artifact-store/%s"
+                    (bob-url)
+                    name)]
+    (effects/request url
+                     :post
+                     {:content-type :json
+                      :accept       :json
+                      :body         (json/generate-string {:url resource-url})})))
+
+(defn artifact-store-show!
+  []
+  (let [url (format "%s/artifact-store"
+                    (bob-url))]
+    (effects/request url)))
+
+(defn artifact-store-delete!
+  [name]
+  (let [url (format "%s/artifact-store/%s"
+                    (bob-url)
+                    name)]
+    (effects/request url :delete)))
+
 (comment
   (bob-url)
 
@@ -153,4 +177,11 @@
 
   (external-resource-list!)
 
-  (external-resource-delete! "git"))
+  (external-resource-delete! "git")
+
+  (artifact-store-register! "local"
+                            "http://localhost:8001")
+
+  (artifact-store-show!)
+
+  (artifact-store-delete! "local"))

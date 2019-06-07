@@ -158,8 +158,8 @@
         _                        (-> register-parser
                                      (.addArgument (into-array String ["-u" "--url"]))
                                      (.required true)
-                                     (.help "list all external resources"))
-        list-parser              (-> external-resource-parser
+                                     (.help "url of the resource provider"))
+        _                        (-> external-resource-parser
                                      (.addParser "list" true)
                                      (.help "list all registered external resources"))
         delete-parser            (-> external-resource-parser
@@ -168,7 +168,35 @@
         _                        (-> delete-parser
                                      (.addArgument (into-array String ["-n" "--name"]))
                                      (.required true)
-                                     (.help "name of the resource"))]
+                                     (.help "name of the resource"))
+        artifact-store-parser    (-> subparsers
+                                     (.addParser "artifact-store")
+                                     (.help "artifact store commands")
+                                     (.addSubparsers)
+                                     (.title "artifact store")
+                                     (.metavar "COMMANDS")
+                                     (.dest "artifact-store-command"))
+        artifact-register-parser (-> artifact-store-parser
+                                     (.addParser "register" true)
+                                     (.help "register an artifact store"))
+        _                        (-> artifact-register-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the artifact store"))
+        _                        (-> artifact-register-parser
+                                     (.addArgument (into-array String ["-u" "--url"]))
+                                     (.required true)
+                                     (.help "url of the artifact store"))
+        _                        (-> artifact-store-parser
+                                     (.addParser "show" true)
+                                     (.help "show the registered artifact store"))
+        artifact-delete-parser   (-> artifact-store-parser
+                                     (.addParser "delete" true)
+                                     (.help "delete the registered artifact store"))
+        _                        (-> artifact-delete-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required true)
+                                     (.help "name of the artifact store"))]
     parser))
 
 (defn dispatch
@@ -210,7 +238,16 @@
       "list"
       (commands/external-resource-list!)
       "delete"
-      (commands/external-resource-delete! (.get options "name")))))
+      (commands/external-resource-delete! (.get options "name")))
+    "artifact-store"
+    (case (.get options "artifact-store-command")
+      "register"
+      (commands/artifact-store-register! (.get options "name")
+                                         (.get options "url"))
+      "show"
+      (commands/artifact-store-show!)
+      "delete"
+      (commands/artifact-store-delete! (.get options "name")))))
 
 (defn error-out
   [message]

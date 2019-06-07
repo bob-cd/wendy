@@ -145,7 +145,7 @@
             result (.parseArgs parser args)]
         (is (= "external-resource" (.get result "command")))
         (is (= "list" (.get result "external-resource-command")))))
-    (testing "external resource register"
+    (testing "external resource delete"
       (let [args   (into-array String ["external-resource"
                                        "delete"
                                        "-n"
@@ -153,4 +153,31 @@
             result (.parseArgs parser args)]
         (is (= "external-resource" (.get result "command")))
         (is (= "delete" (.get result "external-resource-command")))
+        (is (= "git" (.get result "name")))))
+    (testing "artifact store register"
+      (let [args   (into-array String ["artifact-store"
+                                       "register"
+                                       "-n"
+                                       "git"
+                                       "-u"
+                                       "http://git-host.com:8000"])
+            result (.parseArgs parser args)]
+        (is (= "artifact-store" (.get result "command")))
+        (is (= "register" (.get result "artifact-store-command")))
+        (is (= "git" (.get result "name")))
+        (is (= "http://git-host.com:8000" (.get result "url")))))
+    (testing "artifact store show"
+      (let [args   (into-array String ["artifact-store"
+                                       "show"])
+            result (.parseArgs parser args)]
+        (is (= "artifact-store" (.get result "command")))
+        (is (= "show" (.get result "artifact-store-command")))))
+    (testing "artifact store delete"
+      (let [args   (into-array String ["artifact-store"
+                                       "delete"
+                                       "-n"
+                                       "git"])
+            result (.parseArgs parser args)]
+        (is (= "artifact-store" (.get result "command")))
+        (is (= "delete" (.get result "artifact-store-command")))
         (is (= "git" (.get result "name")))))))
