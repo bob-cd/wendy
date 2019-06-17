@@ -26,6 +26,7 @@
                          "--report-unsupported-elements-at-runtime"
                          "--enable-url-protocols=http"
                          "-H:Name=wendy"
+                         "-H:Path=target"
                          "-H:IncludeResourceBundles=net.sourceforge.argparse4j.internal.ArgumentParserImpl"]
             :jvm-opts   ["-Dclojure.compiler.direct-linking=true"]
             :extra-deps {clj.native-image

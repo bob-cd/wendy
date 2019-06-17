@@ -41,7 +41,7 @@ Clone the repo and in the repo and:
 - Run `<graal_donwload_path>/Home/bin/gu install native-image` to get the Graal native compiler.
 - Run `clojure -A:native-image` if using Clojure CLI or `lein native-image` with leiningen to compile it to a native executable.
   (Warning: Quite resource heavy step)
-- The executable is found in current dir if compiled via Clojure CLI or in `/target/default+uberjar` with leiningen.
+- The executable is found in `target/` if compiled via Clojure CLI or in `/target/default+uberjar/` with leiningen.
 - Running `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
 
 #### The full command reference can be found [here](https://github.com/bob-cd/wendy/blob/master/docs/commands.md)
