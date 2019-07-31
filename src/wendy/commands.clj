@@ -37,7 +37,7 @@
       (let [conf        result
             requests    (for [group    (build/groups-in conf)
                               pipeline (build/pipelines-of conf group)]
-                          {:url    (format "%s/pipeline/%s/%s"
+                          {:url    (format "%s/pipelines/groups/%s/names/%s"
                                            (bob-url)
                                            group
                                            pipeline)
@@ -57,7 +57,7 @@
 
 (defn pipeline-start!
   [group name]
-  (let [url (format "%s/pipeline/start/%s/%s"
+  (let [url (format "%s/pipelines/start/groups/%s/names/%s"
                     (bob-url)
                     group
                     name)]
@@ -65,7 +65,7 @@
 
 (defn pipeline-status!
   [group name number]
-  (let [url (format "%s/pipeline/status/%s/%s/%s"
+  (let [url (format "%s/pipelines/status/groups/%s/names/%s/number/%s"
                     (bob-url)
                     group
                     name
@@ -74,7 +74,7 @@
 
 (defn pipeline-stop!
   [group name number]
-  (let [url (format "%s/pipeline/stop/%s/%s/%s"
+  (let [url (format "%s/pipelines/stop/groups/%s/names/%s/number/%s"
                     (bob-url)
                     group
                     name
@@ -83,7 +83,7 @@
 
 (defn pipeline-logs!
   [group name number offset lines]
-  (let [url (format "%s/pipeline/logs/%s/%s/%s/%s/%s"
+  (let [url (format "%s/pipelines/logs/groups/%s/names/%s/number/%s/offset/%s/lines/%s"
                     (bob-url)
                     group
                     name
@@ -94,7 +94,7 @@
 
 (defn pipeline-delete!
   [group name]
-  (let [url (format "%s/pipeline/%s/%s"
+  (let [url (format "%s/pipelines/groups/%s/names/%s"
                     (bob-url)
                     group
                     name)]
@@ -109,7 +109,7 @@
 
 (defn external-resource-register!
   [name resource-url]
-  (let [url (format "%s/external-resource/%s"
+  (let [url (format "%s/external-resources/%s"
                     (bob-url)
                     name)]
     (effects/request url
@@ -126,14 +126,14 @@
 
 (defn external-resource-delete!
   [name]
-  (let [url (format "%s/external-resource/%s"
+  (let [url (format "%s/external-resources/%s"
                     (bob-url)
                     name)]
     (effects/request url :delete)))
 
 (defn artifact-store-register!
   [name resource-url]
-  (let [url (format "%s/artifact-store/%s"
+  (let [url (format "%s/artifact-stores/%s"
                     (bob-url)
                     name)]
     (effects/request url
@@ -144,13 +144,13 @@
 
 (defn artifact-store-show!
   []
-  (let [url (format "%s/artifact-store"
+  (let [url (format "%s/artifact-stores"
                     (bob-url))]
     (effects/request url)))
 
 (defn artifact-store-delete!
   [name]
-  (let [url (format "%s/artifact-store/%s"
+  (let [url (format "%s/artifact-stores/%s"
                     (bob-url)
                     name)]
     (effects/request url :delete)))
