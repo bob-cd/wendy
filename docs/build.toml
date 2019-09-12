@@ -46,7 +46,7 @@ image = "busybox:musl"
 
   [[dev.test.steps]]
   cmd = "sh -c 'touch test.txt && echo $env >> test.txt'"
-  produces_artifact = { name = "afile", path = "test.txt" }
+  produces_artifact = { name = "afile", path = "test.txt", store = "local" }
 
   [[dev.test.steps]]
   cmd = "cat test.txt"
@@ -54,4 +54,4 @@ image = "busybox:musl"
   [[dev.test.steps]]
   needs_resource = "my-source"
   cmd = "ls"
-  produces_artifact = { name = "afile1", path = "LICENSE" }
+  produces_artifact = { name = "afile1", path = "LICENSE", store = "local" }
