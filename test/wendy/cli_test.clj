@@ -116,17 +116,6 @@
         (is (= "delete" (.get result "lifecycle-cmd")))
         (is (= "dev" (.get result "group")))
         (is (= "test" (.get result "name")))))
-    (testing "gc"
-      (let [args   (into-array String ["gc"])
-            result (.parseArgs parser args)]
-        (is (= "gc" (.get result "command")))
-        (is (false? (.get result "all")))))
-    (testing "full gc"
-      (let [args   (into-array String ["gc"
-                                       "-a"])
-            result (.parseArgs parser args)]
-        (is (= "gc" (.get result "command")))
-        (is (.get result "all"))))
     (testing "external resource register"
       (let [args   (into-array String ["external-resource"
                                        "register"

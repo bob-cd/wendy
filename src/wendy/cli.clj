@@ -134,13 +134,6 @@
                                      (.addArgument (into-array String ["-n" "--name"]))
                                      (.required true)
                                      (.help "name of the pipeline"))
-        gc-parser                (-> subparsers
-                                     (.addParser "gc")
-                                     (.help "trigger garbage collection on bob"))
-        _                        (-> gc-parser
-                                     (.addArgument (into-array String ["-a" "--all"]))
-                                     (.action (Arguments/storeTrue))
-                                     (.help "trigger full GC resulting in build history loss"))
         external-resource-parser (-> subparsers
                                      (.addParser "external-resource")
                                      (.help "external resource commands")
@@ -228,8 +221,6 @@
       "delete"
       (commands/pipeline-delete! (.get options "group")
                                  (.get options "name")))
-    "gc"
-    (commands/gc! (.get options "all"))
     "external-resource"
     (case (.get options "external-resource-command")
       "register"
@@ -269,9 +260,6 @@
     (let [options (into-array String ["pipeline" "status" "--help"])]
       (.parseArgs (configured-parser) options))
     (catch Exception _))
-
-  (-> (configured-parser)
-      (.parseArgs (into-array String ["gc" "--all"])))
 
   (-> (configured-parser)
       (.parseArgs (into-array String ["external-resource" "list"])))

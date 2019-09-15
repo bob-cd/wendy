@@ -100,13 +100,6 @@
                     name)]
     (effects/request url :delete)))
 
-(defn gc!
-  [all?]
-  (let [url (format "%s/gc%s"
-                    (bob-url)
-                    (if all? "/all" ""))]
-    (effects/request url :post)))
-
 (defn external-resource-register!
   [name resource-url]
   (let [url (format "%s/external-resources/%s"
@@ -169,8 +162,6 @@
   (pipeline-logs! "dev" "test" "1" "0" "100")
 
   (pipeline-delete! "dev" "test")
-
-  (gc! true)
 
   (external-resource-register! "git"
                                "http://localhost:8000")

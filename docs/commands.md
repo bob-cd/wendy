@@ -105,15 +105,3 @@ $ `wendy external-resource un-register -n git`
 Lists all registered external resources by name.
 
 $ `wendy external-resource ls`
-
-### gc
-
-Triggers garbage collection on Bob.
-
-Params:
-- a = Triggers a full GC removing everything causing build history loss. Triggers partial GC
-if unspecified.
-
-$ `wendy gc`
-
-$ `wendy gc -a`
