@@ -100,6 +100,21 @@
                                      (.addArgument (into-array String ["-num" "--number"]))
                                      (.required true)
                                      (.help "the run number of the pipeline"))
+        list-parser            (-> pipeline-parser
+                                     (.addParser "list" true)
+                                     (.help "filter pipelines"))
+        _                        (-> list-parser
+                                     (.addArgument (into-array String ["-g" "--group"]))
+                                     (.required false)
+                                     (.help "group of the pipeline"))
+        _                        (-> list-parser
+                                     (.addArgument (into-array String ["-n" "--name"]))
+                                     (.required false)
+                                     (.help "name of the pipeline"))
+        _                        (-> list-parser
+                                     (.addArgument (into-array String ["-s" "--status"]))
+                                     (.required false)
+                                     (.help "filter by last run status"))
         logs-parser              (-> pipeline-parser
                                      (.addParser "logs" true)
                                      (.help "logs of a pipeline"))
@@ -212,6 +227,10 @@
       (commands/pipeline-stop! (.get options "group")
                                (.get options "name")
                                (.get options "number"))
+      "list"
+      (commands/pipeline-list! (.get options "group")
+                               (.get options "name")
+                               (.get options "status"))
       "logs"
       (commands/pipeline-logs! (.get options "group")
                                (.get options "name")

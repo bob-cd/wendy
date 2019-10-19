@@ -81,6 +81,15 @@
                     number)]
     (effects/request url :post)))
 
+(defn pipeline-list!
+  [group name status]
+  (let [url (format "%s/pipelines?group=%s&name=%s&status=%s"
+                    (bob-url)
+                   (str group)
+                   (str name)
+                   (str status))]
+    (effects/request url)))
+
 (defn pipeline-logs!
   [group name number offset lines]
   (let [url (format "%s/pipelines/logs/groups/%s/names/%s/number/%s/offset/%s/lines/%s"
