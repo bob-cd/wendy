@@ -16,6 +16,7 @@
 (ns wendy.commands
   (:require [cheshire.core :as json]
             [wendy.conf :as conf]
+            [wendy.utils :as utils]
             [wendy.build-conf :as build]
             [wendy.effects :as effects]))
 
@@ -80,6 +81,13 @@
                     name
                     number)]
     (effects/request url :post)))
+
+(defn pipeline-list!
+  [group name status]
+  (let [url (format "%s/pipelines%s"
+                    (bob-url)
+                    (utils/map-to-query-str {:group group :name name :status status}))]
+    (effects/request url)))
 
 (defn pipeline-logs!
   [group name number offset lines]

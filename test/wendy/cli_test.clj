@@ -46,6 +46,21 @@
             result (.parseArgs parser args)]
         (is (= "/tmp/build.toml"
                (.get result "config")))))
+    (testing "pipeline list"
+      (let [args (into-array String ["pipeline"
+                                     "list"
+                                     "-g"
+                                     "dev"
+                                     "-n"
+                                     "test"
+                                     "-s"
+                                     "pass"])
+            result (.parseArgs parser args)]
+        (is (= "list" (.get result "lifecycle-cmd")))
+        (is (= "dev" (.get result "group")))
+        (is (= "test" (.get result "name")))
+        (is (= "pass" (.get result "status")))))
+
     (testing "pipeline start"
       (let [args   (into-array String ["pipeline"
                                        "start"
