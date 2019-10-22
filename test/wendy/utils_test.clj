@@ -12,6 +12,7 @@
 ;
 ;   You should have received a copy of the GNU General Public License
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
+
 (ns wendy.utils-test
   (:require [clojure.test :refer :all]
             [wendy.utils :refer :all]))
@@ -33,4 +34,3 @@
     (let [arg {:group "some text"}
           result (map-to-query-str arg)]
       (is (= result "?group=some+text")))))
-

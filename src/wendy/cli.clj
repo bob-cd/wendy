@@ -100,7 +100,7 @@
                                      (.addArgument (into-array String ["-num" "--number"]))
                                      (.required true)
                                      (.help "the run number of the pipeline"))
-        list-parser            (-> pipeline-parser
+        list-parser              (-> pipeline-parser
                                      (.addParser "list" true)
                                      (.help "filter pipelines"))
         _                        (-> list-parser

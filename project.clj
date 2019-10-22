@@ -37,7 +37,7 @@
   :global-vars {*warn-on-reflection* true}
   :aliases {"kaocha" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner"]}
   :profiles {:kaocha
-             {:dependencies [[lambdaisland/kaocha "0.0-529"]]}
+             {:dependencies [[lambdaisland/kaocha "0.0-554"]]}
              :uberjar
              {:aot          :all
               :native-image {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}})
