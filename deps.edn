@@ -17,8 +17,8 @@
            org.martinklepsch/clj-http-lite       {:mvn/version "0.4.1"}
            cheshire                              {:mvn/version "5.9.0"}
            net.sourceforge.argparse4j/argparse4j {:mvn/version "0.8.1"}
-           com.electronwill.night-config/toml    {:mvn/version "3.6.0"}
-           com.electronwill.night-config/json    {:mvn/version "3.6.0"}}
+           com.electronwill.night-config/toml    {:mvn/version "3.6.2"}
+           com.electronwill.night-config/json    {:mvn/version "3.6.2"}}
  :paths   ["src" "resources"]
  :aliases {:native-image
            {:main-opts  ["-m clj.native-image wendy.main"

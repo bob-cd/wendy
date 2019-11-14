@@ -23,8 +23,8 @@
                  [cheshire "5.9.0"]
                  [org.martinklepsch/clj-http-lite "0.4.1"]
                  [net.sourceforge.argparse4j/argparse4j "0.8.1"]
-                 [com.electronwill.night-config/toml "3.6.0"]
-                 [com.electronwill.night-config/json "3.6.0"]]
+                 [com.electronwill.night-config/toml "3.6.2"]
+                 [com.electronwill.night-config/json "3.6.2"]]
   :plugins [[lein-ancient "0.6.15"]
             [io.taylorwood/lein-native-image "0.3.1"]]
   :native-image {:name "wendy"
