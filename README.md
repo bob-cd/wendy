@@ -49,3 +49,11 @@ Clone the repo and from the repo directory:
 - Running `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
 
 #### The full command reference can be found [here](https://github.com/bob-cd/wendy/blob/master/docs/commands.md)
+
+#### Configuration
+You can configure Wendy in `~/.wendy.edn`. When you create a `~/.wendy.edn`-file then it currently has to hold all the configuration. That means it needs to have following map:
+```
+{:connection {:host "127.0.0.1"
+              :port 7777}}
+```
+Here you can configure where your bob runs. Only Host and Port are possible for now.
