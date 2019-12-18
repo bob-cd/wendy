@@ -21,7 +21,7 @@
             :url  "https://www.gnu.org/licenses/gpl-3.0.en.html"}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [cheshire "5.9.0"]
-                 [org.martinklepsch/clj-http-lite "0.4.1"]
+                 [org.martinklepsch/clj-http-lite "0.4.3"]
                  [net.sourceforge.argparse4j/argparse4j "0.8.1"]
                  [com.electronwill.night-config/toml "3.6.2"]
                  [com.electronwill.night-config/json "3.6.2"]]
@@ -37,7 +37,7 @@
   :global-vars {*warn-on-reflection* true}
   :aliases {"kaocha" ["with-profile" "+kaocha" "run" "-m" "kaocha.runner"]}
   :profiles {:kaocha
-             {:dependencies [[lambdaisland/kaocha "0.0-554"]]}
+             {:dependencies [[lambdaisland/kaocha "0.0-565"]]}
              :uberjar
              {:aot          :all
               :native-image {:jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}})
