@@ -196,8 +196,8 @@
                                      (.required true)
                                      (.help "url of the artifact store"))
         _                        (-> artifact-store-parser
-                                     (.addParser "show" true)
-                                     (.help "show the registered artifact store"))
+                                     (.addParser "list" true)
+                                     (.help "list the registered artifact stores"))
         artifact-delete-parser   (-> artifact-store-parser
                                      (.addParser "delete" true)
                                      (.help "delete the registered artifact store"))
@@ -254,8 +254,8 @@
       "register"
       (commands/artifact-store-register! (.get options "name")
                                          (.get options "url"))
-      "show"
-      (commands/artifact-store-show!)
+      "list"
+      (commands/artifact-store-list!)
       "delete"
       (commands/artifact-store-delete! (.get options "name")))))
 

@@ -143,7 +143,7 @@
                       :accept       :json
                       :body         (json/generate-string {:url resource-url})})))
 
-(defn artifact-store-show!
+(defn artifact-store-list!
   []
   (let [url (format "%s/artifact-stores"
                     (bob-url))]
@@ -181,6 +181,6 @@
   (artifact-store-register! "local"
                             "http://localhost:8001")
 
-  (artifact-store-show!)
+  (artifact-store-list!)
 
   (artifact-store-delete! "local"))

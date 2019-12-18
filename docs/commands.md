@@ -91,17 +91,46 @@ Params:
 
 $ `wendy external-resource register -n git -u "http://192.168.33.10"`
 
-#### un-register
+#### delete
 
-Un-registers an external resource.
+Deletes an external resource.
 
 Params:
 - n: String = Unique name of the resource.
 
-$ `wendy external-resource un-register -n git`
+$ `wendy external-resource delete -n git`
 
-#### ls
+#### list
 
 Lists all registered external resources by name.
 
-$ `wendy external-resource ls`
+$ `wendy external-resource list`
+
+### artifact-store
+
+Group of commands dealing with artifact store.
+
+#### register
+
+Registers an artifact store.
+
+Params:
+- n: String = Unique name of the store.
+- u: String = Url of the store.
+
+$ `wendy artifact-store register -n s3 -u "http://192.168.33.11"`
+
+#### delete
+
+Deletes an artifact store.
+
+Params:
+- n: String = Unique name of the store.
+
+$ `wendy artifact-store delete -n git`
+
+#### list
+
+Lists all registered artifact stores by name.
+
+$ `wendy artifact-store list`

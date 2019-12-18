@@ -170,12 +170,12 @@
         (is (= "register" (.get result "artifact-store-command")))
         (is (= "git" (.get result "name")))
         (is (= "http://git-host.com:8000" (.get result "url")))))
-    (testing "artifact store show"
+    (testing "artifact store list"
       (let [args   (into-array String ["artifact-store"
-                                       "show"])
+                                       "list"])
             result (.parseArgs parser args)]
         (is (= "artifact-store" (.get result "command")))
-        (is (= "show" (.get result "artifact-store-command")))))
+        (is (= "list" (.get result "artifact-store-command")))))
     (testing "artifact store delete"
       (let [args   (into-array String ["artifact-store"
                                        "delete"
