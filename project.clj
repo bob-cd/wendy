@@ -31,6 +31,7 @@
                  :opts ["--initialize-at-build-time"
                         "--report-unsupported-elements-at-runtime"
                         "--enable-url-protocols=http"
+                        "--enable-url-protocols=https"
                         "-H:IncludeResourceBundles=net.sourceforge.argparse4j.internal.ArgumentParserImpl"]}
   :main wendy.main
   :target-path "target/%s"

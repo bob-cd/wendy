@@ -25,6 +25,7 @@
                          "--initialize-at-build-time"
                          "--report-unsupported-elements-at-runtime"
                          "--enable-url-protocols=http"
+                         "--enable-url-protocols=https"
                          "-H:Name=wendy"
                          "-H:Path=target"
                          "-H:IncludeResourceBundles=net.sourceforge.argparse4j.internal.ArgumentParserImpl"]
