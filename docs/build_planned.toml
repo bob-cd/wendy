@@ -27,12 +27,12 @@ image = "clojure:latest"
 
   [[dev.test.steps]]
 
-  [[dev.test.steps.in-parallel]]
-  needs-resource = "my-source-code"
+  [[dev.test.steps.in_parallel]]
+  needs_resource = "my-source-code"
   cmd = "lein test :unit"
 
-  [[dev.test.steps.in-parallel]]
-  needs-resource = "my-source-code"
+  [[dev.test.steps.in_parallel]]
+  needs_resource = "my-source-code"
   cmd = "lein test :integration"
 
 [dev.build-and-push]
@@ -53,13 +53,13 @@ image = "clojure:latest"
 
   [[dev.build-and-push.steps]]
 
-  [[dev.build-and-push.steps.in-parallel]]
-  needs-resource = "my-source-code"
-  produces-artifact = { name = "jar", path = "target/bob-standalone.jar" }
+  [[dev.build-and-push.steps.in_parallel]]
+  needs_resource = "my-source-code"
+  produces_artifact = { name = "jar", path = "target/bob-standalone.jar" }
   cmd = "lein uberjar"
 
-  [[dev.build-and-push.steps.in-parallel]]
-  needs-resource = "my-source-code"
+  [[dev.build-and-push.steps.in_parallel]]
+  needs_resource = "my-source-code"
   cmd = "lein deploy clojars"
 
 [dev.package]
@@ -71,8 +71,8 @@ image = "debian:latest"
   provider = "dev.build-and-push"
 
   [[dev.package.steps]]
-  needs-resource = "my-jar"
-  produces-artifact = { name = "dev-installer", path = "bob.deb" }
+  needs_resource = "my-jar"
+  produces_artifact = { name = "dev-installer", path = "bob.deb" }
   cmd = "make deb-package"
 
 [stable.sign]
@@ -84,8 +84,8 @@ image = "debian:latest"
   provider = "dev.build-and-push"
 
   [[stable.sign.steps]]
-  needs-resource = "my-jar"
-  produces-artifact = { name = "my-sign", path = "bob.sig" }
+  needs_resource = "my-jar"
+  produces_artifact = { name = "my-sign", path = "bob.sig" }
   cmd = "gpg --output bob.sig --sign bob-standalone.jar"
 
 [stable.deploy]
@@ -103,12 +103,12 @@ image = "ansible:latest"
 
   [[stable.deploy.steps]]
 
-  [[stable.deploy.steps.in-parallel]]
-  needs-resource = "my-sign"
+  [[stable.deploy.steps.in_parallel]]
+  needs_resource = "my-sign"
   cmd = "scp user@cdn.com *.sig"
 
-  [[stable.deploy.steps.in-parallel]]
-  needs-resource = "my-jar"
+  [[stable.deploy.steps.in_parallel]]
+  needs_resource = "my-jar"
   cmd = "scp user@cdn.com *.jar"
 
   [[stable.deploy.steps]]
