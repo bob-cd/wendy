@@ -27,19 +27,10 @@ encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 You can run the bootstrap-script to generate a wendy binary. Then you can add it to your PATH if you want to.
 
 ### Dependencies
-bash, curl, tar, jq
-
-### Premises
-- Running a Bob instance on localhost:7777
-- Running an artifact store on localhost:8001
-- Running an external resource on localhost:8000
+bash, curl, tar, jq, docker-compose
 
 ### Manual:
 - Start Docker daemon e.g. with `systemctl start docker`
-- Start Bob's database e.g. with `docker run --detach --name bob-db -p 5432:5432 -e POSTGRES_DB=bob -e POSTGRES_USER=bob postgres:alpine`
-- Start Bob's artifact store e.g. with `docker run --detach --name bob-artifact -p 8001:8001 bobcd/artifact-local`
-- Start Bob's external resource e.g. with `docker run --detach --name bob-resource -p 8000:8000 bobcd/resource-git`
-- Start Bob e.g. with `docker run --detach --privileged --name bob -p 7777:7777 bobcd/bob`
 - Run `bootstrap_wendy.sh`
 
 ## Building and running from source
