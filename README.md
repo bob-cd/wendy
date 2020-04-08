@@ -22,17 +22,6 @@ encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 
 **This is a work in progress in conjunction with Bob and will be evolving.**
 
-## Installation
-
-You can run the bootstrap-script to generate a wendy binary. Then you can add it to your PATH if you want to.
-
-### Dependencies
-bash, curl, tar, jq, docker-compose
-
-### Manual:
-- Start Docker daemon e.g. with `systemctl start docker`
-- Run `bootstrap_wendy.sh`
-
 ## Building and running from source
 
 ### Requirements:
