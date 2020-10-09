@@ -23,7 +23,7 @@
 (defn bob-url
   []
   (let [{:keys [host port]} (:connection (conf/read-conf))]
-    (format "http://%s:%d/api" host port)))
+    (format "http://%s:%d" host port)))
 
 (defn can-we-build-it!
   []
