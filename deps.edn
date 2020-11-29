@@ -13,12 +13,12 @@
 ;   You should have received a copy of the GNU General Public License
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
-{:deps    {org.clojure/clojure                   {:mvn/version "1.10.1"}
-           org.martinklepsch/clj-http-lite       {:mvn/version "0.4.3"}
-           cheshire                              {:mvn/version "5.9.0"}
-           net.sourceforge.argparse4j/argparse4j {:mvn/version "0.8.1"}
-           com.electronwill.night-config/toml    {:mvn/version "3.6.2"}
-           com.electronwill.night-config/json    {:mvn/version "3.6.2"}}
+{:deps    {org.clojure/clojure  {:mvn/version "1.10.1"}
+           java-http-clj        {:mvn/version "0.4.1"}
+           cheshire             {:mvn/version "5.9.0"}
+           clj-commons/clj-yaml {:mvn/version "0.7.2"}
+           camel-snake-kebab    {:mvn/version "0.4.2"}
+           cli-matic            {:mvn/version "0.4.3"}}
  :paths   ["src" "resources"]
  :aliases {:native-image
            {:main-opts  ["-m clj.native-image wendy.main"
@@ -27,8 +27,7 @@
                          "--enable-url-protocols=http"
                          "--enable-url-protocols=https"
                          "-H:Name=wendy"
-                         "-H:Path=target"
-                         "-H:IncludeResourceBundles=net.sourceforge.argparse4j.internal.ArgumentParserImpl"]
+                         "-H:Path=target"]
             :jvm-opts   ["-Dclojure.compiler.direct-linking=true"]
             :extra-deps {clj.native-image
                          {:git/url "https://github.com/taylorwood/clj.native-image.git"
@@ -37,4 +36,8 @@
            {:extra-deps {olical/depot {:mvn/version "1.8.2"}}
             :main-opts  ["-m" "depot.outdated.main"]}
            :test
-           {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-565"}}}}}
+           {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-565"}}}
+           :repl {:extra-deps {cider/cider-nrepl           {:mvn/version "0.19.0"}
+                               nrepl/nrepl                 {:mvn/version "0.5.3"}
+                               org.clojure/tools.namespace {:mvn/version "0.2.11"}}
+                  :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]}}}
