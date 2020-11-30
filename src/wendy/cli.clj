@@ -30,32 +30,39 @@
       (yaml/parse-string :keywords false)
       (get "paths")))
 
+(defn extract-opts [parameters]
+  (let [in (get parameters "in")
+        name (get parameters "name")
+        description (get parameters "description")
+        type (keyword (get-in parameters ["schema" "type"]))
+        required (when (true? (get parameters "required"))
+                   {:default :present})]
+    (when (or (= in "query") (= in "path"))
+      (merge {:as description :option name :type type}
+             required))))
+
+(defn extract-subcommand [path path-item]
+  (let [method      (key path-item)
+        operation   (val path-item)
+        command     (-> (get operation "operationId")
+                        (csk/->kebab-case))
+        description (get operation "summary")
+        opts        (->> (get operation "parameters")
+                         (map extract-opts))
+        subcommand {:method method :command command :path path :description description :runs invoke}]
+    (if (empty? opts)
+      subcommand
+      (assoc subcommand :opts opts))))
+
 (defn transform-configuration [conf]
   (let [head {:command "wendy"
               :description "Bob's SO and the reference CLI."
               :version "1"}
-        extract-opts (fn [parameters]
-                       (let [in (get parameters "in")
-                             name (get parameters "name")
-                             description (get parameters "description")
-                             type (keyword (get-in parameters ["schema" "type"]))]
-                         (when (or (= in "query") (= in "path"))
-                           {:as description
-                            :option name
-                            :type type})))
-        extract (fn [path path-item]
-                  (let [method (key path-item)
-                        operation (val path-item)
-                        command (-> (get operation "operationId")
-                                    (csk/->kebab-case))
-                        description (get operation "summary")]
-                    (if-let [opts (get operation "parameters")]
-                      {:method method :command command :path path :description description :runs invoke :opts (mapv extract-opts opts)}
-                      {:method method :command command :path path :description description :runs invoke})))
         transform (fn [path]
                     (let [p (key path)]
-                      (into {} (map #(extract p %) (val path)))))]
-    (assoc head :subcommands (mapv transform conf))))
+                      (map #(extract-subcommand p %) (val path))))]
+    (assoc head :subcommands (-> (map transform conf)
+                                 (flatten)))))
 
 (defn run [args]
   (cli/run-cmd args (transform-configuration (retrieve-configuration))))
@@ -63,6 +70,6 @@
 (comment
   (clojure.pprint/pprint (get (yaml/parse-string (:body (http/get "http://localhost:7777/api.yaml" {:headers {"Accept" "application/yaml"
                                                                                                               "Accept-Encoding" ["gzip" "deflate"]}}))
-                                                :keywords false)
+                                                 :keywords false)
                               "paths"))
   (clojure.pprint/pprint (transform-configuration (retrieve-configuration))))
