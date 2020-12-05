@@ -37,7 +37,7 @@
             :main-opts  ["-m" "depot.outdated.main"]}
            :test
            {:extra-deps {lambdaisland/kaocha {:mvn/version "0.0-565"}}}
-           :repl {:extra-deps {cider/cider-nrepl           {:mvn/version "0.19.0"}
-                               nrepl/nrepl                 {:mvn/version "0.5.3"}
-                               org.clojure/tools.namespace {:mvn/version "0.2.11"}}
+           :repl {:extra-deps {cider/cider-nrepl           {:mvn/version "0.25.5"}
+                               nrepl/nrepl                 {:mvn/version "0.8.3"}
+                               org.clojure/tools.namespace {:mvn/version "1.1.0"}}
                   :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]}}}

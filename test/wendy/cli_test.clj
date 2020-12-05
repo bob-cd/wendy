@@ -16,8 +16,28 @@
 (ns wendy.cli-test
   (:require [clojure.test :refer :all]
             [wendy.cli :refer :all])
-  (:import (java.io File)
-           (net.sourceforge.argparse4j.inf ArgumentParser)))
+  (:import (java.io File)))
+
+(deftest test-interpolate
+  (testing "interpolate success"
+    (is (= "a/a-id/path/to/stuff/and/b-id/stuff"
+           (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
+                             {:id             "a-id"
+                              :xid            "b-id"
+                              :something-else "stuff"}))))
+  (testing "interpolate missing params"
+    (is (= "a/a-id/path/to/{something-else}/and/{xid}/{not-this}"
+           (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
+                             {:id "a-id"})))))
+
+(deftest test-join-query-params
+  (testing "joining success"
+    (is (= "/pipelines&foo=bar?baz=meh"
+           (join-query-params "/pipelines" {:foo "bar"
+                                            :baz "meh"}))))
+  (testing "no query params"
+    (is (= "/pipelines"
+           (join-query-params "/pipelines" {})))))
 
 (deftest test-top-level-commands
   (let [parser ^ArgumentParser (configured-parser)]

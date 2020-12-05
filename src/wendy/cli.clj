@@ -14,14 +14,15 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.cli
-  (:require [cheshire.core :as json]
+  (:require [wendy.request :as r]
+            [cheshire.core :as json]
             [clj-yaml.core :as yaml]
             [java-http-clj.core :as http]
             [camel-snake-kebab.core :as csk]
             [cli-matic.core :as cli]))
 
-(defn invoke [& args]
-  (println args))
+(defn invoke [args]
+  (r/cli-request args))
 
 (defn retrieve-configuration []
   (-> (http/get "http://localhost:7777/api.yaml" {:headers {"Accept" "application/yaml"
@@ -38,7 +39,7 @@
         required (when (true? (get parameters "required"))
                    {:default :present})]
     (when (or (= in "query") (= in "path"))
-      (merge {:as description :option name :type type}
+      (merge {:as description :option name :type type :in in}
              required))))
 
 (defn extract-subcommand [path path-item]
@@ -49,7 +50,12 @@
         description (get operation "summary")
         opts        (->> (get operation "parameters")
                          (map extract-opts))
-        subcommand {:method method :command command :path path :description description :runs invoke}]
+        runs        (fn [params]
+                      (invoke {:params params
+                               :opts opts
+                               :method method
+                               :uri path}))
+        subcommand {:method method :command command :path path :description description :runs runs}]
     (if (empty? opts)
       subcommand
       (assoc subcommand :opts opts))))
@@ -72,4 +78,15 @@
                                                                                                               "Accept-Encoding" ["gzip" "deflate"]}}))
                                                  :keywords false)
                               "paths"))
-  (clojure.pprint/pprint (transform-configuration (retrieve-configuration))))
+  (clojure.pprint/pprint (transform-configuration (retrieve-configuration)))
+
+  (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
+                    {:id             "a-id"
+                     :xid            "b-id"
+                     :something-else "stuff"})
+  (map (fn [[k v]]
+         (str (name k) "=" v))
+       {:foo "bar"
+        :baz "meh"})
+  (join-query-params "foo" {:foo "bar"
+                            :baz "meh"}))
