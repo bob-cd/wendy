@@ -45,10 +45,10 @@
   [path query-map]
   (let [query-list   (map (fn [[k v]] (str (name k) "=" v))
                           query-map)
-        query-string (s/join "?" query-list)]
+        query-string (s/join "&" query-list)]
     (if (empty? query-map)
       path
-      (str path "&" query-string))))
+      (str path "?" query-string))))
 
 (defn extract-params [params opts]
   (let [opts (into {} (map (fn [opt]
@@ -68,6 +68,13 @@
                           (into {}))]
     [path-params query-params]))
 
+(defn request [args-map]
+  (let [{:keys [host port]} (:connection (conf/read-conf))
+        defaults-map {:uri (str "http://" host ":" port (:uri args-map))}
+        request-map (merge args-map
+                           defaults-map)]
+    (http/send request-map)))
+
 (defn cli-request [{:keys [body headers method uri params opts]}]
   (let [[path-params query-params] (extract-params params opts)
         transformed-uri (-> uri
@@ -82,11 +89,3 @@
         response (request request-args)]
     (println response)
     0))
-
-(defn request [args-map]
-  (let [{:keys [host port]} (:connection (conf/read-conf))
-        defaults-map {:uri (str "http://" host ":" port (:uri args-map))}
-        request-map (merge args-map
-                           defaults-map)]
-    (http/send request-map)))
-
