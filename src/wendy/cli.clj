@@ -32,14 +32,14 @@
       (get "paths")))
 
 (defn extract-opts [parameters]
-  (let [in (get parameters "in")
-        name (get parameters "name")
-        description (get parameters "description")
-        type (keyword (get-in parameters ["schema" "type"]))
+  (let [pin (get parameters "in")
+        pname (get parameters "name")
+        pdescription (get parameters "description")
+        ptype (keyword (get-in parameters ["schema" "type"]))
         required (when (true? (get parameters "required"))
                    {:default :present})]
-    (when (or (= in "query") (= in "path"))
-      (merge {:as description :option name :type type :in in}
+    (when (or (= pin "query") (= pin "path"))
+      (merge {:as pdescription :option pname :type ptype :in pin}
              required))))
 
 (defn extract-subcommand [path path-item]
