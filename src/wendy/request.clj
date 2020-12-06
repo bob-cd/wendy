@@ -14,9 +14,8 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.request
-  (:require [wendy.conf :as conf]
-            [wendy.utils :as u]
-            [java-http-clj.core :as http]))
+  (:require [wendy.utils :as u]
+            [wendy.effects :as e]))
 
 (defn extract-params [params opts]
   (let [opts (->> (map (fn [opt]
@@ -37,13 +36,6 @@
                           (into {}))]
     [path-params query-params]))
 
-(defn request [args-map]
-  (let [{:keys [host port]} (:connection (conf/read-conf))
-        defaults-map {:uri (str "http://" host ":" port (:uri args-map))}
-        request-map (merge args-map
-                           defaults-map)]
-    (http/send request-map)))
-
 (defn cli-request [{:keys [body headers method uri params opts]}]
   (let [[path-params query-params] (extract-params params opts)
         transformed-uri (-> uri
@@ -55,6 +47,6 @@
                                  headers)
                       :method method
                       :uri transformed-uri}
-        response (request request-args)]
+        response (e/request request-args)]
     (println response)
     0))

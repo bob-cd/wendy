@@ -15,6 +15,7 @@
 
 (ns wendy.cli
   (:require [wendy.request :as r]
+            [wendy.effects :as e]
             [cheshire.core :as json]
             [clj-yaml.core :as yaml]
             [camel-snake-kebab.core :as csk]
@@ -24,7 +25,7 @@
   (r/cli-request args))
 
 (defn retrieve-configuration []
-  (-> (r/request {:uri "/api.yaml"
+  (-> (e/request {:uri "/api.yaml"
                   :headers {"Accept" "application/yaml"
                             "Accept-Encoding" ["gzip" "deflate"]}})
       (:body)
@@ -80,10 +81,6 @@
                               "paths"))
   (clojure.pprint/pprint (transform-configuration (retrieve-configuration)))
 
-  (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
-                    {:id             "a-id"
-                     :xid            "b-id"
-                     :something-else "stuff"})
   (map (fn [[k v]]
          (str (name k) "=" v))
        {:foo "bar"

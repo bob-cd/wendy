@@ -34,3 +34,20 @@
     (let [arg {:group "some text"}
           result (map-to-query-str arg)]
       (is (= result "?group=some+text")))))
+
+(deftest test-interpolate
+  (testing "interpolate missing params"
+    (is (= "a/a-id/path/to/{something-else}/and/{xid}/{not-this}"
+           (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
+                             {:id "a-id"}))))
+  (testing "Successful interpolation"
+    (is (= "a/a-id/path/to/stuff/and/b-id/stuff"
+           (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
+                             {:id             "a-id"
+                              :xid            "b-id"
+                              :something-else "stuff"})))
+    (is (= "a-id/a-id/path/to/stuff/and/b-id/stuff"
+           (interpolate-path "{id}/{id}/path/to/{something-else}/and/{xid}/{not-this}"
+                             {:id             "a-id"
+                              :xid            "b-id"
+                              :something-else "stuff"})))))
