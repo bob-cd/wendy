@@ -15,47 +15,16 @@
 
 (ns wendy.request
   (:require [wendy.conf :as conf]
-            [java-http-clj.core :as http]
-            [clojure.string :as s])
-  (:import (java.util.regex Pattern)))
-
-(defn interpolate-path
-  "Replaces all occurrences of {k1}, {k2} ... with the value map provided.
-
-  Example:
-  given a/path/{id}/on/{not-this}/root/{id} and {:id hello}
-  results in: a/path/hello/{not-this}/root/hello."
-  [path path-map]
-  (let [[param value] (first path-map)]
-    (if (nil? param)
-      path
-      (recur
-       (s/replace path
-                  (re-pattern (format "\\{([%s].*?)\\}"
-                                      (-> param name Pattern/quote)))
-                  value)
-       (dissoc path-map param)))))
-
-(defn join-query-params
-  "Joins a path with its query parameters.
-
-  Example:
-  given a/my/path and {:foo bar}
-  results in: a/my/path&foo=bar"
-  [path query-map]
-  (let [query-list   (map (fn [[k v]] (str (name k) "=" v))
-                          query-map)
-        query-string (s/join "&" query-list)]
-    (if (empty? query-map)
-      path
-      (str path "?" query-string))))
+            [wendy.utils :as u]
+            [java-http-clj.core :as http]))
 
 (defn extract-params [params opts]
-  (let [opts (into {} (map (fn [opt]
-                             (let [option (keyword (:option opt))
-                                   in     (keyword (:in opt))]
-                               {option in}))
-                          opts))
+  (let [opts (->> (map (fn [opt]
+                         (let [option (keyword (:option opt))
+                               in     (keyword (:in opt))]
+                           {option in}))
+                      opts)
+                  (into {}))
         path-params (->> (for [[k v] params
                                :let [o (get opts k)]
                                :when (= o :path)]
@@ -78,8 +47,8 @@
 (defn cli-request [{:keys [body headers method uri params opts]}]
   (let [[path-params query-params] (extract-params params opts)
         transformed-uri (-> uri
-                            (interpolate-path path-params)
-                            (join-query-params query-params))
+                            (u/interpolate-path path-params)
+                            (str (u/map-to-query-str query-params)))
         request-args {:body body
                       :headers (merge
                                  {"Accept" "application/json"}

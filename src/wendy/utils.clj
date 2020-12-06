@@ -14,7 +14,26 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.utils
-  (:import java.net.URLEncoder))
+  (:require [clojure.string :as s])
+  (:import [java.net URLEncoder]
+           [java.util.regex Pattern]))
+
+(defn interpolate-path
+  "Replaces all occurrences of {k1}, {k2} ... with the value map provided.
+
+  Example:
+  given a/path/{id}/on/{not-this}/root/{id} and {:id hello}
+  results in: a/path/hello/{not-this}/root/hello."
+  [path path-map]
+  (let [[param value] (first path-map)]
+    (if (nil? param)
+      path
+      (recur
+       (s/replace path
+                  (re-pattern (format "\\{([%s].*?)\\}"
+                                      (-> param name Pattern/quote)))
+                  value)
+       (dissoc path-map param)))))
 
 (defn map-to-query-str
   [m]
@@ -23,6 +42,6 @@
        (map (fn [[param value]]
               (let [param-name    (name param)
                     value-encoded (str (URLEncoder/encode value))]
-                (str param-name "=" value-encoded) )))
+                (str param-name "=" value-encoded))))
        (clojure.string/join "&")
        (#(if (not-empty %) (str "?" %) ""))))
