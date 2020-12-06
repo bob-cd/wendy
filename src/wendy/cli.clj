@@ -17,7 +17,6 @@
   (:require [wendy.request :as r]
             [cheshire.core :as json]
             [clj-yaml.core :as yaml]
-            [java-http-clj.core :as http]
             [camel-snake-kebab.core :as csk]
             [cli-matic.core :as cli]))
 
@@ -25,8 +24,9 @@
   (r/cli-request args))
 
 (defn retrieve-configuration []
-  (-> (http/get "http://localhost:7777/api.yaml" {:headers {"Accept" "application/yaml"
-                                                            "Accept-Encoding" ["gzip" "deflate"]}})
+  (-> (r/request {:uri "/api.yaml"
+                  :headers {"Accept" "application/yaml"
+                            "Accept-Encoding" ["gzip" "deflate"]}})
       (:body)
       (yaml/parse-string :keywords false)
       (get "paths")))

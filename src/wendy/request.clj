@@ -69,17 +69,24 @@
     [path-params query-params]))
 
 (defn cli-request [{:keys [body headers method uri params opts]}]
-  (let [{:keys [host port]} (:connection (conf/read-conf))
-        [path-params query-params] (extract-params params opts)
+  (let [[path-params query-params] (extract-params params opts)
         transformed-uri (-> uri
                             (interpolate-path path-params)
                             (join-query-params query-params))
-        request {:body body
-                 :headers (merge
-                            {"Accept" "application/json"}
-                            headers)
-                 :method method
-                 :uri (str "http://" host ":" port transformed-uri)}
-        response (http/send request)]
+        request-args {:body body
+                      :headers (merge
+                                 {"Accept" "application/json"}
+                                 headers)
+                      :method method
+                      :uri transformed-uri}
+        response (request request-args)]
     (println response)
     0))
+
+(defn request [args-map]
+  (let [{:keys [host port]} (:connection (conf/read-conf))
+        defaults-map {:uri (str "http://" host ":" port (:uri args-map))}
+        request-map (merge args-map
+                           defaults-map)]
+    (http/send request-map)))
+
