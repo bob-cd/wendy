@@ -58,10 +58,13 @@
       {:file file}
       (fail-with (str "Missing or unreadble file: " path)))))
 
+(defn from-stdin []
+  (if (> (.available System/in) 0)
+    (println "STDIN: " (slurp *in*))
+    (println "No Input")))
+
 (comment
   (failed? (unsafe! (/ 5 0)))
-
-  (fail-with "shizzz" 403)
 
   (request "https://httpbin.org/get")
 

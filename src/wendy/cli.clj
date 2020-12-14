@@ -33,15 +33,24 @@
       (get "paths")))
 
 (defn extract-opts [parameters]
-  (let [pin (get parameters "in")
-        pname (get parameters "name")
-        pdescription (get parameters "description")
-        ptype (keyword (get-in parameters ["schema" "type"]))
+  (let [param-in (get parameters "in")
+        param-name (get parameters "name")
+        param-description (get parameters "description")
+        param-type (keyword (get-in parameters ["schema" "type"]))
         required (when (true? (get parameters "required"))
                    {:default :present})]
-    (when (or (= pin "query") (= pin "path"))
-      (merge {:as pdescription :option pname :type ptype :in pin}
+    (when (or (= param-in "query") (= param-in "path"))
+      (merge {:as param-description :option param-name :type param-type :in param-in}
              required))))
+
+(defn extract-body-opt [path-item opts]
+  (if-let [body-opt (get path-item "requestBody")]
+    (let [param-in "body"
+          param-name "data"
+          param-description (get body-opt "description")
+          param-type :slurp]
+      (merge opts {:as param-description :option param-name :type param-type :in param-in :default :present}))
+    opts))
 
 (defn extract-subcommand [path path-item]
   (let [method      (key path-item)
@@ -50,7 +59,8 @@
                         (csk/->kebab-case))
         description (get operation "summary")
         opts        (->> (get operation "parameters")
-                         (map extract-opts))
+                         (map extract-opts)
+                         (extract-body-opt operation))
         runs        (fn [params]
                       (invoke {:params params
                                :opts opts
@@ -86,4 +96,22 @@
        {:foo "bar"
         :baz "meh"})
   (join-query-params "foo" {:foo "bar"
-                            :baz "meh"}))
+                            :baz "meh"})
+
+  (->> (map extract-opts
+        '({"name" "group",
+           "required" false,
+           "in" "query",
+           "description" "The group of the pipeline",
+           "schema" {"type" "string"}}
+          {"name" "name",
+           "required" false,
+           "in" "query",
+           "description" "The name of the pipeline",
+           "schema" {"type" "string"}}
+          {"name" "status",
+           "required" false,
+           "in" "query",
+           "description" "The status of the pipeline",
+           "schema" {"type" "string"}}))
+       (cons nil)))
