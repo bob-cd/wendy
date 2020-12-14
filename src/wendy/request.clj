@@ -25,25 +25,29 @@
                            {option in}))
                       opts)
                   (into {}))
-        path-params (->> (for [[k v] params
-                               :let [o (get opts k)]
-                               :when (= o :path)]
-                          {k v})
-                         (into {}))
-        query-params (->> (for [[k v] params
-                                :let [o (get opts k)]
-                                :when (= o :query)]
-                           {k v})
-                          (into {}))
-        body-param (->> (for [[k v] params
-                                :let [o (get opts k)]
-                                :when (= o :body)]
-                           {k v})
-                        (into {}))]
-    [path-params query-params body-param]))
+        param-map (reduce (fn [p-map param]
+                            (let [[k v] param
+                                  o (get opts k)]
+                              (cond
+                                (= o :path) (assoc-in p-map [:path k] v)
+                                (= o :query) (assoc-in p-map [:query k] v)
+                                (= o :body) (assoc-in p-map [:body k] v)
+                                :else p-map)))
+                          {:path {} :query {} :body {}}
+                          params)]
+    (reduce (fn [p-map param]
+              (let [[k v] param
+                    o (get opts k)]
+                (cond
+                  (= o :path) (assoc-in p-map [:path-params k] v)
+                  (= o :query) (assoc-in p-map [:query-params k] v)
+                  (= o :body) (assoc-in p-map [:body-param k] v)
+                  :else p-map)))
+            {:path-params {} :query-params {} :body-param {}}
+            params)))
 
 (defn cli-request [{:keys [body headers method uri params opts]}]
-  (let [[path-params query-params body-param] (extract-params params opts)
+  (let [{:keys [path-params query-params body-param]} (extract-params params opts)
         transformed-uri (-> uri
                             (u/interpolate-path path-params)
                             (str (u/map-to-query-str query-params)))
@@ -55,8 +59,5 @@
                       :method method
                       :uri transformed-uri}
         response (e/request request-args)]
+    (println response)
     0))
-
-(comment
-  (java-http-clj.core/post {:body {"image" "gradle:jdk11"}
-                            :headers {"Accept" "application/json"}, :method :post, :uri "/pipelines/groups/foo/names/bar"}))
