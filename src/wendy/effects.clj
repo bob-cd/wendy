@@ -17,6 +17,7 @@
   (:require [wendy.conf :as conf]
             [clojure.java.io :as io]
             [cheshire.core :as json]
+            [clj-yaml.core :as yaml]
             [java-http-clj.core :as http])
   (:import (java.nio.file Files)))
 
@@ -63,6 +64,14 @@
     (println "STDIN: " (slurp *in*))
     (println "No Input")))
 
+(defn retrieve-configuration []
+  (-> (request {:uri "/api.yaml"
+                :headers {"Accept" "application/yaml"
+                          "Accept-Encoding" ["gzip" "deflate"]}})
+      (:body)
+      (yaml/parse-string :keywords false)
+      (get "paths")))
+
 (comment
   (failed? (unsafe! (/ 5 0)))
 
@@ -75,4 +84,6 @@
   (file-from "lulz.edn")
 
   (request "http://localhost:7777/api/pipeline/stop/dev/test/1"
-           :post))
+           :post)
+
+  (retrieve-configuration))

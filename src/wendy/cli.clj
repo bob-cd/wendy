@@ -17,20 +17,11 @@
   (:require [wendy.request :as r]
             [wendy.effects :as e]
             [cheshire.core :as json]
-            [clj-yaml.core :as yaml]
             [camel-snake-kebab.core :as csk]
             [cli-matic.core :as cli]))
 
 (defn invoke [args]
-  (r/cli-request args))
-
-(defn retrieve-configuration []
-  (-> (e/request {:uri "/api.yaml"
-                  :headers {"Accept" "application/yaml"
-                            "Accept-Encoding" ["gzip" "deflate"]}})
-      (:body)
-      (yaml/parse-string :keywords false)
-      (get "paths")))
+  (r/api-request args))
 
 (defn extract-opts [parameters]
   (let [param-in (get parameters "in")
@@ -82,14 +73,10 @@
                                  (flatten)))))
 
 (defn run [args]
-  (cli/run-cmd args (transform-configuration (retrieve-configuration))))
+  (cli/run-cmd args (transform-configuration (e/retrieve-configuration))))
 
 (comment
-  (clojure.pprint/pprint (get (yaml/parse-string (:body (http/get "http://localhost:7777/api.yaml" {:headers {"Accept" "application/yaml"
-                                                                                                              "Accept-Encoding" ["gzip" "deflate"]}}))
-                                                 :keywords false)
-                              "paths"))
-  (clojure.pprint/pprint (transform-configuration (retrieve-configuration)))
+  (clojure.pprint/pprint (transform-configuration (e/retrieve-configuration)))
 
   (map (fn [[k v]]
          (str (name k) "=" v))
@@ -114,4 +101,5 @@
            "in" "query",
            "description" "The status of the pipeline",
            "schema" {"type" "string"}}))
-       (cons nil)))
+       (cons nil))
+  (run '("health-check")))

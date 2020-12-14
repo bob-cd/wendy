@@ -46,7 +46,7 @@
             {:path-params {} :query-params {} :body-param {}}
             params)))
 
-(defn cli-request [{:keys [body headers method uri params opts]}]
+(defn api-request [{:keys [body headers method uri params opts]}]
   (let [{:keys [path-params query-params body-param]} (extract-params params opts)
         transformed-uri (-> uri
                             (u/interpolate-path path-params)
