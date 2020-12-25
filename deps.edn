@@ -18,7 +18,8 @@
            cheshire             {:mvn/version "5.9.0"}
            clj-commons/clj-yaml {:mvn/version "0.7.2"}
            camel-snake-kebab    {:mvn/version "0.4.2"}
-           cli-matic            {:mvn/version "0.4.3"}}
+           cli-matic            {:git/url "https://github.com/TimoKramer/cli-matic.git"
+                                 :sha "1fb7eb852c07ec2094f6ea8c85f44361bea88b02"}}
  :paths   ["src" "resources"]
  :aliases {:native-image
            {:main-opts  ["-m clj.native-image wendy.main"
