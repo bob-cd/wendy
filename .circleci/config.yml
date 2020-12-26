@@ -25,7 +25,7 @@ jobs:
       - checkout
       - restore_cache:
           key: wendy-{{ checksum "deps.edn" }}
-      - run: clojure -A:test -m kaocha.runner
+      - run: clojure -A:test
       - save_cache:
           paths:
             - ~/.m2
