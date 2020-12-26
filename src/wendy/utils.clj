@@ -30,7 +30,7 @@
       path
       (recur
        (s/replace path
-                  (re-pattern (format "\\{([%s].*?)\\}"
+                  (re-pattern (format "\\{(%s.*?)\\}"
                                       (-> param name Pattern/quote)))
                   value)
        (dissoc path-map param)))))

@@ -59,11 +59,6 @@
       {:file file}
       (fail-with (str "Missing or unreadble file: " path)))))
 
-(defn from-stdin []
-  (if (> (.available System/in) 0)
-    (println "STDIN: " (slurp *in*))
-    (println "No Input")))
-
 (defn retrieve-configuration []
   (-> (request {:uri "/api.yaml"
                 :headers {"Accept" "application/yaml"

@@ -41,13 +41,22 @@
            (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
                              {:id "a-id"}))))
   (testing "Successful interpolation"
-    (is (= "a/a-id/path/to/stuff/and/b-id/stuff"
+    (is (= "a/a-id/path/to/stuff/and/b-id/{not-this}"
            (interpolate-path "a/{id}/path/to/{something-else}/and/{xid}/{not-this}"
                              {:id             "a-id"
                               :xid            "b-id"
                               :something-else "stuff"})))
-    (is (= "a-id/a-id/path/to/stuff/and/b-id/stuff"
+    (is (= "a-id/a-id/path/to/stuff/and/b-id/{not-this}"
            (interpolate-path "{id}/{id}/path/to/{something-else}/and/{xid}/{not-this}"
                              {:id             "a-id"
                               :xid            "b-id"
-                              :something-else "stuff"})))))
+                              :something-else "stuff"}))))
+
+  (testing "Interpolate artifact fetch path"
+    (is (= "/pipelines/groups/dev/names/test/runs/r-14933e85-4196-4457-acc2-5812430d7a55/artifact-stores/local/artifact/app"
+           (interpolate-path "/pipelines/groups/{group}/names/{name}/runs/{id}/artifact-stores/{store-name}/artifact/{artifact-name}"
+                             {:group "dev"
+                              :name "test"
+                              :id "r-14933e85-4196-4457-acc2-5812430d7a55"
+                              :store-name "local"
+                              :artifact-name "app"})))))

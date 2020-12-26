@@ -28,21 +28,21 @@
         param-map (reduce (fn [p-map param]
                             (let [[k v] param
                                   o (get opts k)]
-                              (cond
-                                (= o :path) (assoc-in p-map [:path k] v)
-                                (= o :query) (assoc-in p-map [:query k] v)
-                                (= o :body) (assoc-in p-map [:body k] v)
-                                :else p-map)))
+                              (case o
+                                :path (assoc-in p-map [:path k] v)
+                                :query (assoc-in p-map [:query k] v)
+                                :body (assoc-in p-map [:body k] v)
+                                p-map)))
                           {:path {} :query {} :body {}}
                           params)]
     (reduce (fn [p-map param]
               (let [[k v] param
                     o (get opts k)]
-                (cond
-                  (= o :path) (assoc-in p-map [:path-params k] v)
-                  (= o :query) (assoc-in p-map [:query-params k] v)
-                  (= o :body) (assoc-in p-map [:body-param k] v)
-                  :else p-map)))
+                (case o
+                  :path (assoc-in p-map [:path-params k] v)
+                  :query (assoc-in p-map [:query-params k] v)
+                  :body (assoc-in p-map [:body-param k] v)
+                  p-map)))
             {:path-params {} :query-params {} :body-param {}}
             params)))
 
@@ -59,5 +59,8 @@
                       :method method
                       :uri transformed-uri}
         response (e/request request-args)]
-    (println response)
+    (if (or (= (:status response) 200)
+            (= (:status response) 202))
+      (println (:body response))
+      (println response))
     0))
