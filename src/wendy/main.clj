@@ -19,4 +19,4 @@
 
 (defn -main
   [& args]
-  (cli/build-it! args))
+  (cli/run args))

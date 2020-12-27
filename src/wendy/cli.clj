@@ -14,273 +14,92 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.cli
-  (:require [cheshire.core :as json]
-            [wendy.commands :as commands])
-  (:import (java.io File)
-           (net.sourceforge.argparse4j ArgumentParsers)
-           (net.sourceforge.argparse4j.inf ArgumentParser
-                                           Namespace)
-           (net.sourceforge.argparse4j.impl Arguments)))
+  (:require [wendy.request :as r]
+            [wendy.effects :as e]
+            [cheshire.core :as json]
+            [camel-snake-kebab.core :as csk]
+            [cli-matic.core :as cli]))
 
-;; TODO: Maybe a macro to convert a cute little map to this mess?
-(defn configured-parser
-  []
-  (let [parser                   (-> (ArgumentParsers/newFor "wendy")
-                                     (.build)
-                                     (.defaultHelp true)
-                                     (.version "${prog} 0.1.0")
-                                     (.description "bob's reference CLI and his SO"))
-        _                        (-> parser
-                                     (.addArgument (into-array String ["--version"]))
-                                     (.action (Arguments/version))
-                                     (.help "show the version"))
-        subparsers               (-> parser
-                                     (.addSubparsers)
-                                     (.title "things i can make bob do")
-                                     (.metavar "COMMANDS")
-                                     (.dest "command"))
-        _                        (-> subparsers
-                                     (.addParser "can-we-build-it" true)
-                                     (.help "perform a health check on bob"))
-        pipeline-parser          (-> subparsers
-                                     (.addParser "pipeline" true)
-                                     (.help "pipeline lifecycle commands")
-                                     (.addSubparsers)
-                                     (.title "pipeline lifecycle")
-                                     (.metavar "COMMANDS")
-                                     (.dest "lifecycle-cmd"))
-        create-parser            (-> pipeline-parser
-                                     (.addParser "create" true)
-                                     (.help "create a pipeline"))
-        _                        (-> create-parser
-                                     (.addArgument (into-array String ["-c" "--config"]))
-                                     (.required false)
-                                     (.setDefault (str (System/getProperty "user.dir")
-                                                       File/separator
-                                                       "build.toml"))
-                                     (.help "path to the build file"))
-        start-parser             (-> pipeline-parser
-                                     (.addParser "start" true)
-                                     (.help "start a pipeline"))
-        _                        (-> start-parser
-                                     (.addArgument (into-array String ["-g" "--group"]))
-                                     (.required true)
-                                     (.help "group of the pipeline"))
-        _                        (-> start-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the pipeline"))
-        status-parser            (-> pipeline-parser
-                                     (.addParser "status" true)
-                                     (.help "status of a pipeline"))
-        _                        (-> status-parser
-                                     (.addArgument (into-array String ["-g" "--group"]))
-                                     (.required true)
-                                     (.help "group of the pipeline"))
-        _                        (-> status-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the pipeline"))
-        _                        (-> status-parser
-                                     (.addArgument (into-array String ["-num" "--number"]))
-                                     (.required true)
-                                     (.help "the run number of the pipeline"))
-        stop-parser              (-> pipeline-parser
-                                     (.addParser "stop" true)
-                                     (.help "status of a pipeline"))
-        _                        (-> stop-parser
-                                     (.addArgument (into-array String ["-g" "--group"]))
-                                     (.required true)
-                                     (.help "group of the pipeline"))
-        _                        (-> stop-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the pipeline"))
-        _                        (-> stop-parser
-                                     (.addArgument (into-array String ["-num" "--number"]))
-                                     (.required true)
-                                     (.help "the run number of the pipeline"))
-        list-parser              (-> pipeline-parser
-                                     (.addParser "list" true)
-                                     (.help "filter pipelines"))
-        _                        (-> list-parser
-                                     (.addArgument (into-array String ["-g" "--group"]))
-                                     (.required false)
-                                     (.help "group of the pipeline"))
-        _                        (-> list-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required false)
-                                     (.help "name of the pipeline"))
-        _                        (-> list-parser
-                                     (.addArgument (into-array String ["-s" "--status"]))
-                                     (.required false)
-                                     (.help "filter by last run status"))
-        logs-parser              (-> pipeline-parser
-                                     (.addParser "logs" true)
-                                     (.help "logs of a pipeline"))
-        _                        (-> logs-parser
-                                     (.addArgument (into-array String ["-g" "--group"]))
-                                     (.required true)
-                                     (.help "group of the pipeline"))
-        _                        (-> logs-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the pipeline"))
-        _                        (-> logs-parser
-                                     (.addArgument (into-array String ["-num" "--number"]))
-                                     (.required true)
-                                     (.help "the run number of the pipeline"))
-        _                        (-> logs-parser
-                                     (.addArgument (into-array String ["-o" "--offset"]))
-                                     (.required true)
-                                     (.help "the line offset from the beginning of the logs"))
-        _                        (-> logs-parser
-                                     (.addArgument (into-array String ["-l" "--lines"]))
-                                     (.required true)
-                                     (.help "the number of lines from the offset"))
-        delete-parser            (-> pipeline-parser
-                                     (.addParser "delete" true)
-                                     (.help "delete a pipeline"))
-        _                        (-> delete-parser
-                                     (.addArgument (into-array String ["-g" "--group"]))
-                                     (.required true)
-                                     (.help "group of the pipeline"))
-        _                        (-> delete-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the pipeline"))
-        external-resource-parser (-> subparsers
-                                     (.addParser "external-resource")
-                                     (.help "external resource commands")
-                                     (.addSubparsers)
-                                     (.title "external resource")
-                                     (.metavar "COMMANDS")
-                                     (.dest "external-resource-command"))
-        register-parser          (-> external-resource-parser
-                                     (.addParser "register" true)
-                                     (.help "register an external resource"))
-        _                        (-> register-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the resource"))
-        _                        (-> register-parser
-                                     (.addArgument (into-array String ["-u" "--url"]))
-                                     (.required true)
-                                     (.help "url of the resource provider"))
-        _                        (-> external-resource-parser
-                                     (.addParser "list" true)
-                                     (.help "list all registered external resources"))
-        delete-parser            (-> external-resource-parser
-                                     (.addParser "delete" true)
-                                     (.help "delete an external resource"))
-        _                        (-> delete-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the resource"))
-        artifact-store-parser    (-> subparsers
-                                     (.addParser "artifact-store")
-                                     (.help "artifact store commands")
-                                     (.addSubparsers)
-                                     (.title "artifact store")
-                                     (.metavar "COMMANDS")
-                                     (.dest "artifact-store-command"))
-        artifact-register-parser (-> artifact-store-parser
-                                     (.addParser "register" true)
-                                     (.help "register an artifact store"))
-        _                        (-> artifact-register-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the artifact store"))
-        _                        (-> artifact-register-parser
-                                     (.addArgument (into-array String ["-u" "--url"]))
-                                     (.required true)
-                                     (.help "url of the artifact store"))
-        _                        (-> artifact-store-parser
-                                     (.addParser "list" true)
-                                     (.help "list the registered artifact stores"))
-        artifact-delete-parser   (-> artifact-store-parser
-                                     (.addParser "delete" true)
-                                     (.help "delete the registered artifact store"))
-        _                        (-> artifact-delete-parser
-                                     (.addArgument (into-array String ["-n" "--name"]))
-                                     (.required true)
-                                     (.help "name of the artifact store"))]
-    parser))
+(defn invoke [args]
+  (r/api-request args))
 
-(defn dispatch
-  [^Namespace options]
-  (case (.get options "command")
-    "can-we-build-it"
-    (commands/can-we-build-it!)
-    "pipeline"
-    (case (.get options "lifecycle-cmd")
-      "create"
-      (commands/pipeline-create! (.get options "config"))
-      "start"
-      (commands/pipeline-start! (.get options "group")
-                                (.get options "name"))
-      "status"
-      (commands/pipeline-status! (.get options "group")
-                                 (.get options "name")
-                                 (.get options "number"))
-      "stop"
-      (commands/pipeline-stop! (.get options "group")
-                               (.get options "name")
-                               (.get options "number"))
-      "list"
-      (commands/pipeline-list! (.get options "group")
-                               (.get options "name")
-                               (.get options "status"))
-      "logs"
-      (commands/pipeline-logs! (.get options "group")
-                               (.get options "name")
-                               (.get options "number")
-                               (.get options "offset")
-                               (.get options "lines"))
-      "delete"
-      (commands/pipeline-delete! (.get options "group")
-                                 (.get options "name")))
-    "external-resource"
-    (case (.get options "external-resource-command")
-      "register"
-      (commands/external-resource-register! (.get options "name")
-                                            (.get options "url"))
-      "list"
-      (commands/external-resource-list!)
-      "delete"
-      (commands/external-resource-delete! (.get options "name")))
-    "artifact-store"
-    (case (.get options "artifact-store-command")
-      "register"
-      (commands/artifact-store-register! (.get options "name")
-                                         (.get options "url"))
-      "list"
-      (commands/artifact-store-list!)
-      "delete"
-      (commands/artifact-store-delete! (.get options "name")))))
+(defn extract-opts [parameters]
+  (let [param-in (get parameters "in")
+        param-name (get parameters "name")
+        param-description (get parameters "description")
+        param-type (keyword (get-in parameters ["schema" "type"]))
+        required (when (true? (get parameters "required"))
+                   {:default :present})]
+    (when (or (= param-in "query") (= param-in "path"))
+      (merge {:as param-description :option param-name :type param-type :in param-in}
+             required))))
 
-(defn error-out
-  [message]
-  (.println System/err (str message))
-  (System/exit 1))
+(defn extract-body-opt [path-item opts]
+  (if-let [body-opt (get path-item "requestBody")]
+    (let [param-in "body"
+          param-name "data"
+          param-description (get body-opt "description")
+          param-type :slurp]
+      (merge opts {:as param-description :option param-name :type param-type :in param-in :default :present}))
+    opts))
 
-(defn build-it!
-  [args]
-  (let [parser   ^ArgumentParser (configured-parser)
-        response (dispatch (.parseArgsOrFail parser (into-array String args)))]
-    (if (:failed? response)
-      (error-out (:reason response))
-      (println (json/generate-string (:message response))))))
+(defn extract-subcommand [path path-item]
+  (let [method      (key path-item)
+        operation   (val path-item)
+        command     (-> (get operation "operationId")
+                        (csk/->kebab-case))
+        description (get operation "summary")
+        opts        (->> (get operation "parameters")
+                         (map extract-opts)
+                         (extract-body-opt operation))
+        runs        (fn [params]
+                      (invoke {:params params
+                               :opts opts
+                               :method method
+                               :uri path}))
+        subcommand {:method method :command command :path path :description description :runs runs}]
+    (if (empty? opts)
+      subcommand
+      (assoc subcommand :opts opts))))
+
+(defn transform-configuration [conf]
+  (let [head {:command "wendy"
+              :description "Bob's SO and the reference CLI."
+              :version "1"}
+        transform (fn [path]
+                    (let [p (key path)]
+                      (map #(extract-subcommand p %) (val path))))]
+    (assoc head :subcommands (-> (map transform conf)
+                                 (flatten)))))
+
+(defn run [args]
+  (cli/run-cmd args (transform-configuration (e/retrieve-configuration))))
 
 (comment
-  (configured-parser)
+  (clojure.pprint/pprint (transform-configuration (e/retrieve-configuration)))
 
-  (try
-    (let [options (into-array String ["pipeline" "status" "--help"])]
-      (.parseArgs (configured-parser) options))
-    (catch Exception _))
+  (map (fn [[k v]]
+         (str (name k) "=" v))
+       {:foo "bar"
+        :baz "meh"})
+  (join-query-params "foo" {:foo "bar"
+                            :baz "meh"})
 
-  (-> (configured-parser)
-      (.parseArgs (into-array String ["external-resource" "list"])))
-
-  (build-it! ["pipeline" "status" "-g" "dev" "-n" "test" "-num" "2"]))
+  (->> (map extract-opts
+        '({"name" "group",
+           "required" false,
+           "in" "query",
+           "description" "The group of the pipeline",
+           "schema" {"type" "string"}}
+          {"name" "name",
+           "required" false,
+           "in" "query",
+           "description" "The name of the pipeline",
+           "schema" {"type" "string"}}
+          {"name" "status",
+           "required" false,
+           "in" "query",
+           "description" "The status of the pipeline",
+           "schema" {"type" "string"}}))
+       (cons nil))
+  (run '("health-check")))

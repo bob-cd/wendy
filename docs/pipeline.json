@@ -1,0 +1,31 @@
+{
+  "group": "dev",
+  "name": "pipeline1",
+  "image": "golang:alpine",
+  "steps": [
+    {
+      "needs_resource": "source",
+      "cmd": "go test"
+    },
+    {
+      "needs_resource": "source",
+      "cmd": "sh -c 'GOOS=linux GOARCH=amd64 go build app.go'",
+      "produces_artifact": {
+        "name": "app",
+        "path": "app",
+        "store": "local"
+      }
+    }
+  ],
+  "resources": [
+    {
+      "name": "source",
+      "type": "external",
+      "provider": "resource-git",
+      "params": {
+        "repo": "https://github.com/lispyclouds/bob-example",
+        "branch": "main"
+      }
+    }
+  ]
+}
