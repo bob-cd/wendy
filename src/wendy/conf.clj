@@ -15,7 +15,9 @@
 
 (ns wendy.conf
   (:require [clojure.edn :as edn]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clj-yaml.core :as yaml]
+            [wendy.request :as r])
   (:import (java.io File
                     PushbackReader)))
 
@@ -32,6 +34,16 @@
                         (with-open [rdr (io/reader path)]
                           (edn/read (PushbackReader. rdr))))]
     (merge defaults external-conf)))
+
+(defn retrieve-configuration
+  [connection]
+  (-> (r/request {:uri     "/api.yaml"
+                  :headers {"Accept"          "application/yaml"
+                            "Accept-Encoding" ["gzip" "deflate"]}}
+                 connection)
+      :body
+      (yaml/parse-string :keywords false)
+      (get "paths")))
 
 (comment
   (read-conf))

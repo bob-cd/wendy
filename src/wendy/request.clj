@@ -15,9 +15,7 @@
 
 (ns wendy.request
   (:require [java-http-clj.core :as http]
-            [clj-yaml.core :as yaml]
             [jsonista.core :as j]
-            [wendy.conf :as conf]
             [wendy.utils :as u]))
 
 (defn extract-params
@@ -44,24 +42,14 @@
             params)))
 
 (defn request
-  [args-map]
-  (let [{:keys [host port]} (:connection (conf/read-conf))
-        defaults-map        {:uri (str "http://" host ":" port (:uri args-map))}
-        request-map         (merge args-map
-                                   defaults-map)]
+  [args-map {:keys [host port]}]
+  (let [defaults-map {:uri (str "http://" host ":" port (:uri args-map))}
+        request-map  (merge args-map
+                            defaults-map)]
     (http/send request-map)))
 
-(defn retrieve-configuration
-  []
-  (-> (request {:uri     "/api.yaml"
-                :headers {"Accept"          "application/yaml"
-                          "Accept-Encoding" ["gzip" "deflate"]}})
-      (:body)
-      (yaml/parse-string :keywords false)
-      (get "paths")))
-
 (defn api-request
-  [{:keys [headers method uri params opts]}]
+  [{:keys [headers method uri params opts]} connection]
   (let [{:keys [path-params query-params body-param]} (extract-params params opts)
         transformed-uri                               (-> uri
                                                           (u/interpolate-path path-params)
@@ -73,7 +61,7 @@
                                                                   headers)
                                                        :method  method
                                                        :uri     transformed-uri}
-        {:keys [body status headers]}                 (request request-args)
+        {:keys [body status headers]}                 (request request-args connection)
         response                                      (if (= (get headers "content-type") "application/json")
                                                         (:message (j/read-value body j/keyword-keys-object-mapper))
                                                         body)]

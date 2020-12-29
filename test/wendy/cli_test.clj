@@ -83,7 +83,8 @@
                                                                                "required"    true
                                                                                "in"          "path"
                                                                                "description" "The group of the pipeline"
-                                                                               "schema"      {"type" "string"}})}))
+                                                                               "schema"      {"type" "string"}})})
+                                     {})
                  :runs)))
     (is
       (= {:method      :get
@@ -101,7 +102,8 @@
                                                               "parameters"  '({"name"        "foo"
                                                                                "in"          "query"
                                                                                "description" "The group of the pipeline"
-                                                                               "schema"      {"type" "string"}})}))
+                                                                               "schema"      {"type" "string"}})})
+                                     {})
                  :runs)))
     (is
       (= {:method      :post
@@ -127,5 +129,6 @@
                                                                                "in"          "path"
                                                                                "description" "The group of the pipeline"
                                                                                "schema"      {"type" "string"}})
-                                                              "requestBody" {"description" "foo body"}}))
+                                                              "requestBody" {"description" "foo body"}})
+                                     {})
                  :runs)))))

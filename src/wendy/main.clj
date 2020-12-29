@@ -16,9 +16,11 @@
 (ns wendy.main
   (:require [cli-matic.core :as cm]
             [wendy.cli :as cli]
-            [wendy.request :as r])
+            [wendy.conf :as conf])
   (:gen-class))
 
 (defn -main
   [& args]
-  (cm/run-cmd args (cli/transform-configuration (r/retrieve-configuration))))
+  (let [connection (:connection (conf/read-conf))
+        bob-conf   (conf/retrieve-configuration connection)]
+    (cm/run-cmd args (cli/transform-configuration bob-conf connection))))

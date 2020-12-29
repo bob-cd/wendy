@@ -48,7 +48,7 @@
     opts))
 
 (defn extract-subcommand
-  [path path-item]
+  [path path-item connection]
   (let [method      (key path-item)
         operation   (val path-item)
         command     (-> (get operation "operationId")
@@ -60,7 +60,8 @@
         runs        #(r/api-request {:params %
                                      :opts   opts
                                      :method method
-                                     :uri    path})
+                                     :uri    path}
+                                    connection)
         subcommand  {:method      method
                      :command     command
                      :path        path
@@ -71,13 +72,13 @@
       (assoc subcommand :opts opts))))
 
 (defn transform-configuration
-  [conf]
+  [conf connection]
   (let [head      {:command     "wendy"
                    :description "Bob's SO and the reference CLI."
                    :version     "1"}
         transform (fn [path]
                     (let [p (key path)]
-                      (map #(extract-subcommand p %) (val path))))]
+                      (map #(extract-subcommand p % connection) (val path))))]
     (assoc head
            :subcommands
            (-> (map transform conf)
