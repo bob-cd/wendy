@@ -16,9 +16,9 @@
 (ns wendy.main
   (:require [cli-matic.core :as cm]
             [wendy.cli :as cli]
-            [wendy.effects :as e])
+            [wendy.request :as r])
   (:gen-class))
 
 (defn -main
   [& args]
-  (cm/run-cmd args (cli/transform-configuration (e/retrieve-configuration))))
+  (cm/run-cmd args (cli/transform-configuration (r/retrieve-configuration))))

@@ -14,41 +14,50 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.request
-  (:require [wendy.utils :as u]
-            [wendy.effects :as e]))
+  (:require [java-http-clj.core :as http]
+            [clj-yaml.core :as yaml]
+            [wendy.conf :as conf]
+            [wendy.utils :as u]))
 
 (defn extract-params
   [params opts]
-  (let [opts      (->> (map (fn [opt]
-                              (let [option (keyword (:option opt))
-                                    in     (keyword (:in opt))]
-                                {option in}))
-                            opts)
-                       (into {}))
-        param-map (reduce (fn [p-map param]
-                            (let [[k v] param
-                                  o     (get opts k)]
-                              (case o
-                                :path  (assoc-in p-map [:path k] v)
-                                :query (assoc-in p-map [:query k] v)
-                                :body  (assoc-in p-map [:body k] v)
-                                p-map)))
-                          {:path  {}
-                           :query {}
-                           :body  {}}
-                          params)]
+  (let [opts (->> (map (fn [opt]
+                         (let [option (keyword (:option opt))
+                               in     (keyword (:in opt))]
+                           {option in}))
+                       opts)
+                  (into {}))]
     (reduce (fn [p-map param]
               (let [[k v] param
-                    o     (get opts k)]
-                (case o
-                  :path  (assoc-in p-map [:path-params k] v)
-                  :query (assoc-in p-map [:query-params k] v)
-                  :body  (assoc-in p-map [:body-param k] v)
+                    path  (case (get opts k)
+                            :path  [:path-params k]
+                            :query [:query-params k]
+                            :body  [:body-param k]
+                            nil)]
+                (if path
+                  (assoc-in p-map path v)
                   p-map)))
             {:path-params  {}
              :query-params {}
              :body-param   {}}
             params)))
+
+(defn request
+  [args-map]
+  (let [{:keys [host port]} (:connection (conf/read-conf))
+        defaults-map        {:uri (str "http://" host ":" port (:uri args-map))}
+        request-map         (merge args-map
+                                   defaults-map)]
+    (http/send request-map)))
+
+(defn retrieve-configuration
+  []
+  (-> (request {:uri     "/api.yaml"
+                :headers {"Accept"          "application/yaml"
+                          "Accept-Encoding" ["gzip" "deflate"]}})
+      (:body)
+      (yaml/parse-string :keywords false)
+      (get "paths")))
 
 (defn api-request
   [{:keys [headers method uri params opts]}]
@@ -63,7 +72,7 @@
                                                                   headers)
                                                        :method  method
                                                        :uri     transformed-uri}
-        response                                      (e/request request-args)]
+        response                                      (request request-args)]
     (if (or (= (:status response) 200)
             (= (:status response) 202))
       (println (:body response))
