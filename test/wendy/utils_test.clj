@@ -19,19 +19,22 @@
 
 (deftest test-map-to-query-str
   (testing "Testing with all paramteres"
-    (let [arg {:group "dev" :name "test"}
+    (let [arg    {:group "dev"
+                  :name  "test"}
           result (map-to-query-str arg)]
       (is (= result "?group=dev&name=test"))))
   (testing "Testing with all some null parameters"
-    (let [arg {:group "dev" :name nil}
+    (let [arg    {:group "dev"
+                  :name  nil}
           result (map-to-query-str arg)]
       (is (= result "?group=dev"))))
   (testing "Testing with all nil"
-    (let [arg {:group nil :name nil}
+    (let [arg    {:group nil
+                  :name  nil}
           result (map-to-query-str arg)]
       (is (= result ""))))
   (testing "Testing query encoding"
-    (let [arg {:group "some text"}
+    (let [arg    {:group "some text"}
           result (map-to-query-str arg)]
       (is (= result "?group=some+text")))))
 
@@ -53,10 +56,13 @@
                               :something-else "stuff"}))))
 
   (testing "Interpolate artifact fetch path"
-    (is (= "/pipelines/groups/dev/names/test/runs/r-14933e85-4196-4457-acc2-5812430d7a55/artifact-stores/local/artifact/app"
-           (interpolate-path "/pipelines/groups/{group}/names/{name}/runs/{id}/artifact-stores/{store-name}/artifact/{artifact-name}"
-                             {:group "dev"
-                              :name "test"
-                              :id "r-14933e85-4196-4457-acc2-5812430d7a55"
-                              :store-name "local"
-                              :artifact-name "app"})))))
+    (is
+      (=
+        "/pipelines/groups/dev/names/test/runs/r-14933e85-4196-4457-acc2-5812430d7a55/artifact-stores/local/artifact/app"
+        (interpolate-path
+          "/pipelines/groups/{group}/names/{name}/runs/{id}/artifact-stores/{store-name}/artifact/{artifact-name}"
+          {:group         "dev"
+           :name          "test"
+           :id            "r-14933e85-4196-4457-acc2-5812430d7a55"
+           :store-name    "local"
+           :artifact-name "app"})))))

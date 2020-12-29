@@ -29,11 +29,13 @@
     (if (nil? param)
       path
       (recur
-       (s/replace path
-                  (re-pattern (format "\\{(%s.*?)\\}"
-                                      (-> param name Pattern/quote)))
-                  value)
-       (dissoc path-map param)))))
+        (s/replace path
+                   (re-pattern (format "\\{(%s.*?)\\}"
+                                       (-> param
+                                           name
+                                           Pattern/quote)))
+                   value)
+        (dissoc path-map param)))))
 
 (defn map-to-query-str
   [m]
@@ -44,4 +46,6 @@
                     value-encoded (str (URLEncoder/encode value))]
                 (str param-name "=" value-encoded))))
        (clojure.string/join "&")
-       (#(if (not-empty %) (str "?" %) ""))))
+       (#(if (not-empty %)
+           (str "?" %)
+           ""))))

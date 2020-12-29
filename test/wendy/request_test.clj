@@ -19,29 +19,91 @@
 
 (deftest extract-params-test
   (testing "Correct extraction of path params"
-    (is (= {:path-params {:foo 1, :bar "bar"}, :query-params {}, :body-param {}}
+    (is (= {:path-params  {:foo 1
+                           :bar "bar"}
+            :query-params {}
+            :body-param   {}}
            (extract-params
-             {:foo 1 :bar "bar" :_arguments []}
-             '({:as "Foo", :option "foo", :type :int, :in "path", :default :present}
-               {:as "Bar", :option "bar", :type :string, :in "path", :default :present})))))
+             {:foo        1
+              :bar        "bar"
+              :_arguments []}
+             '({:as      "Foo"
+                :option  "foo"
+                :type    :int
+                :in      "path"
+                :default :present}
+               {:as      "Bar"
+                :option  "bar"
+                :type    :string
+                :in      "path"
+                :default :present})))))
   (testing "Correct extraction of query params"
-    (is (= {:path-params {:foo "foo", :bar "bar"},
-            :query-params {:baz 1, :meh "meh"},
-            :body-param {}}
+    (is (= {:path-params  {:foo "foo"
+                           :bar "bar"}
+            :query-params {:baz 1
+                           :meh "meh"}
+            :body-param   {}}
            (extract-params
-             {:foo "foo" :bar "bar" :baz 1 :meh "meh" :_arguments []}
-             '({:as "Foo", :option "foo", :type :string, :in "path", :default :present}
-               {:as "Bar", :option "bar", :type :string, :in "path", :default :present}
-               {:as "Baz", :option "baz", :type :int, :in "query", :default :present}
-               {:as "Meh", :option "meh", :type :string, :in "query", :default :present})))))
+             {:foo        "foo"
+              :bar        "bar"
+              :baz        1
+              :meh        "meh"
+              :_arguments []}
+             '({:as      "Foo"
+                :option  "foo"
+                :type    :string
+                :in      "path"
+                :default :present}
+               {:as      "Bar"
+                :option  "bar"
+                :type    :string
+                :in      "path"
+                :default :present}
+               {:as      "Baz"
+                :option  "baz"
+                :type    :int
+                :in      "query"
+                :default :present}
+               {:as      "Meh"
+                :option  "meh"
+                :type    :string
+                :in      "query"
+                :default :present})))))
   (testing "Correct extraction of body param"
-      (is (= {:path-params {:foo "foo", :bar "bar"},
-              :query-params {:baz 1, :meh "meh"},
-              :body-param {:data {:foo "bar"}}}
-             (extract-params
-               {:foo "foo" :bar "bar" :baz 1 :meh "meh" :data {:foo "bar"} :_arguments []}
-               '({:as "Foo", :option "foo", :type :string, :in "path", :default :present}
-                 {:as "Bar", :option "bar", :type :string, :in "path", :default :present}
-                 {:as "Baz", :option "baz", :type :int, :in "query", :default :present}
-                 {:as "Meh", :option "meh", :type :string, :in "query", :default :present}
-                 {:as "Body", :option "data", :type :slurp, :in "body", :default :present}))))))
+    (is (= {:path-params  {:foo "foo"
+                           :bar "bar"}
+            :query-params {:baz 1
+                           :meh "meh"}
+            :body-param   {:data {:foo "bar"}}}
+           (extract-params
+             {:foo        "foo"
+              :bar        "bar"
+              :baz        1
+              :meh        "meh"
+              :data       {:foo "bar"}
+              :_arguments []}
+             '({:as      "Foo"
+                :option  "foo"
+                :type    :string
+                :in      "path"
+                :default :present}
+               {:as      "Bar"
+                :option  "bar"
+                :type    :string
+                :in      "path"
+                :default :present}
+               {:as      "Baz"
+                :option  "baz"
+                :type    :int
+                :in      "query"
+                :default :present}
+               {:as      "Meh"
+                :option  "meh"
+                :type    :string
+                :in      "query"
+                :default :present}
+               {:as      "Body"
+                :option  "data"
+                :type    :slurp
+                :in      "body"
+                :default :present}))))))

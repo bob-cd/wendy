@@ -19,8 +19,9 @@
   (:import (java.io File
                     PushbackReader)))
 
-(def ^:private defaults {:connection {:host "127.0.0.1"
-                                      :port 7777}})
+(def ^:private defaults
+  {:connection {:host "127.0.0.1"
+                :port 7777}})
 
 (defn read-conf
   []

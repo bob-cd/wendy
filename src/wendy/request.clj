@@ -14,51 +14,56 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.request
-  (:require [cheshire.core :as json]
-            [wendy.utils :as u]
+  (:require [wendy.utils :as u]
             [wendy.effects :as e]))
 
-(defn extract-params [params opts]
-  (let [opts (->> (map (fn [opt]
-                         (let [option (keyword (:option opt))
-                               in     (keyword (:in opt))]
-                           {option in}))
-                      opts)
-                  (into {}))
+(defn extract-params
+  [params opts]
+  (let [opts      (->> (map (fn [opt]
+                              (let [option (keyword (:option opt))
+                                    in     (keyword (:in opt))]
+                                {option in}))
+                            opts)
+                       (into {}))
         param-map (reduce (fn [p-map param]
                             (let [[k v] param
-                                  o (get opts k)]
+                                  o     (get opts k)]
                               (case o
-                                :path (assoc-in p-map [:path k] v)
+                                :path  (assoc-in p-map [:path k] v)
                                 :query (assoc-in p-map [:query k] v)
-                                :body (assoc-in p-map [:body k] v)
+                                :body  (assoc-in p-map [:body k] v)
                                 p-map)))
-                          {:path {} :query {} :body {}}
+                          {:path  {}
+                           :query {}
+                           :body  {}}
                           params)]
     (reduce (fn [p-map param]
               (let [[k v] param
-                    o (get opts k)]
+                    o     (get opts k)]
                 (case o
-                  :path (assoc-in p-map [:path-params k] v)
+                  :path  (assoc-in p-map [:path-params k] v)
                   :query (assoc-in p-map [:query-params k] v)
-                  :body (assoc-in p-map [:body-param k] v)
+                  :body  (assoc-in p-map [:body-param k] v)
                   p-map)))
-            {:path-params {} :query-params {} :body-param {}}
+            {:path-params  {}
+             :query-params {}
+             :body-param   {}}
             params)))
 
-(defn api-request [{:keys [body headers method uri params opts]}]
+(defn api-request
+  [{:keys [headers method uri params opts]}]
   (let [{:keys [path-params query-params body-param]} (extract-params params opts)
-        transformed-uri (-> uri
-                            (u/interpolate-path path-params)
-                            (str (u/map-to-query-str query-params)))
-        request-args {:body (:data body-param)
-                      :headers (merge
-                                 {"Accept" "application/json"
-                                  "content-type" "application/json"}
-                                 headers)
-                      :method method
-                      :uri transformed-uri}
-        response (e/request request-args)]
+        transformed-uri                               (-> uri
+                                                          (u/interpolate-path path-params)
+                                                          (str (u/map-to-query-str query-params)))
+        request-args                                  {:body    (:data body-param)
+                                                       :headers (merge
+                                                                  {"Accept"       "application/json"
+                                                                   "content-type" "application/json"}
+                                                                  headers)
+                                                       :method  method
+                                                       :uri     transformed-uri}
+        response                                      (e/request request-args)]
     (if (or (= (:status response) 200)
             (= (:status response) 202))
       (println (:body response))

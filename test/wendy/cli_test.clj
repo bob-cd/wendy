@@ -20,106 +20,112 @@
 
 (deftest test-extract-opts
   (testing "Extract options from parsed yaml"
-    (is (= {:as "The group of the pipeline",
-            :option "group",
-            :type :string,
-            :in "query"}
+    (is (= {:as     "The group of the pipeline"
+            :option "group"
+            :type   :string
+            :in     "query"}
            (extract-opts
-             {"name" "group",
-              "required" false,
-              "in" "query",
-              "description" "The group of the pipeline",
-              "schema" {"type" "string"}})))
-    (is (= {:as "Foo description",
-            :option "name",
-            :type :foo,
-            :in "query",
+             {"name"        "group"
+              "required"    false
+              "in"          "query"
+              "description" "The group of the pipeline"
+              "schema"      {"type" "string"}})))
+    (is (= {:as      "Foo description"
+            :option  "name"
+            :type    :foo
+            :in      "query"
             :default :present}
            (extract-opts
-             {"name" "name",
-              "required" true,
-              "in" "query",
-              "description" "Foo description",
-              "schema" {"type" "foo"}})))
-    (is (= {:as "The group of the pipeline",
-            :option "status",
-            :type :string,
-            :in "path",
+             {"name"        "name"
+              "required"    true
+              "in"          "query"
+              "description" "Foo description"
+              "schema"      {"type" "foo"}})))
+    (is (= {:as      "The group of the pipeline"
+            :option  "status"
+            :type    :string
+            :in      "path"
             :default :present}
            (extract-opts
-             {"name" "status",
-              "required" true,
-              "in" "path",
-              "description" "The group of the pipeline",
-              "schema" {"type" "string"}})))))
+             {"name"        "status"
+              "required"    true
+              "in"          "path"
+              "description" "The group of the pipeline"
+              "schema"      {"type" "string"}})))))
 
 (deftest test-extract-body-opts
   (testing "Extract body option from parsed yaml"
-    (is (= '({:as "foo",
-              :option "data",
-              :type :slurp,
-              :in "body",
+    (is (= '({:as      "foo"
+              :option  "data"
+              :type    :slurp
+              :in      "body"
               :default :present})
            (extract-body-opt {"requestBody" {"description" "foo"}} '())))))
 
 
 (deftest test-extract-subcommand
   (testing "Extracting subcommands"
-    (is (= {:method :get,
-            :command "foo",
-            :path "/foo",
-            :description "foo summary",
-            :opts
-            '({:as "The group of the pipeline",
-               :option "status",
-               :type :string,
-               :in "path",
-               :default :present})}
-           (dissoc (extract-subcommand "/foo" (clojure.lang.MapEntry. :get {"operationId" "foo"
-                                                                            "summary" "foo summary"
-                                                                            "parameters" '({"name" "status",
-                                                                                            "required" true,
-                                                                                            "in" "path",
-                                                                                            "description" "The group of the pipeline",
-                                                                                            "schema" {"type" "string"}})}))
-                   :runs)))
-    (is (= {:method :get
-            :command "foo",
-            :path "/foo",
-            :description "foo summary",
-            :opts
-            '({:as "The group of the pipeline",
-               :option "foo",
-               :type :string,
-               :in "query",})}
-           (dissoc (extract-subcommand "/foo" (clojure.lang.MapEntry. :get {"operationId" "foo"
-                                                                            "summary" "foo summary"
-                                                                            "parameters" '({"name" "foo",
-                                                                                            "in" "query",
-                                                                                            "description" "The group of the pipeline",
-                                                                                            "schema" {"type" "string"}})}))
-                   :runs)))
-    (is (= {:method :post,
-            :command "foo",
-            :path "/foo",
-            :description "foo summary",
-            :opts
-            '({:as "foo body",
-               :option "data",
-               :type :slurp,
-               :in "body",
-               :default :present}
-              {:as "The group of the pipeline",
-               :option "status",
-               :type :string,
-               :in "path",
-               :default :present})}
-           (dissoc (extract-subcommand "/foo" (clojure.lang.MapEntry. :post {"operationId" "foo"
-                                                                             "summary" "foo summary"
-                                                                             "parameters" '({"name" "status",
-                                                                                             "required" true,
-                                                                                             "in" "path",
-                                                                                             "description" "The group of the pipeline",
-                                                                                             "schema" {"type" "string"}})
-                                                                             "requestBody" {"description" "foo body"}}))
-                   :runs)))))
+    (is
+      (= {:method      :get
+          :command     "foo"
+          :path        "/foo"
+          :description "foo summary"
+          :opts        '({:as      "The group of the pipeline"
+                          :option  "status"
+                          :type    :string
+                          :in      "path"
+                          :default :present})}
+         (dissoc (extract-subcommand "/foo"
+                                     (clojure.lang.MapEntry. :get
+                                                             {"operationId" "foo"
+                                                              "summary"     "foo summary"
+                                                              "parameters"  '({"name"        "status"
+                                                                               "required"    true
+                                                                               "in"          "path"
+                                                                               "description" "The group of the pipeline"
+                                                                               "schema"      {"type" "string"}})}))
+                 :runs)))
+    (is
+      (= {:method      :get
+          :command     "foo"
+          :path        "/foo"
+          :description "foo summary"
+          :opts        '({:as     "The group of the pipeline"
+                          :option "foo"
+                          :type   :string
+                          :in     "query"})}
+         (dissoc (extract-subcommand "/foo"
+                                     (clojure.lang.MapEntry. :get
+                                                             {"operationId" "foo"
+                                                              "summary"     "foo summary"
+                                                              "parameters"  '({"name"        "foo"
+                                                                               "in"          "query"
+                                                                               "description" "The group of the pipeline"
+                                                                               "schema"      {"type" "string"}})}))
+                 :runs)))
+    (is
+      (= {:method      :post
+          :command     "foo"
+          :path        "/foo"
+          :description "foo summary"
+          :opts        '({:as      "foo body"
+                          :option  "data"
+                          :type    :slurp
+                          :in      "body"
+                          :default :present}
+                         {:as      "The group of the pipeline"
+                          :option  "status"
+                          :type    :string
+                          :in      "path"
+                          :default :present})}
+         (dissoc (extract-subcommand "/foo"
+                                     (clojure.lang.MapEntry. :post
+                                                             {"operationId" "foo"
+                                                              "summary"     "foo summary"
+                                                              "parameters"  '({"name"        "status"
+                                                                               "required"    true
+                                                                               "in"          "path"
+                                                                               "description" "The group of the pipeline"
+                                                                               "schema"      {"type" "string"}})
+                                                              "requestBody" {"description" "foo body"}}))
+                 :runs)))))

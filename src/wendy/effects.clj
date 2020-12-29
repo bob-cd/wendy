@@ -34,10 +34,10 @@
 (defn fail-with
   [reason & status]
   (conj
-   {:failed? true
-    :reason  reason}
-   (when (not-empty status)
-     {:status (first status)})))
+    {:failed? true
+     :reason  reason}
+    (when (not-empty status)
+      {:status (first status)})))
 
 (defn parse-error
   [message]
@@ -45,11 +45,12 @@
     (json/generate-string (:body message))
     message))
 
-(defn request [args-map]
+(defn request
+  [args-map]
   (let [{:keys [host port]} (:connection (conf/read-conf))
-        defaults-map {:uri (str "http://" host ":" port (:uri args-map))}
-        request-map (merge args-map
-                           defaults-map)]
+        defaults-map        {:uri (str "http://" host ":" port (:uri args-map))}
+        request-map         (merge args-map
+                                   defaults-map)]
     (http/send request-map)))
 
 (defn file-from
@@ -59,9 +60,10 @@
       {:file file}
       (fail-with (str "Missing or unreadble file: " path)))))
 
-(defn retrieve-configuration []
-  (-> (request {:uri "/api.yaml"
-                :headers {"Accept" "application/yaml"
+(defn retrieve-configuration
+  []
+  (-> (request {:uri     "/api.yaml"
+                :headers {"Accept"          "application/yaml"
                           "Accept-Encoding" ["gzip" "deflate"]}})
       (:body)
       (yaml/parse-string :keywords false)
@@ -77,8 +79,5 @@
   (file-from "deps.edn")
 
   (file-from "lulz.edn")
-
-  (request "http://localhost:7777/api/pipeline/stop/dev/test/1"
-           :post)
 
   (retrieve-configuration))

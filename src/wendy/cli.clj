@@ -16,34 +16,45 @@
 (ns wendy.cli
   (:require [wendy.request :as r]
             [wendy.effects :as e]
-            [cheshire.core :as json]
             [camel-snake-kebab.core :as csk]
             [cli-matic.core :as cli]))
 
-(defn invoke [args]
+(defn invoke
+  [args]
   (r/api-request args))
 
-(defn extract-opts [parameters]
-  (let [param-in (get parameters "in")
-        param-name (get parameters "name")
+(defn extract-opts
+  [parameters]
+  (let [param-in          (get parameters "in")
+        param-name        (get parameters "name")
         param-description (get parameters "description")
-        param-type (keyword (get-in parameters ["schema" "type"]))
-        required (when (true? (get parameters "required"))
-                   {:default :present})]
+        param-type        (keyword (get-in parameters ["schema" "type"]))
+        required          (when (true? (get parameters "required"))
+                            {:default :present})]
     (when (or (= param-in "query") (= param-in "path"))
-      (merge {:as param-description :option param-name :type param-type :in param-in}
+      (merge {:as     param-description
+              :option param-name
+              :type   param-type
+              :in     param-in}
              required))))
 
-(defn extract-body-opt [path-item opts]
+(defn extract-body-opt
+  [path-item opts]
   (if-let [body-opt (get path-item "requestBody")]
-    (let [param-in "body"
-          param-name "data"
+    (let [param-in          "body"
+          param-name        "data"
           param-description (get body-opt "description")
-          param-type :slurp]
-      (merge opts {:as param-description :option param-name :type param-type :in param-in :default :present}))
+          param-type        :slurp]
+      (merge opts
+             {:as      param-description
+              :option  param-name
+              :type    param-type
+              :in      param-in
+              :default :present}))
     opts))
 
-(defn extract-subcommand [path path-item]
+(defn extract-subcommand
+  [path path-item]
   (let [method      (key path-item)
         operation   (val path-item)
         command     (-> (get operation "operationId")
@@ -54,25 +65,33 @@
                          (extract-body-opt operation))
         runs        (fn [params]
                       (invoke {:params params
-                               :opts opts
+                               :opts   opts
                                :method method
-                               :uri path}))
-        subcommand {:method method :command command :path path :description description :runs runs}]
+                               :uri    path}))
+        subcommand  {:method      method
+                     :command     command
+                     :path        path
+                     :description description
+                     :runs        runs}]
     (if (empty? opts)
       subcommand
       (assoc subcommand :opts opts))))
 
-(defn transform-configuration [conf]
-  (let [head {:command "wendy"
-              :description "Bob's SO and the reference CLI."
-              :version "1"}
+(defn transform-configuration
+  [conf]
+  (let [head      {:command     "wendy"
+                   :description "Bob's SO and the reference CLI."
+                   :version     "1"}
         transform (fn [path]
                     (let [p (key path)]
                       (map #(extract-subcommand p %) (val path))))]
-    (assoc head :subcommands (-> (map transform conf)
-                                 (flatten)))))
+    (assoc head
+           :subcommands
+           (-> (map transform conf)
+               (flatten)))))
 
-(defn run [args]
+(defn run
+  [args]
   (cli/run-cmd args (transform-configuration (e/retrieve-configuration))))
 
 (comment
@@ -82,24 +101,22 @@
          (str (name k) "=" v))
        {:foo "bar"
         :baz "meh"})
-  (join-query-params "foo" {:foo "bar"
-                            :baz "meh"})
 
   (->> (map extract-opts
-        '({"name" "group",
-           "required" false,
-           "in" "query",
-           "description" "The group of the pipeline",
-           "schema" {"type" "string"}}
-          {"name" "name",
-           "required" false,
-           "in" "query",
-           "description" "The name of the pipeline",
-           "schema" {"type" "string"}}
-          {"name" "status",
-           "required" false,
-           "in" "query",
-           "description" "The status of the pipeline",
-           "schema" {"type" "string"}}))
+            '({"name"        "group"
+               "required"    false
+               "in"          "query"
+               "description" "The group of the pipeline"
+               "schema"      {"type" "string"}}
+              {"name"        "name"
+               "required"    false
+               "in"          "query"
+               "description" "The name of the pipeline"
+               "schema"      {"type" "string"}}
+              {"name"        "status"
+               "required"    false
+               "in"          "query"
+               "description" "The status of the pipeline"
+               "schema"      {"type" "string"}}))
        (cons nil))
   (run '("health-check")))
