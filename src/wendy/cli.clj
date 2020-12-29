@@ -57,11 +57,10 @@
         opts        (->> (get operation "parameters")
                          (map extract-opts)
                          (extract-body-opt operation))
-        runs        (fn [params]
-                      (r/api-request {:params params
-                                      :opts   opts
-                                      :method method
-                                      :uri    path}))
+        runs        #(r/api-request {:params %
+                                     :opts   opts
+                                     :method method
+                                     :uri    path})
         subcommand  {:method      method
                      :command     command
                      :path        path

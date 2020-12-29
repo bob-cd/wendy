@@ -16,6 +16,7 @@
 (ns wendy.request
   (:require [java-http-clj.core :as http]
             [clj-yaml.core :as yaml]
+            [jsonista.core :as j]
             [wendy.conf :as conf]
             [wendy.utils :as u]))
 
@@ -72,9 +73,11 @@
                                                                   headers)
                                                        :method  method
                                                        :uri     transformed-uri}
-        response                                      (request request-args)]
-    (if (or (= (:status response) 200)
-            (= (:status response) 202))
-      (println (:body response))
-      (println response))
-    0))
+        {:keys [body status headers]}                 (request request-args)
+        response                                      (if (= (get headers "content-type") "application/json")
+                                                        (:message (j/read-value body j/keyword-keys-object-mapper))
+                                                        body)]
+    (println response)
+    (if (>= status 400)
+      1
+      0)))
