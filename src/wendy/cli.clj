@@ -15,13 +15,7 @@
 
 (ns wendy.cli
   (:require [wendy.request :as r]
-            [wendy.effects :as e]
-            [camel-snake-kebab.core :as csk]
-            [cli-matic.core :as cli]))
-
-(defn invoke
-  [args]
-  (r/api-request args))
+            [camel-snake-kebab.core :as csk]))
 
 (defn extract-opts
   [parameters]
@@ -64,10 +58,10 @@
                          (map extract-opts)
                          (extract-body-opt operation))
         runs        (fn [params]
-                      (invoke {:params params
-                               :opts   opts
-                               :method method
-                               :uri    path}))
+                      (r/api-request {:params params
+                                      :opts   opts
+                                      :method method
+                                      :uri    path}))
         subcommand  {:method      method
                      :command     command
                      :path        path
@@ -90,13 +84,7 @@
            (-> (map transform conf)
                (flatten)))))
 
-(defn run
-  [args]
-  (cli/run-cmd args (transform-configuration (e/retrieve-configuration))))
-
 (comment
-  (clojure.pprint/pprint (transform-configuration (e/retrieve-configuration)))
-
   (map (fn [[k v]]
          (str (name k) "=" v))
        {:foo "bar"
@@ -118,5 +106,4 @@
                "in"          "query"
                "description" "The status of the pipeline"
                "schema"      {"type" "string"}}))
-       (cons nil))
-  (run '("health-check")))
+       (cons nil)))

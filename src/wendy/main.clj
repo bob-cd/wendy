@@ -14,9 +14,11 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.main
-  (:require [wendy.cli :as cli])
+  (:require [cli-matic.core :as cm]
+            [wendy.cli :as cli]
+            [wendy.effects :as e])
   (:gen-class))
 
 (defn -main
   [& args]
-  (cli/run args))
+  (cm/run-cmd args (cli/transform-configuration (e/retrieve-configuration))))
