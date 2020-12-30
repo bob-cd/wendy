@@ -20,7 +20,7 @@ $ `wendy pipeline create -c /tmp/build.toml`
 
 $ `wendy pipeline create`
 
-A sample [build.toml](https://github.com/bob-cd/wendy/blob/master/docs/build.toml).
+A sample [build.toml](https://github.com/bob-cd/wendy/blob/main/docs/build_wendy.toml).
 
 #### start
 
