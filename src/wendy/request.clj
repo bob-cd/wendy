@@ -63,7 +63,10 @@
                                                        :uri     transformed-uri}
         {:keys [body status headers]}                 (request request-args connection)
         response                                      (if (= (get headers "content-type") "application/json")
-                                                        (:message (j/read-value body j/keyword-keys-object-mapper))
+                                                        (-> body
+                                                            (j/read-value j/keyword-keys-object-mapper)
+                                                            (:message)
+                                                            (j/write-value-as-string))
                                                         body)]
     (println response)
     (if (>= status 400)
