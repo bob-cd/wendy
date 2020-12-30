@@ -3,7 +3,7 @@
 ### can-we-build-it
 Performs a health check on Bob.
 
-$ `wendy can-we-build-it`
+$ `wendy health-check`
 
 ### pipeline
 
@@ -14,123 +14,121 @@ Group of commands dealing with the lifecycle of a pipeline.
 Create a pipeline.
 
 Params:
-- f: String = The path to the `build.toml` file. Will use the `build.toml` in the PWD if unspecified.
+- data: String = The path to the `build.json` file. You can use `-` as a placeholder to read from stdin.
+- group: String = Group of the pipeline.
+- name: String = Name of the pipeline.
 
-$ `wendy pipeline create -c /tmp/build.toml`
+$ `wendy pipeline-create --data /docs/build.json --group dev --name build`
 
-$ `wendy pipeline create`
-
-A sample [build.toml](https://github.com/bob-cd/wendy/blob/main/docs/build_wendy.toml).
+A sample [build.json](https://github.com/bob-cd/wendy/blob/main/docs/build.json).
 
 #### start
 
 Starts a pipeline.
 
 Params:
-- g: String = Group of the pipeline.
-- n: String = Name of the pipeline.
+- group: String = Group of the pipeline.
+- name: String = Name of the pipeline.
 
-$ `wendy pipeline start -g dev -n build`
+$ `wendy pipeline-start --group dev --name build`
 
 #### stop
 
 Stops a running pipeline.
 
 Params:
-- g: String = Group of the pipeline.
-- n: String = Name of the pipeline.
-- num: Int = The run number of the pipeline.
+- group: String = Group of the pipeline.
+- name: String = Name of the pipeline.
+- id: String = Run ID of the pipeline.
 
-$ `wendy pipeline stop -g dev -n build -num 2`
+$ `wendy pipeline-stop --group dev --name build --id r-20e19dcc-9fdb-475d-96b1-63416b0f7b44`
 
 #### delete
 
 Deletes a pipeline.
 
 Params:
-- g: String = Group of the pipeline.
-- n: String = Name of the pipeline.
+- group: String = Group of the pipeline.
+- name: String = Name of the pipeline.
 
-$ `wendy pipeline delete -g dev -n build`
+$ `wendy pipeline delete --group dev --name build`
 
 #### logs
 
 Returns the logs of a running pipeline.
 
 Params:
-- g: String = Group of the pipeline.
-- n: String = Name of the pipeline.
-- num: Int = The run number of the pipeline.
-- o: Int = The line offset from the beginning of the logs.
-- l: Int = The number of lines from the offset.
+- group: String = Group of the pipeline.
+- name: String = Name of the pipeline.
+- id: String = Run ID of the pipeline.
+- offset: Int = Line offset from the beginning of the logs.
+- lines: Int = Number of lines from the offset.
 
-$ `wendy pipeline logs -g dev -n build -num 2 -o 10 -l 100`
+$ `wendy pipeline-logs --group dev --name build --id r-20e19dcc-9fdb-475d-96b1-63416b0f7b44 --offset 10 --lines 100`
 
 #### status
 
 Returns the status of a pipeline.
 
 Params:
-- g: String = Group of the pipeline.
-- n: String = Name of the pipeline.
-- num: Int = The run number of the pipeline.
+- id: String = Run ID of the pipeline.
 
-$ `wendy pipeline status -g dev -n build -num 2`
+$ `wendy pipeline-status --group dev --name build --id r-20e19dcc-9fdb-475d-96b1-63416b0f7b44`
 
-### external-resource
+### resource-provider
 
-Group of commands dealing with external resources.
+Group of commands dealing with resource providers.
 
-#### register
+#### create
 
-Registers an external resource.
+Registers a resource provider.
 
 Params:
-- n: String = Unique name of the resource.
-- u: String = Url of the resource.
+- name: File = Unique name of the resource.
+- data: String = The path to the definition file. You can use `-` as a placeholder to read the attributes from stdin.
 
-$ `wendy external-resource register -n git -u "http://192.168.33.10"`
+$ `echo '{"url": "http://192.168.33.10"}' | wendy resource-provider-create --name git --data - `
 
 #### delete
 
-Deletes an external resource.
+Deletes a resource provider.
 
 Params:
-- n: String = Unique name of the resource.
+- name: String = Unique name of the resource provider.
 
-$ `wendy external-resource delete -n git`
+$ `wendy resource-provider-delete --name git`
 
 #### list
 
-Lists all registered external resources by name.
+Lists all registered resource-provider by name.
 
-$ `wendy external-resource list`
+$ `wendy resource-provider-list`
 
 ### artifact-store
 
-Group of commands dealing with artifact store.
+Group of commands dealing with artifact stores.
 
-#### register
+#### create
 
 Registers an artifact store.
 
 Params:
-- n: String = Unique name of the store.
-- u: String = Url of the store.
+- name: String = Unique name of the artifact store.
+- data: String = The path to the definition file. You can use `-` as a placeholder to read the attributes from stdin.
 
-$ `wendy artifact-store register -n s3 -u "http://192.168.33.11"`
+$ `echo '{"url": "http://192.168.33.11"}' | wendy artifact-store-create --name s3 --data - `
 
 #### delete
 
 Deletes an artifact store.
 
 Params:
-- n: String = Unique name of the store.
+- name: String = Unique name of the artifact store.
 
-$ `wendy artifact-store delete -n git`
+$ `wendy artifact-store-delete --name git`
 
 #### list
 
 Lists all registered artifact stores by name.
 
-$ `wendy artifact-store list`
+$ `wendy artifact-store-list`

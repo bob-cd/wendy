@@ -6,12 +6,10 @@
 [![CircleCI](https://circleci.com/gh/bob-cd/wendy/tree/master.svg?style=svg)](https://circleci.com/gh/bob-cd/wendy/tree/master)
 [![Dependencies Status](https://versions.deps.co/bob-cd/wendy/status.svg)](https://versions.deps.co/bob-cd/wendy)
 
-[![Built with Spacemacs](https://cdn.rawgit.com/syl20bnr/spacemacs/442d025779da2f62fc86c2082703697714db6514/assets/spacemacs-badge.svg)](http://spacemacs.org)
-
 She is an `opinionated client` for Bob and takes care of the following tasks:
 
 - Implement a full CLI to all of Bob's REST API with corresponding and semantic commands
-- Read a `build.toml` file and translate to REST API calls to Bob
+- Read a `build.json` file and translate to REST API calls to Bob
 - Plan a build:
     - Bob doesnt know of the order of execution of pipelines
     - Wendy reads the dependencies of a pipeline on other pipelines and schedules them accordingly
@@ -26,7 +24,7 @@ encouraged to build their own CLIs using Bob as an engine in ways they see fit.
 
 ### Requirements:
 - [Graal VM](https://www.graalvm.org/downloads/)
-- [Clojure CLI](https://clojure.org/guides/getting_started)(faster) or [Leiningen](https://leiningen.org/)(better Windows support).
+- [Clojure CLI](https://clojure.org/guides/getting_started)(faster).
 - A running instance of [Bob](https://github.com/bob-cd/bob)
 
 ### Running
@@ -37,12 +35,12 @@ Installing GraalVM:
 - Run `export GRAALVM_HOME=$PWD`.
 
 Clone the repo and from the repo directory:
-- Run `clojure -A:test -m kaocha.runner` if using Clojure CLI or `lein kaocha` with leiningen.
+- Run `clojure -A:test -m kaocha.runner` if using Clojure CLI.
 - Run `$GRAALVM_HOME/bin/gu install native-image` to get the Graal native compiler.
-- Run `clojure -A:native-image` if using Clojure CLI or `lein native-image` with leiningen to compile it to a native executable.
+- Run `clojure -A:native-image` if using Clojure CLI to compile it to a native executable.
   (Warning: Quite a resource heavy step)
-- The executable is found in `target/` if compiled via Clojure CLI or in `/target/default+uberjar/` with leiningen.
-- Running `./wendy can-we-build-it` should output `"Yes we can! 🔨 🔨"`
+- The executable is found at `target/wendy`.
+- Running `./wendy health-check` should output `"Yes we can! 🔨 🔨"`
 
 #### The full command reference can be found [here](https://github.com/bob-cd/wendy/blob/master/docs/commands.md)
 
