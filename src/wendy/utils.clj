@@ -34,7 +34,7 @@
                                        (-> param
                                            name
                                            Pattern/quote)))
-                   value)
+                   (str value))
         (dissoc path-map param)))))
 
 (defn map-to-query-str

@@ -22,7 +22,10 @@
   (let [param-in          (get parameters "in")
         param-name        (get parameters "name")
         param-description (get parameters "description")
-        param-type        (keyword (get-in parameters ["schema" "type"]))
+        param-type        (let [t (keyword (get-in parameters ["schema" "type"]))]
+                            (if (= t :integer)
+                              :int
+                              t))
         required          (when (true? (get parameters "required"))
                             {:default :present})]
     (when (or (= param-in "query") (= param-in "path"))
