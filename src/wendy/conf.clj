@@ -55,6 +55,13 @@
         parsed     (yaml/parse-string data :keywords false)]
     (get parsed "paths")))
 
+(defn purge-cache
+  [& _]
+  (try
+    (io/delete-file (with-home-dir ".bob.api.yaml"))
+    0
+    (catch Exception _ 0)))
+
 (comment
   (with-home-dir ".bob.api.yaml")
 

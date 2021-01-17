@@ -14,8 +14,14 @@
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
 (ns wendy.cli
-  (:require [wendy.request :as r]
-            [camel-snake-kebab.core :as csk]))
+  (:require [camel-snake-kebab.core :as csk]
+            [wendy.conf :as conf]
+            [wendy.request :as r]))
+
+(def extra-subcommands
+  [{:command     "purge-cache"
+    :description "Purges the cache to force Wendy to build options again"
+    :runs        conf/purge-cache}])
 
 (defn extract-opts
   [parameters]
@@ -84,8 +90,9 @@
                       (map #(extract-subcommand p % connection) (val path))))]
     (assoc head
            :subcommands
-           (-> (map transform conf)
-               (flatten)))))
+           (concat extra-subcommands
+                   (-> (map transform conf)
+                       (flatten))))))
 
 (comment
   (map (fn [[k v]]
