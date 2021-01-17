@@ -25,11 +25,15 @@
   {:connection {:host "127.0.0.1"
                 :port 7777}})
 
+(defn with-home-dir
+  [path]
+  (str (System/getProperty "user.home")
+       (File/separator)
+       path))
+
 (defn read-conf
   []
-  (let [path          (str (System/getProperty "user.home")
-                           (File/separator)
-                           ".wendy.edn")
+  (let [path          (with-home-dir ".wendy.edn")
         external-conf (when (.exists (io/file path))
                         (with-open [rdr (io/reader path)]
                           (edn/read (PushbackReader. rdr))))]
@@ -37,13 +41,25 @@
 
 (defn retrieve-configuration
   [connection]
-  (-> (r/request {:uri     "/api.yaml"
-                  :headers {"Accept"          "application/yaml"
-                            "Accept-Encoding" ["gzip" "deflate"]}}
-                 connection)
-      :body
-      (yaml/parse-string :keywords false)
-      (get "paths")))
+  (let [cached-api (with-home-dir ".bob.api.yaml")
+        data       (if (.exists (io/file cached-api))
+                     (slurp cached-api)
+                     (let [{:keys [body status]} (r/request {:uri     "/api.yaml"
+                                                             :headers {"Accept"          "application/yaml"
+                                                                       "Accept-Encoding" ["gzip" "deflate"]}}
+                                                            connection)]
+                       (when (>= status 400)
+                         (throw (Exception. (str "Error fetching api spec: " body))))
+                       (spit cached-api body)
+                       body))
+        parsed     (yaml/parse-string data :keywords false)]
+    (get parsed "paths")))
 
 (comment
-  (read-conf))
+  (with-home-dir ".bob.api.yaml")
+
+  (read-conf)
+
+  (-> (read-conf)
+      :connection
+      retrieve-configuration))
