@@ -15,6 +15,7 @@
 
 (ns wendy.cli
   (:require [camel-snake-kebab.core :as csk]
+            [jsonista.core :as json]
             [wendy.conf :as conf]
             [wendy.request :as r]))
 
@@ -56,45 +57,69 @@
               :default :present}))
     opts))
 
+(defn parse-json
+  [data]
+  (try
+    (json/read-value data)
+    (catch Exception _ {})))
+
+(defn get-command
+  [operation]
+  (let [cli-tags (->> (get operation "tags")
+                      (map parse-json)
+                      (map #(get % "cli"))
+                      (into {}))]
+    (when-not (true? (get cli-tags "disabled"))
+      (get cli-tags "name" (csk/->kebab-case (get operation "operationId"))))))
+
 (defn extract-subcommand
   [path path-item connection]
-  (let [method      (key path-item)
-        operation   (val path-item)
-        command     (-> (get operation "operationId")
-                        (csk/->kebab-case))
-        description (get operation "summary")
-        opts        (->> (get operation "parameters")
-                         (map extract-opts)
-                         (extract-body-opt operation))
-        runs        #(r/api-request {:params %
-                                     :opts   opts
-                                     :method method
-                                     :uri    path}
-                                    connection)
-        subcommand  {:method      method
-                     :command     command
-                     :path        path
-                     :description description
-                     :runs        runs}]
-    (if (empty? opts)
-      subcommand
-      (assoc subcommand :opts opts))))
+  (let [method    (key path-item)
+        operation (val path-item)
+        command   (get-command operation)]
+    (when command
+      (let [description (get operation "summary")
+            opts        (->> (get operation "parameters")
+                             (map extract-opts)
+                             (extract-body-opt operation))
+            runs        #(r/api-request {:params %
+                                         :opts   opts
+                                         :method method
+                                         :uri    path}
+                                        connection)
+            subcommand  {:method      method
+                         :command     command
+                         :path        path
+                         :description description
+                         :runs        runs}]
+        (if (empty? opts)
+          subcommand
+          (assoc subcommand :opts opts))))))
 
 (defn transform-configuration
   [conf connection]
   (let [head      {:command     "wendy"
-                   :description "Bob's SO and the reference CLI."
-                   :version     "1"}
+                   :description "Bob's SO and the reference CLI"
+                   :version     "0.1.0"}
         transform (fn [path]
-                    (let [p (key path)]
-                      (map #(extract-subcommand p % connection) (val path))))]
+                    (->> (val path)
+                         (map #(extract-subcommand (key path) % connection))
+                         (filter some?)))]
     (assoc head
            :subcommands
            (concat extra-subcommands
                    (-> (map transform conf)
-                       (flatten))))))
+                       flatten)))))
 
 (comment
+  (get-command {"operationId" "GetApiSpec"
+                "tags"        ["{\"cli\": {\"disabled\": true}}" "yes" "{\"cli\": {\"name\": \"yes\"}}"]})
+
+  (get-command {"operationId" "PipelineCreate"
+                "tags"        ["yes" "{\"cli\": {\"name\": \"pcreate\"}}"]})
+
+  (get-command {"operationId" "GetMetrics"})
+
   (map (fn [[k v]]
          (str (name k) "=" v))
        {:foo "bar"

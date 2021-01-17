@@ -62,6 +62,17 @@
               :default :present})
            (extract-body-opt {"requestBody" {"description" "foo"}} '())))))
 
+(deftest test-get-command
+  (testing "Fetch enabled command name, no tags"
+    (is (= "get-metrics" (get-command {"operationId" "GetMetrics"}))))
+  (testing "Fetch enabled command name with alias"
+    (is (= "pcreate"
+           (get-command {"operationId" "PipelineCreate"
+                         "tags"        ["not a json" "{\"cli\": {\"name\": \"pcreate\"}}"]}))))
+  (testing "Disabled command"
+    (is (nil?
+          (get-command {"operationId" "GetApiSpec"
+                        "tags"        ["{\"cli\": {\"disabled\": true}}" "{\"cli\": {\"name\": \"yes\"}}"]})))))
 
 (deftest test-extract-subcommand
   (testing "Extracting subcommands"
