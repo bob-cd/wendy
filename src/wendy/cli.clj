@@ -15,7 +15,6 @@
 
 (ns wendy.cli
   (:require [camel-snake-kebab.core :as csk]
-            [jsonista.core :as json]
             [wendy.conf :as conf]
             [wendy.request :as r]))
 
@@ -57,18 +56,9 @@
               :default :present}))
     opts))
 
-(defn parse-json
-  [data]
-  (try
-    (json/read-value data)
-    (catch Exception _ {})))
-
 (defn get-command
   [operation]
-  (let [cli-tags (->> (get operation "tags")
-                      (map parse-json)
-                      (map #(get % "cli"))
-                      (into {}))]
+  (let [cli-tags (get operation "x-cli")]
     (when-not (true? (get cli-tags "disabled"))
       (get cli-tags "name" (csk/->kebab-case (get operation "operationId"))))))
 
@@ -113,10 +103,10 @@
 
 (comment
   (get-command {"operationId" "GetApiSpec"
-                "tags"        ["{\"cli\": {\"disabled\": true}}" "yes" "{\"cli\": {\"name\": \"yes\"}}"]})
+                "x-cli"       {"disabled" true}})
 
   (get-command {"operationId" "PipelineCreate"
-                "tags"        ["yes" "{\"cli\": {\"name\": \"pcreate\"}}"]})
+                "x-cli"       {"name" "p-create"}})
 
   (get-command {"operationId" "GetMetrics"})
 
