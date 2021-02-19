@@ -13,13 +13,13 @@
 ;   You should have received a copy of the GNU General Public License
 ;   along with Wendy. If not, see <http://www.gnu.org/licenses/>.
 
-{:deps    {org.clojure/clojure                 {:mvn/version "1.10.2-rc1"}
+{:deps    {org.clojure/clojure                 {:mvn/version "1.10.3-rc1"}
            java-http-clj/java-http-clj         {:mvn/version "0.4.1"}
-           metosin/jsonista                    {:mvn/version "0.3.0"}
-           clj-commons/clj-yaml                {:mvn/version "0.7.2"}
+           metosin/jsonista                    {:mvn/version "0.3.1"}
+           clj-commons/clj-yaml                {:mvn/version "0.7.106"}
            camel-snake-kebab/camel-snake-kebab {:mvn/version "0.4.2"}
            cli-matic/cli-matic                 {:git/url "https://github.com/TimoKramer/cli-matic.git"
-                                                :sha     "3b9c143b2c1a38a8a8c34713901834b5d359bae7"}}
+                                                :sha     "7ab1779a1555d2a3f6530483a5d4fcfa639bd250"}}
  :paths   ["src" "resources"]
  :aliases {:native-image {:main-opts  ["-m clj.native-image wendy.main"
                                        "--initialize-at-build-time"
@@ -35,7 +35,7 @@
                                         :sha     "f3e40672d5c543b80a2019c1f07b2d3fe785962c"}}}
            :test         {:extra-deps {lambdaisland/kaocha {:mvn/version "1.0.732"}}
                           :main-opts  ["-m" "kaocha.runner"]}
-           :repl         {:extra-deps {cider/cider-nrepl           {:mvn/version "0.25.5"}
+           :repl         {:extra-deps {cider/cider-nrepl           {:mvn/version "0.25.9"}
                                        nrepl/nrepl                 {:mvn/version "0.8.3"}
                                        org.clojure/tools.namespace {:mvn/version "1.1.0"}}
                           :main-opts  ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]}}}
