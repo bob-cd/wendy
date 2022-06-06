@@ -10,3 +10,4 @@ pom.xml.asc
 .cpcache/
 .idea/
 .DS_Store
+.cache/
