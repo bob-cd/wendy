@@ -3,10 +3,13 @@
 
 (cp/add-classpath "src:test")
 
-(require 'wendy.client-test)
+(def test-nses
+  ['wendy.client-test])
+
+(apply require test-nses)
 
 (def test-results
-  (t/run-tests 'wendy.client-test))
+  (apply t/run-tests test-nses))
 
 (def failures-and-errors
   (let [{:keys [:fail :error]} test-results]
