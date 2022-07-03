@@ -35,21 +35,23 @@
 
 (defn request
   [url method supplied-args required-args]
-  (let [lookup (args-lookup required-args)
-        call   #(deref (http/request {:url          (interpolate-path url supplied-args)
-                                      :method       method
-                                      :headers      {"Content-Type" "application/json"}
-                                      :query-params (make-query-params supplied-args lookup)
-                                      :body         (supplied-args :f)}))
-        resp   (impl/try! call)]
-    (-> resp
-        :body
-        (json/parse-string)
-        (get "message")
-        (println))))
+  (let [lookup                 (args-lookup required-args)
+        call                   #(deref (http/request {:url          (interpolate-path url supplied-args)
+                                                      :method       method
+                                                      :headers      {"Content-Type" "application/json"}
+                                                      :query-params (make-query-params supplied-args lookup)
+                                                      :body         (supplied-args :f)}))
+        {:keys [headers body]} (impl/try! call)]
+    (if (= "application/json" (headers "Content-Type"))
+      (impl/try!
+        #(-> body
+             (json/parse-string)
+             (get "message")
+             (println)))
+      (println body))))
 
 (comment
-  (deref (http/request {:url "http://localhost:7777/api.yaml" :method :get}))
+  (deref (http/request {:url "http://localhost:7777/cctray.xml" :method :get}))
 
   (make-query-params {:a 10 :b 12} {:a "path" :b "query"})
 
