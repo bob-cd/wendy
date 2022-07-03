@@ -1,6 +1,6 @@
 def main():
     return [
-        ("container", {"image": "eclipse-temurin:18-jre"}),
+        ("container", {"image": "clojure:temurin-18-tools-deps-focal"}),
         (
             "task",
             {
