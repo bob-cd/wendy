@@ -1,11 +1,15 @@
 def main():
     return [
+        ("env", {"CIRRUS_WORKING_DIR": "/root"}),
         ("container", {"image": "clojure:temurin-18-tools-deps-focal"}),
         (
             "task",
             {
                 "deps_cache": {
-                    "folder": "~/.m2/",
+                    "folders": [
+                        ".m2/",
+                        ".gitlibs/",
+                    ],
                     "reupload_on_changes": False,
                     "fingerprint_script": [
                         "cat bb.edn",
