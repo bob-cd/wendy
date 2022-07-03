@@ -4,8 +4,7 @@ def main():
         (
             "task",
             {
-                "script": "curl -sLO https://raw.githubusercontent.com/babashka/babashka/master/install"
+                "script": "bash < <(curl -s https://raw.githubusercontent.com/babashka/babashka/master/install) && bb test"
             },
         ),
-        ("task", {"script": "bb test"}),
     ]
