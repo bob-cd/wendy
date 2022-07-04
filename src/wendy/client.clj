@@ -41,14 +41,16 @@
                                                       :headers      {"Content-Type" "application/json"}
                                                       :query-params (make-query-params supplied-args lookup)
                                                       :body         (supplied-args :f)}))
-        {:keys [headers body]} (impl/try! call)]
-    (if (= "application/json" (headers "Content-Type"))
-      (impl/try!
-        #(-> body
-             (json/parse-string)
-             (get "message")
-             (println)))
-      (println body))))
+        {:keys [headers body]} (impl/try! call)
+        result                 (if (str/includes? (headers :content-type) "application/json")
+                                 (try
+                                   (-> body
+                                       (json/parse-string)
+                                       (get "message"))
+                                   (catch Exception _
+                                     body))
+                                 body)]
+    (println result)))
 
 (comment
   (deref (http/request {:url "http://localhost:7777/cctray.xml" :method :get}))
