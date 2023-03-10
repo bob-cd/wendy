@@ -43,11 +43,12 @@
   (let [args (map #(param->arg schema %) params)]
     (if request-body
       (conj args
-            {:option  "f"
+            {:option  "data"
              :as      (request-body "description")
-             :default :present
              :in      :body
-             :type    :slurp})
+             :type    :slurp
+             :default (when (request-body "required")
+                        :present)})
       args)))
 
 (defn path-data->op
