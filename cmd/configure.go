@@ -27,29 +27,27 @@ func config(key, prompt string) error {
 	return nil
 }
 
-func configure(cmd *cobra.Command, _ []string) error {
-	if err := pkg.LoadConfig(); err != nil {
-		return err
-	}
-
-	options := map[string]string{
-		"endpoint": "Bob's endpoint",
-		"api_path": "Path on which the OpenAPI spec can be found",
-	}
-
-	for k, v := range options {
-		if err := config(k, v); err != nil {
-			return err
-		}
-	}
-
-	return pkg.SaveConfig()
-}
-
 func ConfigureCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "configure",
-		Short: "Interactively configure wendy",
-		RunE:  configure,
+		Short: "Interactively configure Wendy",
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			if err := pkg.LoadConfig(); err != nil {
+				return err
+			}
+
+			options := map[string]string{
+				"endpoint": "Bob's endpoint",
+				"api_path": "Path on which the OpenAPI spec can be found",
+			}
+
+			for k, v := range options {
+				if err := config(k, v); err != nil {
+					return err
+				}
+			}
+
+			return pkg.SaveConfig()
+		},
 	}
 }
