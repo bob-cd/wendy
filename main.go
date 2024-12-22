@@ -23,12 +23,7 @@ func checkBootstrap(rootCmd *cobra.Command) (bool, error) {
 		return false, nil
 	}
 
-	b, err := os.ReadFile(apiPath)
-	if err != nil {
-		return false, err
-	}
-
-	model, err := climate.LoadV3(b)
+	model, err := climate.LoadFileV3(apiPath)
 	if err != nil {
 		return false, err
 	}

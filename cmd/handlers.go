@@ -5,6 +5,7 @@ import (
 	"log/slog"
 
 	"github.com/bob-cd/wendy/cmd/handlers/cluster"
+	"github.com/bob-cd/wendy/cmd/handlers/pipelines"
 	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
 )
@@ -25,9 +26,9 @@ func GetHandlers() map[string]climate.Handler {
 		"GetEvents":              handler,
 		"HealthCheck":            cluster.HealthCheckHandler,
 		"PipelineArtifactFetch":  handler,
-		"PipelineCreate":         handler,
+		"PipelineCreate":         pipelines.PipelineCreateHandler,
 		"PipelineDelete":         handler,
-		"PipelineList":           handler,
+		"PipelineList":           pipelines.PipelineListHandler,
 		"PipelineLogs":           handler,
 		"PipelinePause":          handler,
 		"PipelineRuns":           handler,
