@@ -1,11 +1,44 @@
 package main
 
 import (
+	"log/slog"
 	"os"
+	"path"
 
 	"github.com/bob-cd/wendy/cmd"
+	"github.com/bob-cd/wendy/pkg"
+	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
 )
+
+func checkBootstrap(rootCmd *cobra.Command) (bool, error) {
+	apiDir, err := pkg.GetApiDir()
+	if err != nil {
+		return false, err
+	}
+	apiPath := path.Join(apiDir, "api.yaml")
+
+	_, err = os.Stat(apiPath)
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+
+	b, err := os.ReadFile(apiPath)
+	if err != nil {
+		return false, err
+	}
+
+	model, err := climate.LoadV3(b)
+	if err != nil {
+		return false, err
+	}
+
+	if err = climate.BootstrapV3(rootCmd, *model, cmd.GetHandlers()); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
 
 func main() {
 	rootCmd := cobra.Command{
@@ -14,7 +47,17 @@ func main() {
 		Long:  "A comprehensive TUI for Bob allowing for control and complex pipeline orchestrations",
 	}
 
-	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd(&rootCmd))
+	// TODO: Better
+	bootstrapped, err := checkBootstrap(&rootCmd)
+	if err != nil {
+		slog.Error("Error checking bootstrap", "err", err)
+		os.Exit(1)
+	}
+	if !bootstrapped {
+		slog.Warn("Wendy is not bootstrapped, please run 'bootstrap' first")
+	}
+
+	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd())
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)

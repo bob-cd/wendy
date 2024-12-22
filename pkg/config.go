@@ -16,6 +16,22 @@ func confPaths() (string, string, error) {
 	return path.Join(confDir, "wendy"), "conf.json", nil
 }
 
+func GetApiDir() (string, error) {
+	cacheDir, err := os.UserCacheDir()
+	if err != nil {
+		return "", err
+	}
+
+	apiDir := path.Join(cacheDir, "wendy")
+	if _, err := os.Stat(apiDir); err != nil {
+		if err = os.MkdirAll(apiDir, os.ModePerm); err != nil {
+			return "", err
+		}
+	}
+
+	return apiDir, nil
+}
+
 func LoadConfig() error {
 	confDir, confName, err := confPaths()
 	if err != nil {

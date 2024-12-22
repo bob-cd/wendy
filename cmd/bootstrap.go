@@ -13,17 +13,12 @@ import (
 )
 
 func saveAPISpec(r io.ReadCloser) error {
-	cacheDir, err := os.UserCacheDir()
+	apiPath, err := pkg.GetApiDir()
 	if err != nil {
 		return err
 	}
 
-	apiDir := path.Join(cacheDir, "wendy")
-	if err = os.MkdirAll(apiDir, os.ModePerm); err != nil {
-		return err
-	}
-
-	w, err := os.Create(path.Join(apiDir, "api.yaml"))
+	w, err := os.Create(path.Join(apiPath, "api.yaml"))
 	if err != nil {
 		return err
 	}
@@ -38,7 +33,7 @@ func saveAPISpec(r io.ReadCloser) error {
 	return nil
 }
 
-func BootstrapCmd(rootCmd *cobra.Command) *cobra.Command {
+func BootstrapCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "bootstrap",
 		Short: "Bootstrap Wendy's commands from Bob",
