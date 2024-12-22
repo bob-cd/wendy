@@ -40,6 +40,13 @@ func checkBootstrap(rootCmd *cobra.Command) (bool, error) {
 	return true, nil
 }
 
+func bail(err error) {
+	if err != nil {
+		slog.Error("Error", "err", err)
+		os.Exit(1)
+	}
+}
+
 func main() {
 	rootCmd := cobra.Command{
 		Use:   "wendy",
@@ -49,13 +56,12 @@ func main() {
 
 	// TODO: Better
 	bootstrapped, err := checkBootstrap(&rootCmd)
-	if err != nil {
-		slog.Error("Error checking bootstrap", "err", err)
-		os.Exit(1)
-	}
+	bail(err)
 	if !bootstrapped {
 		slog.Warn("Wendy is not bootstrapped, please run 'bootstrap' first")
 	}
+
+	bail(pkg.LoadConfig())
 
 	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd())
 
