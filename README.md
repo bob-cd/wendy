@@ -2,8 +2,7 @@
 
 ## Bob's SO and the reference CLI.
 
-Wendy is an `opinionated client` for Bob and takes care of the following tasks:
-- Implement a full CLI to all of Bob's REST API with corresponding and semantic commands
+Wendy is an opinionated client for Bob implementing a controller TUI and a full CLI to all of Bob's REST API with corresponding and semantic commands
 
 #### TODO
 - Read declarative file(s) and translate to REST API calls to Bob

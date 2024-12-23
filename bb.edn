@@ -1,3 +1,5 @@
 {:tasks {update {:doc "Update all deps"
                  :task (do (shell "go get -u -t")
-                           (shell "go mod tidy"))}}}
+                           (shell "go mod tidy"))}
+         install {:doc "Compile and install to PATH"
+                  :task (shell "go install")}}}
