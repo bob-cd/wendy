@@ -31,7 +31,7 @@ var Handlers = map[string]climate.Handler{
 	"GetError":               placeHandler,
 	"GetEvents":              placeHandler,
 	"HealthCheck":            cluster.HealthCheckHandler,
-	"PipelineArtifactFetch":  placeHandler,
+	"PipelineArtifactFetch":  pipelines.ArtifactFetchHandler,
 	"PipelineCreate":         pipelines.CreateHandler,
 	"PipelineDelete":         pipelines.DeleteHandler,
 	"PipelineList":           pipelines.ListHandler,
@@ -52,7 +52,7 @@ func BootstrapCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "bootstrap",
 		Short: "Bootstrap Wendy's commands from Bob",
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			apiPath := viper.GetString("api_path")
 			res, err := http.Get(pkg.FullUrl(apiPath))
 			if err != nil {

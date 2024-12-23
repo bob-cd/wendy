@@ -2,6 +2,7 @@ package pipelines
 
 import (
 	"io"
+	"log/slog"
 	"net/http"
 	"os"
 	"strings"
@@ -94,7 +95,7 @@ func RunsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
 }
 
 func StatusHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", nil)
+	res, err := http.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
 	}
@@ -118,4 +119,32 @@ func UnpauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) erro
 	}
 
 	return pkg.ShowMessage(res.Body)
+}
+
+func ArtifactFetchHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
+	name, _ := opts.Flags().GetString("artifact-name")
+	fileName := name + ".tar"
+
+	slog.Info("Downloading artifact", "file-name", fileName)
+
+	res, err := http.Get(pkg.FullUrl(data.Path))
+	if err != nil {
+		return err
+	}
+
+	w, err := os.Create(fileName)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(w, res.Body)
+	if err != nil {
+		return err
+	}
+
+	w.Sync()
+	w.Close()
+
+	slog.Info("Complete")
+
+	return nil
 }
