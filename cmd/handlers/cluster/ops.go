@@ -2,21 +2,14 @@ package cluster
 
 import (
 	"net/http"
-	"net/url"
 
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func get(data climate.HandlerData) error {
-	fullUrl, err := url.JoinPath(viper.GetString("endpoint"), data.Path)
-	if err != nil {
-		return err
-	}
-
-	res, err := http.Get(fullUrl)
+	res, err := http.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
 	}

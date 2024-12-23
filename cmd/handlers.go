@@ -29,7 +29,7 @@ func GetHandlers() map[string]climate.Handler {
 		"PipelineCreate":         pipelines.CreateHandler,
 		"PipelineDelete":         pipelines.DeleteHandler,
 		"PipelineList":           pipelines.ListHandler,
-		"PipelineLogs":           handler,
+		"PipelineLogs":           pipelines.LogsHandler,
 		"PipelinePause":          handler,
 		"PipelineRuns":           handler,
 		"PipelineStart":          handler,

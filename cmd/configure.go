@@ -32,10 +32,6 @@ func ConfigureCmd() *cobra.Command {
 		Use:   "configure",
 		Short: "Interactively configure Wendy",
 		RunE: func(cmd *cobra.Command, _ []string) error {
-			if err := pkg.LoadConfig(); err != nil {
-				return err
-			}
-
 			options := map[string]string{
 				"endpoint": "Bob's endpoint",
 				"api_path": "Path on which the OpenAPI spec can be found",

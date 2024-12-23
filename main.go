@@ -49,14 +49,15 @@ func main() {
 		Long:  "A comprehensive TUI for Bob allowing for control and complex pipeline orchestrations",
 	}
 
+	// Ensure config is loaded
+	bailIfErr(pkg.LoadConfig())
+
 	// TODO: Better
 	bootstrapped, err := bootstrap(&rootCmd)
 	bailIfErr(err)
 	if !bootstrapped {
-		slog.Warn("Wendy is not bootstrapped, please run 'bootstrap' first")
+		slog.Warn("Wendy is not bootstrapped, please run 'wendy bootstrap'")
 	}
-
-	bailIfErr(pkg.LoadConfig())
 
 	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd())
 

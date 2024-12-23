@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net/url"
+
+	"github.com/spf13/viper"
 )
 
 func ShowMessage(rdr io.Reader) error {
@@ -22,4 +25,9 @@ func ShowMessage(rdr io.Reader) error {
 	fmt.Println(string(toPrint))
 
 	return nil
+}
+
+func FullUrl(path string) string {
+	joined, _ := url.JoinPath(viper.GetString("endpoint"), path)
+	return joined
 }
