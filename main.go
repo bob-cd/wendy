@@ -28,7 +28,7 @@ func bootstrap(rootCmd *cobra.Command) (bool, error) {
 		return false, err
 	}
 
-	if err = climate.BootstrapV3(rootCmd, *model, cmd.GetHandlers()); err != nil {
+	if err = climate.BootstrapV3(rootCmd, *model, cmd.Handlers); err != nil {
 		return false, err
 	}
 
