@@ -1,10 +1,7 @@
 package cmd
 
 import (
-	"io"
 	"log/slog"
-	"net/http"
-	"os"
 	"path"
 
 	"github.com/bob-cd/wendy/cmd/handlers/artifact_stores"
@@ -54,24 +51,8 @@ func BootstrapCmd() *cobra.Command {
 		Short: "Bootstrap Wendy's commands from Bob",
 		RunE: func(_ *cobra.Command, _ []string) error {
 			apiPath := viper.GetString("api_path")
-			res, err := http.Get(pkg.FullUrl(apiPath))
-			if err != nil {
-				return err
-			}
 
-			w, err := os.Create(path.Join(apiPath, "api.yaml"))
-			if err != nil {
-				return err
-			}
-			_, err = io.Copy(w, res.Body)
-			if err != nil {
-				return err
-			}
-
-			w.Sync()
-			w.Close()
-
-			return nil
+			return pkg.Download(pkg.FullUrl(apiPath), path.Join(apiPath, "api.yaml"))
 		},
 	}
 }
