@@ -1,18 +1,17 @@
 package cluster
 
 import (
-	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 
+	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-func get(path string) error {
-	fullUrl, err := url.JoinPath(viper.GetString("endpoint"), path)
+func get(data climate.HandlerData) error {
+	fullUrl, err := url.JoinPath(viper.GetString("endpoint"), data.Path)
 	if err != nil {
 		return err
 	}
@@ -22,20 +21,13 @@ func get(path string) error {
 		return err
 	}
 
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(b))
-
-	return nil
+	return pkg.ShowMessage(res.Body)
 }
 
 func InfoHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	return get(data.Path)
+	return get(data)
 }
 
 func HealthCheckHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	return get(data.Path)
+	return get(data)
 }

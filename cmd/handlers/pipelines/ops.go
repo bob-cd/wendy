@@ -1,13 +1,13 @@
 package pipelines
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 
+	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -24,14 +24,7 @@ func PipelineListHandler(_ *cobra.Command, _ []string, data climate.HandlerData)
 		return err
 	}
 
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(b))
-
-	return nil
+	return pkg.ShowMessage(res.Body)
 }
 
 func PipelineCreateHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
@@ -60,12 +53,5 @@ func PipelineCreateHandler(opts *cobra.Command, _ []string, data climate.Handler
 		return err
 	}
 
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(b))
-
-	return nil
+	return pkg.ShowMessage(res.Body)
 }

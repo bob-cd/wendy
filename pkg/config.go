@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"errors"
 	"os"
 	"path"
 
@@ -24,8 +25,10 @@ func GetApiDir() (string, error) {
 
 	apiDir := path.Join(cacheDir, "wendy")
 	if _, err := os.Stat(apiDir); err != nil {
-		if err = os.MkdirAll(apiDir, os.ModePerm); err != nil {
-			return "", err
+		if errors.Is(err, os.ErrNotExist) {
+			if err = os.MkdirAll(apiDir, os.ModePerm); err != nil {
+				return "", err
+			}
 		}
 	}
 

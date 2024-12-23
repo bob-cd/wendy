@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func checkBootstrap(rootCmd *cobra.Command) (bool, error) {
+func bootstrap(rootCmd *cobra.Command) (bool, error) {
 	apiDir, err := pkg.GetApiDir()
 	if err != nil {
 		return false, err
@@ -35,7 +35,7 @@ func checkBootstrap(rootCmd *cobra.Command) (bool, error) {
 	return true, nil
 }
 
-func bail(err error) {
+func bailIfErr(err error) {
 	if err != nil {
 		slog.Error("Error", "err", err)
 		os.Exit(1)
@@ -50,13 +50,13 @@ func main() {
 	}
 
 	// TODO: Better
-	bootstrapped, err := checkBootstrap(&rootCmd)
-	bail(err)
+	bootstrapped, err := bootstrap(&rootCmd)
+	bailIfErr(err)
 	if !bootstrapped {
 		slog.Warn("Wendy is not bootstrapped, please run 'bootstrap' first")
 	}
 
-	bail(pkg.LoadConfig())
+	bailIfErr(pkg.LoadConfig())
 
 	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd())
 
