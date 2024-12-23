@@ -57,8 +57,62 @@ func DeleteHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error
 	return pkg.ShowMessage(res.Body)
 }
 
-func LogsHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
+func LogsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
 	res, err := http.Get(pkg.FullUrl(data.Path))
+	if err != nil {
+		return err
+	}
+
+	return pkg.ShowMessage(res.Body)
+}
+
+func StartHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", nil)
+	if err != nil {
+		return err
+	}
+
+	return pkg.ShowMessage(res.Body)
+}
+
+func StopHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", nil)
+	if err != nil {
+		return err
+	}
+
+	return pkg.ShowMessage(res.Body)
+}
+
+func RunsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+	res, err := http.Get(pkg.FullUrl(data.Path))
+	if err != nil {
+		return err
+	}
+
+	return pkg.ShowMessage(res.Body)
+}
+
+func StatusHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", nil)
+	if err != nil {
+		return err
+	}
+
+	return pkg.ShowMessage(res.Body)
+}
+
+func PauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", nil)
+	if err != nil {
+		return err
+	}
+
+	return pkg.ShowMessage(res.Body)
+}
+
+func UnpauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", nil)
 	if err != nil {
 		return err
 	}
