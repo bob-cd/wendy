@@ -52,8 +52,12 @@ func BootstrapCmd() *cobra.Command {
 		Use:   "bootstrap",
 		Short: "Bootstrap Wendy's commands from Bob",
 		RunE: func(_ *cobra.Command, _ []string) error {
-			apiPath := viper.GetString("api_path")
-			return pkg.Download(pkg.FullUrl(apiPath), path.Join(apiPath, "api.yaml"))
+			apiDir, err := pkg.GetApiDir()
+			if err != nil {
+				return err
+			}
+
+			return pkg.Download(pkg.FullUrl(viper.GetString("api_path")), path.Join(apiDir, "api.yaml"))
 		},
 	}
 }

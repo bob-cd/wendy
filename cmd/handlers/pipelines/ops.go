@@ -116,6 +116,5 @@ func UnpauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) erro
 
 func ArtifactFetchHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
 	name, _ := opts.Flags().GetString("artifact-name")
-
 	return pkg.Download(pkg.FullUrl(data.Path), name+".tar")
 }
