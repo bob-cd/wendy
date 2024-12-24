@@ -3,7 +3,6 @@ package events
 import (
 	"bufio"
 	"fmt"
-	"net/http"
 	"strings"
 
 	"github.com/bob-cd/wendy/pkg"
@@ -12,12 +11,12 @@ import (
 )
 
 func EventsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := http.Get(pkg.FullUrl(data.Path))
+	res, err := pkg.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
 	}
 
-	r := bufio.NewReader(res.Body)
+	r := bufio.NewReader(res)
 	for {
 		b, err := r.ReadBytes('\n')
 		if err != nil {

@@ -35,24 +35,72 @@ func FullUrl(path string) string {
 	return joined
 }
 
+func checkStatus(res *http.Response) error {
+	if status := res.StatusCode; status >= 400 {
+		b, _ := io.ReadAll(res.Body)
+		return fmt.Errorf("Invalid call: %s Status: %d", string(b), status)
+	}
+
+	return nil
+}
+
+func Get(url string) (io.Reader, error) {
+	res, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = checkStatus(res); err != nil {
+		return nil, err
+	}
+
+	return res.Body, nil
+}
+
+func Post(url string, body io.Reader) (io.Reader, error) {
+	res, err := http.Post(url, "application/json", body)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = checkStatus(res); err != nil {
+		return nil, err
+	}
+
+	return res.Body, nil
+}
+
+func Delete(url string) (io.Reader, error) {
+	req, err := http.NewRequest("DELETE", url, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = checkStatus(res); err != nil {
+		return nil, err
+	}
+
+	return res.Body, nil
+}
+
 func Download(url, path string) error {
 	slog.Info("Downloading", "fileName", path)
 
-	res, err := http.Get(url)
+	res, err := Get(url)
 	if err != nil {
 		return err
-	}
-
-	if res.StatusCode >= 400 {
-		b, _ := io.ReadAll(res.Body)
-		return fmt.Errorf("Staus %d Response %s", res.StatusCode, string(b))
 	}
 
 	w, err := os.Create(path)
 	if err != nil {
 		return err
 	}
-	_, err = io.Copy(w, res.Body)
+	_, err = io.Copy(w, res)
 	if err != nil {
 		return err
 	}

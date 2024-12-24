@@ -2,7 +2,6 @@ package artifact_stores
 
 import (
 	"io"
-	"net/http"
 	"os"
 	"strings"
 
@@ -12,12 +11,12 @@ import (
 )
 
 func ListHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := http.Get(pkg.FullUrl(data.Path))
+	res, err := pkg.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
 	}
 
-	return pkg.ShowMessage(res.Body)
+	return pkg.ShowMessage(res)
 }
 
 func CreateHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
@@ -35,24 +34,19 @@ func CreateHandler(opts *cobra.Command, _ []string, data climate.HandlerData) er
 		rdr = strings.NewReader(payload)
 	}
 
-	res, err := http.Post(pkg.FullUrl(data.Path), "application/json", rdr)
+	res, err := pkg.Post(pkg.FullUrl(data.Path), rdr)
 	if err != nil {
 		return err
 	}
 
-	return pkg.ShowMessage(res.Body)
+	return pkg.ShowMessage(res)
 }
 
 func DeleteHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	req, err := http.NewRequest("DELETE", pkg.FullUrl(data.Path), nil)
+	res, err := pkg.Delete(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
 	}
 
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return err
-	}
-
-	return pkg.ShowMessage(res.Body)
+	return pkg.ShowMessage(res)
 }
