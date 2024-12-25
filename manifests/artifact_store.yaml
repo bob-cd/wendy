@@ -1,0 +1,5 @@
+apiVersion: wendy.bob.cd/v1alpha1
+kind: ArtifactStore
+spec:
+  name: artifact-local
+  url: http://artifact-local:8001

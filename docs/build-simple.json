@@ -1,8 +1,0 @@
-{
-  "image": "gradle:jdk11",
-  "steps": [
-    {
-      "cmd": "echo build started."
-    }
-  ]
-}

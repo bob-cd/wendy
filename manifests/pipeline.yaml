@@ -1,0 +1,25 @@
+apiVersion: wendy.bob.cd/v1alpha1
+kind: Pipeline
+spec:
+  group: dev
+  name: pipeline1
+  image: docker.io/library/golang:alpine
+  steps:
+    - needs_resource: source
+      cmd: go test
+    - needs_resource: source
+      vars:
+        GOOS: linux
+        GOARCH: amd64
+      cmd: go build -o app
+      produces_artifact:
+        name: app
+        path: app
+        store: artifact-local
+  resources:
+    - name: source
+      type: external
+      provider: resource-git
+      params:
+        repo: https://github.com/lispyclouds/bob-example
+        branch: main
