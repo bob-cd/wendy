@@ -1,5 +1,8 @@
 apiVersion: wendy.bob.cd/v1alpha1
 kind: Pipeline
+identifiedBy:
+  - group
+  - name
 spec:
   group: dev
   name: pipeline1

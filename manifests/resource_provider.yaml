@@ -1,5 +1,7 @@
 apiVersion: wendy.bob.cd/v1alpha1
 kind: ResourceProvider
+identifiedBy:
+  - name
 spec:
   name: resource-git
   url: http://resource-git:8000

@@ -54,7 +54,7 @@ func main() {
 	bootstrapped, err := bootstrap(&rootCmd)
 	bailIfErr(err)
 
-	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd())
+	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd(), cmd.ApplyCmd())
 	rootCmd.Run = func(_ *cobra.Command, _ []string) {
 		if !bootstrapped {
 			slog.Warn("Wendy is not bootstrapped, please run the boostrap command")
