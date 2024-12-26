@@ -17,6 +17,18 @@ func confPaths() (string, string, error) {
 	return path.Join(confDir, "wendy"), "conf.json", nil
 }
 
+func mkdir(path string) error {
+	if _, err := os.Stat(path); err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			if err = os.MkdirAll(path, os.ModePerm); err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
 func GetApiDir() (string, error) {
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
@@ -24,12 +36,8 @@ func GetApiDir() (string, error) {
 	}
 
 	apiDir := path.Join(cacheDir, "wendy")
-	if _, err := os.Stat(apiDir); err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			if err = os.MkdirAll(apiDir, os.ModePerm); err != nil {
-				return "", err
-			}
-		}
+	if err := mkdir(apiDir); err != nil {
+		return "", err
 	}
 
 	return apiDir, nil
@@ -41,18 +49,20 @@ func LoadConfig() error {
 		return err
 	}
 
+	if err := mkdir(confDir); err != nil {
+		return err
+	}
+
 	viper.AddConfigPath(confDir)
 	viper.SetConfigName(confName)
 	viper.SetConfigType("json")
 
 	if err = viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			return err
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			return errors.New("Wendy is not configured, please run the configure command")
 		}
 
-		if err = os.MkdirAll(confDir, os.ModePerm); err != nil {
-			return err
-		}
+		return err
 	}
 
 	return nil
