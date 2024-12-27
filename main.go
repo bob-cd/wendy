@@ -8,31 +8,33 @@ import (
 	"github.com/bob-cd/wendy/cmd"
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
+	"github.com/pb33f/libopenapi"
+	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/spf13/cobra"
 )
 
-func bootstrap(rootCmd *cobra.Command) (bool, error) {
+func bootstrap(rootCmd *cobra.Command) (*libopenapi.DocumentModel[v3.Document], error) {
 	apiDir, err := pkg.GetApiDir()
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 	apiPath := path.Join(apiDir, "api.yaml")
 
 	_, err = os.Stat(apiPath)
 	if os.IsNotExist(err) {
-		return false, nil
+		return nil, nil
 	}
 
 	model, err := climate.LoadFileV3(apiPath)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
 	if err = climate.BootstrapV3(rootCmd, *model, cmd.Handlers); err != nil {
-		return false, err
+		return nil, err
 	}
 
-	return true, nil
+	return model, nil
 }
 
 func bailIfErr(err error) {
@@ -51,12 +53,12 @@ func main() {
 
 	// Ensure config load and bootstrap
 	bailIfErr(pkg.LoadConfig())
-	bootstrapped, err := bootstrap(&rootCmd)
+	model, err := bootstrap(&rootCmd)
 	bailIfErr(err)
 
-	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd(), cmd.ApplyCmd())
+	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd(), cmd.ApplyCmd(model))
 	rootCmd.Run = func(_ *cobra.Command, _ []string) {
-		if !bootstrapped {
+		if model == nil {
 			slog.Warn("Wendy is not bootstrapped, please run the boostrap command")
 		}
 

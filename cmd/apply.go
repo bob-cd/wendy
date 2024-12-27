@@ -8,10 +8,10 @@ import (
 	"log/slog"
 	"net/url"
 	"os"
-	"path"
 
 	"github.com/bob-cd/wendy/pkg"
-	"github.com/lispyclouds/climate"
+	"github.com/pb33f/libopenapi"
+	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
 )
@@ -31,10 +31,6 @@ var conf = map[string]map[string]string{
 	},
 }
 
-type opInfo struct {
-	path string
-}
-
 type manifest struct {
 	ApiVersion   string         `yaml:"apiVersion"`
 	Kind         string         `yaml:"kind"`
@@ -43,45 +39,30 @@ type manifest struct {
 }
 
 type Object map[string]any
+type Model = libopenapi.DocumentModel[v3.Document]
 
 // TODO: Any better way to do this? Maybe via climate?
-func getOpInfo(opId string) (*opInfo, error) {
-	apiDir, err := pkg.GetApiDir()
-	if err != nil {
-		return nil, err
-	}
-	apiPath := path.Join(apiDir, "api.yaml")
-
-	_, err = os.Stat(apiPath)
-	if os.IsNotExist(err) {
-		return nil, errors.New("Wendy is not bootstrapped, please run the boostrap command")
-	}
-
-	model, err := climate.LoadFileV3(apiPath)
-	if err != nil {
-		return nil, err
-	}
-
+func getOpInfo(model *Model, opId string) *string {
 	for path, item := range model.Model.Paths.PathItems.FromOldest() {
 		for _, op := range item.GetOperations().FromOldest() {
 			if op.OperationId == opId {
-				return &opInfo{path: path}, nil
+				return &path
 			}
 		}
 	}
 
-	return nil, errors.New("Cannot find " + opId)
+	return nil
 }
 
-func getObject(kind string, indentifiers map[string]string) (Object, error) {
+func getObject(model *Model, kind string, indentifiers map[string]string) (Object, error) {
 	ops, ok := conf[kind]
 	if !ok {
 		return nil, errors.New("Unsupported kind: " + kind)
 	}
 
-	opInfo, err := getOpInfo(ops["ListOp"])
-	if err != nil {
-		return nil, err
+	path := getOpInfo(model, ops["ListOp"])
+	if path == nil {
+		return nil, errors.New("Invalid op " + ops["ListOp"])
 	}
 
 	params := url.Values{}
@@ -89,7 +70,7 @@ func getObject(kind string, indentifiers map[string]string) (Object, error) {
 		params.Set(k, v)
 	}
 
-	res, err := pkg.Get(pkg.FullUrl(opInfo.path) + "?" + params.Encode())
+	res, err := pkg.Get(pkg.FullUrl(*path) + "?" + params.Encode())
 	if err != nil {
 		return nil, err
 	}
@@ -113,10 +94,8 @@ func different(obj1, obj2 any) bool {
 	return !(fmt.Sprint(obj1) == fmt.Sprint(obj2))
 }
 
-func apply(cmd *cobra.Command, _ []string) error {
-	m, _ := cmd.Flags().GetString("manifest")
-
-	f, err := os.Open(m)
+func apply(model *Model, manifestFile string) error {
+	f, err := os.Open(manifestFile)
 	if err != nil {
 		return err
 	}
@@ -133,7 +112,7 @@ func apply(cmd *cobra.Command, _ []string) error {
 		ids[id] = parsed.Spec[id].(string)
 	}
 
-	object, err := getObject(parsed.Kind, ids)
+	object, err := getObject(model, parsed.Kind, ids)
 	if err != nil {
 		return err
 	}
@@ -150,12 +129,12 @@ func apply(cmd *cobra.Command, _ []string) error {
 			return errors.New("Unsupported kind: " + parsed.Kind)
 		}
 
-		opInfo, err := getOpInfo(ops["CreateOp"])
-		if err != nil {
-			return err
+		path := getOpInfo(model, ops["CreateOp"])
+		if path == nil {
+			return errors.New("Invalid op " + ops["CreateOp"])
 		}
 
-		_, err = pkg.Post(pkg.FullUrl(opInfo.path), &buffer)
+		_, err = pkg.Post(pkg.FullUrl(*path), &buffer)
 		if err != nil {
 			return err
 		}
@@ -170,11 +149,14 @@ func apply(cmd *cobra.Command, _ []string) error {
 	return nil
 }
 
-func ApplyCmd() *cobra.Command {
+func ApplyCmd(model *Model) *cobra.Command {
 	cmd := cobra.Command{
 		Use:   "apply",
 		Short: "Declaratively apply manifests",
-		RunE:  apply,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			manifestFile, _ := cmd.Flags().GetString("manifest")
+			return apply(model, manifestFile)
+		},
 	}
 
 	cmd.Flags().StringP("manifest", "m", "", "The manifest file to apply")

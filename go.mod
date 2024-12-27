@@ -1,10 +1,13 @@
 module github.com/bob-cd/wendy
 
-go 1.23.4
+go 1.23.0
+
+toolchain go1.23.4
 
 require (
 	github.com/charmbracelet/huh v0.6.0
 	github.com/lispyclouds/climate v0.0.0-20241222082605-86c14b3a3aec
+	github.com/pb33f/libopenapi v0.18.7
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -39,7 +42,6 @@ require (
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/termenv v0.15.3-0.20241212154518-8c990cd6cf4b // indirect
-	github.com/pb33f/libopenapi v0.18.7 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sagikazarmark/locafero v0.6.0 // indirect
