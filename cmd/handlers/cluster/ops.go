@@ -1,12 +1,14 @@
 package cluster
 
 import (
+	"fmt"
+
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
 )
 
-func get(data climate.HandlerData) error {
+func InfoHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
@@ -15,10 +17,13 @@ func get(data climate.HandlerData) error {
 	return pkg.ShowMessage(res)
 }
 
-func InfoHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	return get(data)
-}
-
 func HealthCheckHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	return get(data)
+	res, err := pkg.Get(pkg.FullUrl(data.Path))
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("Pong")
+
+	return res.Close()
 }
