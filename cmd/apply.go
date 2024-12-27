@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"net/url"
 	"os"
+	"reflect"
 
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/pb33f/libopenapi"
@@ -89,9 +90,9 @@ func getObject(model *Model, kind string, indentifiers map[string]string) (Objec
 	return objects[0], nil
 }
 
-func different(obj1, obj2 any) bool {
-	// TODO: Possibly better
-	return !(fmt.Sprint(obj1) == fmt.Sprint(obj2))
+func different(obj1, obj2 map[string]any) bool {
+	// TODO: Maybe show the diff?
+	return !reflect.DeepEqual(obj1, obj2)
 }
 
 func apply(model *Model, manifestFile string) error {
