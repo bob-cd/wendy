@@ -2,6 +2,7 @@ package artifact_stores
 
 import (
 	"io"
+	"net/url"
 	"os"
 	"strings"
 
@@ -10,8 +11,15 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ListHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := pkg.Get(pkg.FullUrl(data.Path))
+func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
+	name, _ := opts.Flags().GetString("name")
+
+	params := url.Values{}
+	if name != "" {
+		params.Set("name", name)
+	}
+
+	res, err := pkg.Get(pkg.FullUrl(data.Path) + "?" + params.Encode())
 	if err != nil {
 		return err
 	}

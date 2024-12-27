@@ -2,6 +2,7 @@ package pipelines
 
 import (
 	"io"
+	"net/url"
 	"os"
 	"strings"
 
@@ -10,8 +11,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func ListHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := pkg.Get(pkg.FullUrl(data.Path))
+func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
+	group, _ := opts.Flags().GetString("group")
+	name, _ := opts.Flags().GetString("name")
+	status, _ := opts.Flags().GetString("status")
+
+	params := url.Values{}
+	if group != "" {
+		params.Set("group", group)
+	}
+	if name != "" {
+		params.Set("name", name)
+	}
+	if status != "" {
+		params.Set("status", status)
+	}
+
+	res, err := pkg.Get(pkg.FullUrl(data.Path) + "?" + params.Encode())
 	if err != nil {
 		return err
 	}
