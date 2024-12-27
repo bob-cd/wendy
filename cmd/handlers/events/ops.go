@@ -3,6 +3,8 @@ package events
 import (
 	"bufio"
 	"fmt"
+	"os"
+	"os/signal"
 	"strings"
 
 	"github.com/bob-cd/wendy/pkg"
@@ -15,6 +17,14 @@ func EventsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error
 	if err != nil {
 		return err
 	}
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		<-c
+		res.Close()
+		os.Exit(0)
+	}()
 
 	r := bufio.NewReader(res)
 	for {

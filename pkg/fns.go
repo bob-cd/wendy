@@ -44,7 +44,7 @@ func checkStatus(res *http.Response) error {
 	return nil
 }
 
-func Get(url string) (io.Reader, error) {
+func Get(url string) (io.ReadCloser, error) {
 	res, err := http.Get(url)
 	if err != nil {
 		return nil, err
