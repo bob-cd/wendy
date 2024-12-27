@@ -56,14 +56,10 @@ func getOpInfo(model *Model, opId string) *string {
 }
 
 func getObject(model *Model, kind string, indentifiers map[string]string) (Object, error) {
-	ops, ok := conf[kind]
-	if !ok {
-		return nil, errors.New("Unsupported kind: " + kind)
-	}
-
-	path := getOpInfo(model, ops["ListOp"])
+	opId := conf[kind]["ListOp"]
+	path := getOpInfo(model, opId)
 	if path == nil {
-		return nil, errors.New("Invalid op " + ops["ListOp"])
+		return nil, errors.New("Cannot find path for " + opId)
 	}
 
 	params := url.Values{}
@@ -108,6 +104,10 @@ func apply(model *Model, manifestFile string) error {
 		return err
 	}
 
+	if _, ok := conf[parsed.Kind]; !ok {
+		return errors.New("Unsupported kind: " + parsed.Kind)
+	}
+
 	ids := make(map[string]string)
 	for _, id := range parsed.IdentifiedBy {
 		ids[id] = parsed.Spec[id].(string)
@@ -125,14 +125,10 @@ func apply(model *Model, manifestFile string) error {
 			return err
 		}
 
-		ops, ok := conf[parsed.Kind]
-		if !ok {
-			return errors.New("Unsupported kind: " + parsed.Kind)
-		}
-
-		path := getOpInfo(model, ops["CreateOp"])
+		opId := conf[parsed.Kind]["CreateOp"]
+		path := getOpInfo(model, opId)
 		if path == nil {
-			return errors.New("Invalid op " + ops["CreateOp"])
+			return errors.New("Cannot find path for " + opId)
 		}
 
 		_, err = pkg.Post(pkg.FullUrl(*path), &buffer)
