@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"errors"
-
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
@@ -11,15 +9,20 @@ import (
 
 func config(key, prompt string) error {
 	var input string
+	currentValue := viper.GetString(key)
 
-	huh.NewInput().
+	err := huh.NewInput().
 		Title(prompt).
+		Description("hit enter to accept the current value").
 		Value(&input).
-		Placeholder(viper.GetString(key)).
+		Placeholder(currentValue).
 		Run()
+	if err != nil {
+		return err
+	}
 
 	if input == "" {
-		return errors.New("Cancelled")
+		input = currentValue
 	}
 
 	viper.Set(key, input)
@@ -31,7 +34,7 @@ func ConfigureCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "configure",
 		Short: "Interactively configure Wendy",
-		RunE: func(cmd *cobra.Command, _ []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			options := map[string]string{
 				"endpoint": "Bob's endpoint",
 				"api_path": "Path on which the OpenAPI spec can be found",

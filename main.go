@@ -51,7 +51,6 @@ func main() {
 		Long:  "A comprehensive TUI for Bob allowing for control and complex pipeline orchestrations",
 	}
 
-	// Ensure config load and bootstrap
 	bailIfErr(pkg.LoadConfig())
 	model, err := bootstrap(&rootCmd)
 	bailIfErr(err)

@@ -56,13 +56,13 @@ func LoadConfig() error {
 	viper.AddConfigPath(confDir)
 	viper.SetConfigName(confName)
 	viper.SetConfigType("json")
+	viper.SetDefault("endpoint", "http://localhost:7777")
+	viper.SetDefault("api_path", "/api.yaml")
 
 	if err = viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			return errors.New("Wendy is not configured, please run the configure command")
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			return err
 		}
-
-		return err
 	}
 
 	return nil
