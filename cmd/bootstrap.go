@@ -57,7 +57,7 @@ func BootstrapCmd() *cobra.Command {
 				return err
 			}
 
-			return pkg.Download(pkg.FullUrl(viper.GetString("api_path")), path.Join(apiDir, "api.yaml"))
+			return pkg.Download(pkg.FullUrl(viper.GetString("api-path")), path.Join(apiDir, "api.yaml"))
 		},
 	}
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func config(key, prompt string) error {
+func configure(key, prompt string) error {
 	var input string
 	currentValue := viper.GetString(key)
 
@@ -30,18 +30,23 @@ func config(key, prompt string) error {
 	return nil
 }
 
-func ConfigureCmd() *cobra.Command {
-	return &cobra.Command{
+func ConfigureCmd(options []pkg.Option) *cobra.Command {
+	cmd := cobra.Command{
 		Use:   "configure",
-		Short: "Interactively configure Wendy",
-		RunE: func(_ *cobra.Command, _ []string) error {
-			options := map[string]string{
-				"endpoint": "Bob's endpoint",
-				"api_path": "Path on which the OpenAPI spec can be found",
-			}
+		Short: "Configure Wendy",
+		Long:  "Configures Wendy interactively or via setting the flags",
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			flags := cmd.Flags()
 
-			for k, v := range options {
-				if err := config(k, v); err != nil {
+			for _, option := range options {
+				if flags.Changed(option.Name) {
+					value, _ := flags.GetString(option.Name)
+
+					viper.Set(option.Name, value)
+					continue
+				}
+
+				if err := configure(option.Name, option.Desc); err != nil {
 					return err
 				}
 			}
@@ -49,4 +54,10 @@ func ConfigureCmd() *cobra.Command {
 			return pkg.SaveConfig()
 		},
 	}
+
+	for _, option := range options {
+		cmd.Flags().String(option.Name, option.Default, option.Desc)
+	}
+
+	return &cmd
 }

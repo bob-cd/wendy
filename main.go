@@ -50,12 +50,16 @@ func main() {
 		Short: "Bob's other half",
 		Long:  "A comprehensive TUI for Bob allowing for control and complex pipeline orchestrations",
 	}
+	options := []pkg.Option{
+		{Name: "endpoint", Desc: "Bob's endpoint", Default: "http://localhost:7777"},
+		{Name: "api-path", Desc: "Path on which the OpenAPI spec can be found", Default: "/api.yaml"},
+	}
 
-	bailIfErr(pkg.LoadConfig())
+	bailIfErr(pkg.LoadConfig(options))
 	model, err := bootstrap(&rootCmd)
 	bailIfErr(err)
 
-	rootCmd.AddCommand(cmd.ConfigureCmd(), cmd.BootstrapCmd(), cmd.ApplyCmd(model))
+	rootCmd.AddCommand(cmd.ConfigureCmd(options), cmd.BootstrapCmd(), cmd.ApplyCmd(model))
 	rootCmd.Run = func(_ *cobra.Command, _ []string) {
 		if model == nil {
 			slog.Warn("Wendy is not bootstrapped, please run the boostrap command")

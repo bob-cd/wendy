@@ -8,6 +8,12 @@ import (
 	"github.com/spf13/viper"
 )
 
+type Option struct {
+	Name    string
+	Desc    string
+	Default string
+}
+
 func confPaths() (string, string, error) {
 	confDir, err := os.UserConfigDir()
 	if err != nil {
@@ -43,7 +49,7 @@ func GetApiDir() (string, error) {
 	return apiDir, nil
 }
 
-func LoadConfig() error {
+func LoadConfig(options []Option) error {
 	confDir, confName, err := confPaths()
 	if err != nil {
 		return err
@@ -56,8 +62,10 @@ func LoadConfig() error {
 	viper.AddConfigPath(confDir)
 	viper.SetConfigName(confName)
 	viper.SetConfigType("json")
-	viper.SetDefault("endpoint", "http://localhost:7777")
-	viper.SetDefault("api_path", "/api.yaml")
+
+	for _, option := range options {
+		viper.SetDefault(option.Name, option.Default)
+	}
 
 	if err = viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
