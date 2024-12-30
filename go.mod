@@ -6,7 +6,7 @@ toolchain go1.23.4
 
 require (
 	github.com/charmbracelet/huh v0.6.0
-	github.com/lispyclouds/climate v0.0.0-20241229084516-4771ae42798f
+	github.com/lispyclouds/climate v0.0.0-20241229193814-71cc1a15667a
 	github.com/pb33f/libopenapi v0.18.7
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0

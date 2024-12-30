@@ -62,7 +62,7 @@ func main() {
 	rootCmd.AddCommand(cmd.ConfigureCmd(options), cmd.BootstrapCmd(), cmd.ApplyCmd(model))
 	rootCmd.Run = func(_ *cobra.Command, _ []string) {
 		if model == nil {
-			slog.Warn("Wendy is not bootstrapped, please run the boostrap command")
+			slog.Warn("Wendy is not bootstrapped, please run the bootstrap command")
 		}
 
 		rootCmd.Help()
