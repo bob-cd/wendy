@@ -2,10 +2,11 @@ package events
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
-	"strings"
 
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
@@ -26,18 +27,25 @@ func EventsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error
 		os.Exit(0)
 	}()
 
-	r := bufio.NewReader(res)
+	rdr := bufio.NewReader(res)
+	event := pkg.Event{}
+
 	for {
-		b, err := r.ReadBytes('\n')
+		bytes, err := rdr.ReadBytes('\n')
 		if err != nil {
 			return err
 		}
 
-		if len(b) <= 1 {
+		if len(bytes) <= 1 {
 			continue
 		}
 
-		line := strings.TrimSpace(strings.TrimPrefix(string(b), "data: "))
-		fmt.Println(line)
+		// start from 6 to drop "data: "
+		if err = json.Unmarshal(bytes[6:], &event); err != nil {
+			slog.Warn("Unexpected event format", "event", string(bytes))
+			continue
+		}
+
+		fmt.Printf("%+v\n", event)
 	}
 }

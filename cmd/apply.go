@@ -17,16 +17,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var conf = map[string]map[string]string{
-	"Pipeline": {
+var conf = map[pkg.Kind]map[string]string{
+	pkg.Pipeline: {
 		"ListOp":   "PipelineList",
 		"CreateOp": "PipelineCreate",
 	},
-	"ResourceProvider": {
+	pkg.ResourceProvider: {
 		"ListOp":   "ResourceProviderList",
 		"CreateOp": "ResourceProviderCreate",
 	},
-	"ArtifactStore": {
+	pkg.ArtifactStore: {
 		"ListOp":   "ArtifactStoreList",
 		"CreateOp": "ArtifactStoreCreate",
 	},
@@ -34,7 +34,7 @@ var conf = map[string]map[string]string{
 
 type manifest struct {
 	ApiVersion   string         `yaml:"apiVersion"`
-	Kind         string         `yaml:"kind"`
+	Kind         pkg.Kind       `yaml:"kind"`
 	IdentifiedBy []string       `yaml:"identifiedBy"`
 	Spec         map[string]any `yaml:"spec"`
 }
@@ -55,7 +55,7 @@ func getOpInfo(model *Model, opId string) *string {
 	return nil
 }
 
-func getObject(model *Model, kind string, indentifiers map[string]string) (Object, error) {
+func getObject(model *Model, kind pkg.Kind, indentifiers map[string]string) (Object, error) {
 	opId := conf[kind]["ListOp"]
 	path := getOpInfo(model, opId)
 	if path == nil {
@@ -105,7 +105,7 @@ func apply(model *Model, manifestFile string) error {
 	}
 
 	if _, ok := conf[parsed.Kind]; !ok {
-		return errors.New("Unsupported kind: " + parsed.Kind)
+		return fmt.Errorf("Unsupported kind: %s", parsed.Kind)
 	}
 
 	ids := make(map[string]string)
