@@ -43,7 +43,6 @@ var Handlers = map[string]climate.Handler{
 	"ResourceProviderList":   resource_providers.ListHandler,
 
 	"GetApiSpec": placeHandler,
-	"GetError":   placeHandler,
 	"Query":      placeHandler,
 }
 
