@@ -22,8 +22,8 @@ require (
 	github.com/charmbracelet/bubbles v0.20.0 // indirect
 	github.com/charmbracelet/bubbletea v1.2.4 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
-	github.com/charmbracelet/x/ansi v0.6.0 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250113065325-800d48271e72 // indirect
+	github.com/charmbracelet/x/ansi v0.7.0 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250117142827-dd310ffa7553 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
