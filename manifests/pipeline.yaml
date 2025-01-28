@@ -26,6 +26,3 @@ spec:
       params:
         repo: https://github.com/lispyclouds/bob-example
         branch: main
-  quotas:
-    requests:
-      mem: 512Mi

@@ -6,7 +6,7 @@ toolchain go1.23.4
 
 require (
 	github.com/charmbracelet/huh v0.6.0
-	github.com/lispyclouds/climate v0.0.0-20250112083043-5e18ae4940ca
+	github.com/lispyclouds/climate v0.0.0-20250127081823-72b3e3ce19e3
 	github.com/pb33f/libopenapi v0.20.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
@@ -22,8 +22,8 @@ require (
 	github.com/charmbracelet/bubbles v0.20.0 // indirect
 	github.com/charmbracelet/bubbletea v1.2.4 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
-	github.com/charmbracelet/x/ansi v0.7.0 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250123221317-62850e99922d // indirect
+	github.com/charmbracelet/x/ansi v0.8.0 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250127205426-8255858bd2de // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
@@ -46,7 +46,7 @@ require (
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
 	github.com/sagikazarmark/slog-shim v0.1.0 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
-	github.com/speakeasy-api/jsonpath v0.4.1 // indirect
+	github.com/speakeasy-api/jsonpath v0.6.1 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
