@@ -6,7 +6,7 @@ toolchain go1.23.4
 
 require (
 	github.com/charmbracelet/huh v0.6.0
-	github.com/lispyclouds/climate v0.0.0-20250202085345-469896bd801f
+	github.com/lispyclouds/climate v0.0.0-20250205210132-dba763d8d0fe
 	github.com/pb33f/libopenapi v0.21.2
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
@@ -18,12 +18,12 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
-	github.com/catppuccin/go v0.2.0 // indirect
+	github.com/catppuccin/go v0.3.0 // indirect
 	github.com/charmbracelet/bubbles v0.20.0 // indirect
-	github.com/charmbracelet/bubbletea v1.2.4 // indirect
+	github.com/charmbracelet/bubbletea v1.3.0 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250131172436-6251e772efa1 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250205221229-dbe065c03d1b // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
@@ -54,8 +54,8 @@ require (
 	github.com/wk8/go-ordered-map/v2 v2.1.9-0.20240816141633-0a40785b4f41 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20250128182459-e0ece0dbea4c // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.29.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 )
