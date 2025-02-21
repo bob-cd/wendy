@@ -6,8 +6,8 @@ toolchain go1.23.4
 
 require (
 	github.com/charmbracelet/huh v0.6.0
-	github.com/lispyclouds/climate v0.0.0-20250216082825-8343a7834b3b
-	github.com/pb33f/libopenapi v0.21.5
+	github.com/lispyclouds/climate v0.0.0-20250220073635-3e37374f3ee1
+	github.com/pb33f/libopenapi v0.21.6
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.19.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -23,7 +23,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.3 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250218160507-d8b9905d906a // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250219214358-0881292cec0a // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
