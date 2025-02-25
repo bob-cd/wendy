@@ -89,12 +89,12 @@ func Delete(url string) (io.Reader, error) {
 }
 
 func Download(url, path string) error {
-	slog.Info("Downloading", "fileName", path)
-
 	res, err := Get(url)
 	if err != nil {
 		return err
 	}
+
+	slog.Info("Downloading", "fileName", path)
 
 	w, err := os.Create(path)
 	if err != nil {
