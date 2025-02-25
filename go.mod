@@ -6,8 +6,8 @@ toolchain go1.23.4
 
 require (
 	github.com/charmbracelet/huh v0.6.0
-	github.com/lispyclouds/climate v0.0.0-20250220073635-3e37374f3ee1
-	github.com/pb33f/libopenapi v0.21.6
+	github.com/lispyclouds/climate v0.0.0-20250222094325-65ee6d2346a9
+	github.com/pb33f/libopenapi v0.21.7
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.19.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -23,7 +23,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.3 // indirect
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250219214358-0881292cec0a // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250224154003-8377176c5722 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
@@ -40,7 +40,7 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
-	github.com/muesli/termenv v0.15.3-0.20241212154518-8c990cd6cf4b // indirect
+	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sagikazarmark/locafero v0.7.0 // indirect
