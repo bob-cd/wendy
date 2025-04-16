@@ -1,8 +1,6 @@
 module github.com/bob-cd/wendy
 
-go 1.23.0
-
-toolchain go1.23.4
+go 1.24.0
 
 require (
 	github.com/charmbracelet/huh v0.6.0
