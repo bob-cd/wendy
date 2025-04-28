@@ -4,8 +4,8 @@ go 1.24.0
 
 require (
 	github.com/charmbracelet/huh v0.7.0
-	github.com/lispyclouds/climate v0.0.0-20250410071133-79c49e16ed8e
-	github.com/pb33f/libopenapi v0.21.8
+	github.com/lispyclouds/climate v0.0.0-20250427084928-3d2c6f026745
+	github.com/pb33f/libopenapi v0.21.9
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	gopkg.in/yaml.v3 v3.0.1
