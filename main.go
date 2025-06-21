@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"os"
 	"path"
 
 	"github.com/bob-cd/wendy/cmd"
 	"github.com/bob-cd/wendy/pkg"
+	"github.com/charmbracelet/fang"
 	"github.com/lispyclouds/climate"
 	"github.com/pb33f/libopenapi"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
@@ -68,7 +70,7 @@ func main() {
 		rootCmd.Help()
 	}
 
-	if err := rootCmd.Execute(); err != nil {
+	if err := fang.Execute(context.TODO(), &rootCmd); err != nil {
 		os.Exit(1)
 	}
 }
