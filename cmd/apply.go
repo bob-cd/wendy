@@ -158,5 +158,7 @@ func ApplyCmd(model *Model) *cobra.Command {
 
 	cmd.Flags().StringP("manifest", "m", "", "The manifest file to apply")
 
+	cmd.MarkFlagRequired("manifest")
+
 	return &cmd
 }
