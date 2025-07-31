@@ -5,8 +5,8 @@ go 1.24.0
 require (
 	github.com/charmbracelet/fang v0.3.0
 	github.com/charmbracelet/huh v0.7.0
-	github.com/lispyclouds/climate v0.0.0-20250723063057-c35b2574d44a
-	github.com/pb33f/libopenapi v0.23.0
+	github.com/lispyclouds/climate v0.0.0-20250730070510-0928df96ea25
+	github.com/pb33f/libopenapi v0.24.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	gopkg.in/yaml.v3 v3.0.1
@@ -49,8 +49,8 @@ require (
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	github.com/sagikazarmark/locafero v0.9.0 // indirect
-	github.com/sourcegraph/conc v0.3.0 // indirect
+	github.com/sagikazarmark/locafero v0.10.0 // indirect
+	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
 	github.com/speakeasy-api/jsonpath v0.6.2 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect
@@ -58,7 +58,6 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.9-0.20250401010720-46d686821e33 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.34.0 // indirect
