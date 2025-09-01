@@ -7,7 +7,7 @@ require (
 	github.com/charmbracelet/huh v0.7.0
 	github.com/lispyclouds/climate v0.0.0-20250828210518-459de3cd8547
 	github.com/pb33f/libopenapi v0.25.9
-	github.com/spf13/cobra v1.9.1
+	github.com/spf13/cobra v1.9.2-0.20250831231508-51d675196729
 	github.com/spf13/viper v1.20.1
 	gopkg.in/yaml.v3 v3.0.1
 )
