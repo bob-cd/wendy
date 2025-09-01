@@ -3,7 +3,7 @@ module github.com/bob-cd/wendy
 go 1.24.0
 
 require (
-	github.com/charmbracelet/fang v0.3.0
+	github.com/charmbracelet/fang v0.4.0
 	github.com/charmbracelet/huh v0.7.0
 	github.com/lispyclouds/climate v0.0.0-20250828210518-459de3cd8547
 	github.com/pb33f/libopenapi v0.25.9
@@ -25,9 +25,9 @@ require (
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.3 // indirect
 	github.com/charmbracelet/x/ansi v0.10.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250821175832-f235fab04313 // indirect
-	github.com/charmbracelet/x/exp/color v0.0.0-20250821175832-f235fab04313 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250821175832-f235fab04313 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250829135019-44e44e21330d // indirect
+	github.com/charmbracelet/x/exp/color v0.0.0-20250829135019-44e44e21330d // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250829135019-44e44e21330d // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
@@ -54,7 +54,7 @@ require (
 	github.com/speakeasy-api/jsonpath v0.6.2 // indirect
 	github.com/spf13/afero v1.14.0 // indirect
 	github.com/spf13/cast v1.9.2 // indirect
-	github.com/spf13/pflag v1.0.7 // indirect
+	github.com/spf13/pflag v1.0.8 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
