@@ -4,11 +4,10 @@ import (
 	"log/slog"
 	"path"
 
-	"github.com/bob-cd/wendy/cmd/handlers/artifact_stores"
+	"github.com/bob-cd/wendy/cmd/handlers"
 	"github.com/bob-cd/wendy/cmd/handlers/cluster"
 	"github.com/bob-cd/wendy/cmd/handlers/events"
 	"github.com/bob-cd/wendy/cmd/handlers/pipelines"
-	"github.com/bob-cd/wendy/cmd/handlers/resource_providers"
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
 	"github.com/spf13/cobra"
@@ -21,15 +20,15 @@ func placeHandler(_ *cobra.Command, _ []string, _ climate.HandlerData) error {
 }
 
 var Handlers = map[string]climate.Handler{
-	"ArtifactStoreCreate":    artifact_stores.CreateHandler,
-	"ArtifactStoreDelete":    artifact_stores.DeleteHandler,
-	"ArtifactStoreList":      artifact_stores.ListHandler,
+	"ArtifactStoreCreate":    handlers.CreateHandler,
+	"ArtifactStoreDelete":    handlers.DeleteHandler,
+	"ArtifactStoreList":      handlers.ListHandler,
 	"ClusterInfo":            cluster.InfoHandler,
 	"GetEvents":              events.EventsHandler,
 	"HealthCheck":            cluster.HealthCheckHandler,
 	"PipelineArtifactFetch":  pipelines.ArtifactFetchHandler,
-	"PipelineCreate":         pipelines.CreateHandler,
-	"PipelineDelete":         pipelines.DeleteHandler,
+	"PipelineCreate":         handlers.CreateHandler,
+	"PipelineDelete":         handlers.DeleteHandler,
 	"PipelineList":           pipelines.ListHandler,
 	"PipelineLogs":           pipelines.LogsHandler,
 	"PipelinePause":          pipelines.PauseHandler,
@@ -38,9 +37,12 @@ var Handlers = map[string]climate.Handler{
 	"PipelineStatus":         pipelines.StatusHandler,
 	"PipelineStop":           pipelines.StopHandler,
 	"PipelineUnpause":        pipelines.UnpauseHandler,
-	"ResourceProviderCreate": resource_providers.CreateHandler,
-	"ResourceProviderDelete": resource_providers.DeleteHandler,
-	"ResourceProviderList":   resource_providers.ListHandler,
+	"ResourceProviderCreate": handlers.CreateHandler,
+	"ResourceProviderDelete": handlers.DeleteHandler,
+	"ResourceProviderList":   handlers.ListHandler,
+	"LoggerCreate":           handlers.CreateHandler,
+	"LoggerDelete":           handlers.DeleteHandler,
+	"LoggerList":             handlers.ListHandler,
 
 	"GetApiSpec": placeHandler,
 	"Query":      placeHandler,

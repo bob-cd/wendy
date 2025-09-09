@@ -1,0 +1,7 @@
+apiVersion: wendy.bob.cd/v1alpha1
+kind: Logger
+identifiedBy:
+  - name
+spec:
+  name: logger-local
+  url: http://logger-local:8002

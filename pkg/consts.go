@@ -7,6 +7,7 @@ const (
 	Pipeline         Kind = "Pipeline"
 	ResourceProvider Kind = "ResourceProvider"
 	ArtifactStore    Kind = "ArtifactStore"
+	Logger           Kind = "Logger"
 
 	Normal  EventType = "Normal"
 	Warning EventType = "Warning"

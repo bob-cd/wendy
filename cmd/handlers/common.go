@@ -1,4 +1,4 @@
-package resource_providers
+package handlers
 
 import (
 	"io"

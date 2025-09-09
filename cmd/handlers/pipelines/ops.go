@@ -1,9 +1,12 @@
 package pipelines
 
 import (
+	"bufio"
+	"fmt"
 	"io"
 	"net/url"
 	"os"
+	"os/signal"
 	"strings"
 
 	"github.com/bob-cd/wendy/pkg"
@@ -35,45 +38,45 @@ func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) erro
 	return pkg.ShowMessage(res)
 }
 
-func CreateHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
-	payload, _ := opts.Flags().GetString(data.RequestBodyParam.Name)
-	var rdr io.Reader
+func LogsHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
+	follow, _ := opts.Flags().GetBool("follow")
+	url := pkg.FullUrl(data.Path)
 
-	if strings.HasPrefix(payload, "@") {
-		r, err := os.Open(strings.TrimPrefix(payload, "@"))
+	if follow {
+		url += "?follow=true"
+	}
+
+	res, err := pkg.Get(url)
+	if err != nil {
+		return err
+	}
+
+	if !follow {
+		_, err = io.Copy(os.Stdout, res)
+		return err
+	}
+
+	rdr := bufio.NewReader(res)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		<-c
+		res.Close()
+		os.Exit(0)
+	}()
+
+	for {
+		b, err := rdr.ReadBytes('\n')
 		if err != nil {
 			return err
 		}
-		defer r.Close()
-		rdr = r
-	} else {
-		rdr = strings.NewReader(payload)
+
+		if len(b) <= 1 {
+			continue
+		}
+
+		fmt.Println(strings.TrimSpace(string(b)))
 	}
-
-	res, err := pkg.Post(pkg.FullUrl(data.Path), rdr)
-	if err != nil {
-		return err
-	}
-
-	return pkg.ShowMessage(res)
-}
-
-func DeleteHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := pkg.Delete(pkg.FullUrl(data.Path))
-	if err != nil {
-		return err
-	}
-
-	return pkg.ShowMessage(res)
-}
-
-func LogsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
-	res, err := pkg.Get(pkg.FullUrl(data.Path))
-	if err != nil {
-		return err
-	}
-
-	return pkg.ShowMessage(res)
 }
 
 func StartHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {

@@ -1,4 +1,4 @@
-package artifact_stores
+package loggers
 
 import (
 	"io"

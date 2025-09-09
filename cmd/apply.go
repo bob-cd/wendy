@@ -30,6 +30,10 @@ var conf = map[pkg.Kind]map[string]string{
 		"ListOp":   "ArtifactStoreList",
 		"CreateOp": "ArtifactStoreCreate",
 	},
+	pkg.Logger: {
+		"ListOp":   "LoggerList",
+		"CreateOp": "LoggerCreate",
+	},
 }
 
 type manifest struct {
