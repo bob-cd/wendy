@@ -19,15 +19,15 @@ require (
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/catppuccin/go v0.3.0 // indirect
 	github.com/charmbracelet/bubbles v0.21.0 // indirect
-	github.com/charmbracelet/bubbletea v1.3.8 // indirect
+	github.com/charmbracelet/bubbletea v1.3.9 // indirect
 	github.com/charmbracelet/colorprofile v0.3.2 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.3 // indirect
 	github.com/charmbracelet/x/ansi v0.10.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250908230358-4a9fe61cc9a4 // indirect
-	github.com/charmbracelet/x/exp/color v0.0.0-20250908230358-4a9fe61cc9a4 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250908230358-4a9fe61cc9a4 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250911160549-0e720abcae8b // indirect
+	github.com/charmbracelet/x/exp/color v0.0.0-20250911160549-0e720abcae8b // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250911160549-0e720abcae8b // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
@@ -42,8 +42,8 @@ require (
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/mango v0.2.0 // indirect
-	github.com/muesli/mango-cobra v1.2.0 // indirect
-	github.com/muesli/mango-pflag v0.1.0 // indirect
+	github.com/muesli/mango-cobra v1.3.0 // indirect
+	github.com/muesli/mango-pflag v0.2.0 // indirect
 	github.com/muesli/roff v0.1.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
 	github.com/pb33f/ordered-map/v2 v2.2.0 // indirect
