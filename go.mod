@@ -1,15 +1,15 @@
 module github.com/bob-cd/wendy
 
-go 1.24.0
+go 1.24.7
 
 require (
 	github.com/charmbracelet/fang v0.4.0
 	github.com/charmbracelet/huh v0.7.0
-	github.com/lispyclouds/climate v0.0.0-20250828210518-459de3cd8547
-	github.com/pb33f/libopenapi v0.25.9
+	github.com/lispyclouds/climate v0.0.0-20250913070240-37d5e6ce1e19
+	github.com/pb33f/libopenapi v0.26.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/viper v1.21.0
-	gopkg.in/yaml.v3 v3.0.1
+	go.yaml.in/yaml/v4 v4.0.0-rc.2
 )
 
 require (
@@ -46,12 +46,12 @@ require (
 	github.com/muesli/mango-pflag v0.2.0 // indirect
 	github.com/muesli/roff v0.1.0 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
-	github.com/pb33f/ordered-map/v2 v2.2.0 // indirect
+	github.com/pb33f/jsonpath v0.1.2 // indirect
+	github.com/pb33f/ordered-map/v2 v2.3.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sagikazarmark/locafero v0.11.0 // indirect
 	github.com/sourcegraph/conc v0.3.1-0.20240121214520-5f936abd7ae8 // indirect
-	github.com/speakeasy-api/jsonpath v0.6.2 // indirect
 	github.com/spf13/afero v1.15.0 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
