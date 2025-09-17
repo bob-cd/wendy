@@ -3,10 +3,10 @@ module github.com/bob-cd/wendy
 go 1.24.7
 
 require (
-	github.com/charmbracelet/fang v0.4.0
+	github.com/charmbracelet/fang v0.4.1
 	github.com/charmbracelet/huh v0.7.0
-	github.com/lispyclouds/climate v0.0.0-20250913070240-37d5e6ce1e19
-	github.com/pb33f/libopenapi v0.26.0
+	github.com/lispyclouds/climate v0.0.0-20250916062931-f61a554b6c2e
+	github.com/pb33f/libopenapi v0.27.2
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/viper v1.21.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.2
@@ -25,9 +25,9 @@ require (
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.3 // indirect
 	github.com/charmbracelet/x/ansi v0.10.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250911160549-0e720abcae8b // indirect
-	github.com/charmbracelet/x/exp/color v0.0.0-20250911160549-0e720abcae8b // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20250911160549-0e720abcae8b // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20250916153604-9a2e892ed98e // indirect
+	github.com/charmbracelet/x/exp/color v0.0.0-20250916153604-9a2e892ed98e // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20250916153604-9a2e892ed98e // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
