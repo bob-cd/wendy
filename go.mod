@@ -26,9 +26,9 @@ require (
 	github.com/charmbracelet/ultraviolet v0.0.0-20251005154327-b52d39da4eb7 // indirect
 	github.com/charmbracelet/x/ansi v0.10.2 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251002185555-b6045cb4669e // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251008171431-5d3777519489 // indirect
 	github.com/charmbracelet/x/exp/color v0.0.0-20251002185555-b6045cb4669e // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20251002185555-b6045cb4669e // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20251008171431-5d3777519489 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
@@ -63,6 +63,6 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394 // indirect
 	golang.org/x/sync v0.17.0 // indirect
-	golang.org/x/sys v0.36.0 // indirect
-	golang.org/x/text v0.29.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
+	golang.org/x/text v0.30.0 // indirect
 )
