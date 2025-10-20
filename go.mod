@@ -4,7 +4,7 @@ go 1.24.7
 
 require (
 	github.com/charmbracelet/fang v0.4.3
-	github.com/charmbracelet/huh v0.7.0
+	github.com/charmbracelet/huh v0.8.0
 	github.com/lispyclouds/climate v0.0.0-20250923063826-a60d3819e700
 	github.com/pb33f/libopenapi v0.28.0
 	github.com/spf13/cobra v1.10.1
@@ -18,17 +18,17 @@ require (
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.1 // indirect
 	github.com/catppuccin/go v0.3.0 // indirect
-	github.com/charmbracelet/bubbles v0.21.0 // indirect
+	github.com/charmbracelet/bubbles v0.21.1-0.20251006090852-62c791108e04 // indirect
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
 	github.com/charmbracelet/colorprofile v0.3.2 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
 	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.3.0.20250917201909-41ff0bf215ea // indirect
-	github.com/charmbracelet/ultraviolet v0.0.0-20251013101141-047c1131b4f7 // indirect
+	github.com/charmbracelet/ultraviolet v0.0.0-20251017140847-d4ace4d6e731 // indirect
 	github.com/charmbracelet/x/ansi v0.10.2 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251013190359-01371c2be815 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251016201629-54e687c87a08 // indirect
 	github.com/charmbracelet/x/exp/color v0.0.0-20251002185555-b6045cb4669e // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20251013190359-01371c2be815 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20251016201629-54e687c87a08 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
