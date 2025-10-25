@@ -5,8 +5,8 @@ go 1.24.7
 require (
 	github.com/charmbracelet/fang v0.4.3
 	github.com/charmbracelet/huh v0.8.0
-	github.com/lispyclouds/climate v0.0.0-20250923063826-a60d3819e700
-	github.com/pb33f/libopenapi v0.28.0
+	github.com/lispyclouds/climate v0.0.0-20251024081148-8f6c001c9402
+	github.com/pb33f/libopenapi v0.28.1
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/viper v1.21.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.2
@@ -26,9 +26,9 @@ require (
 	github.com/charmbracelet/ultraviolet v0.0.0-20251017140847-d4ace4d6e731 // indirect
 	github.com/charmbracelet/x/ansi v0.10.2 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251016201629-54e687c87a08 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251023181713-f594ac034d6b // indirect
 	github.com/charmbracelet/x/exp/color v0.0.0-20251002185555-b6045cb4669e // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20251016201629-54e687c87a08 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20251023181713-f594ac034d6b // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
