@@ -3,7 +3,7 @@ module github.com/bob-cd/wendy
 go 1.24.7
 
 require (
-	github.com/charmbracelet/fang v0.4.4
+	github.com/charmbracelet/fang v0.4.3
 	github.com/charmbracelet/huh v0.8.0
 	github.com/lispyclouds/climate v0.0.0-20251024081148-8f6c001c9402
 	github.com/pb33f/libopenapi v0.28.2
@@ -13,7 +13,6 @@ require (
 )
 
 require (
-	charm.land/lipgloss/v2 v2.0.0-beta.3.0.20251106193318-19329a3e8410 // indirect
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
@@ -23,8 +22,9 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
 	github.com/charmbracelet/colorprofile v0.3.3 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
-	github.com/charmbracelet/ultraviolet v0.0.0-20251106193841-7889546fc720 // indirect
-	github.com/charmbracelet/x/ansi v0.11.0 // indirect
+	github.com/charmbracelet/lipgloss/v2 v2.0.0-beta.3.0.20250917201909-41ff0bf215ea // indirect
+	github.com/charmbracelet/ultraviolet v0.0.0-20250915111650-81d4262876ef // indirect
+	github.com/charmbracelet/x/ansi v0.10.3 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.13 // indirect
 	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251109135125-8916d276318f // indirect
 	github.com/charmbracelet/x/exp/color v0.0.0-20251006100439-2151805163c8 // indirect
