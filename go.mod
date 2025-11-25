@@ -1,6 +1,6 @@
 module github.com/bob-cd/wendy
 
-go 1.24.7
+go 1.25
 
 require (
 	github.com/charmbracelet/fang v0.4.4
@@ -23,16 +23,15 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
 	github.com/charmbracelet/colorprofile v0.3.3 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
-	github.com/charmbracelet/ultraviolet v0.0.0-20251114211333-9deacb990ee7 // indirect
+	github.com/charmbracelet/ultraviolet v0.0.0-20251124142205-05635edc50ab // indirect
 	github.com/charmbracelet/x/ansi v0.11.1 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.14 // indirect
-	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251114205511-64e30b5ee1c5 // indirect
-	github.com/charmbracelet/x/exp/color v0.0.0-20251006100439-2151805163c8 // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20251114205511-64e30b5ee1c5 // indirect
+	github.com/charmbracelet/x/exp/charmtone v0.0.0-20251124184241-1dbcd821cc13 // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20251124184241-1dbcd821cc13 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
-	github.com/clipperhouse/displaywidth v0.5.0 // indirect
+	github.com/clipperhouse/displaywidth v0.6.0 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
