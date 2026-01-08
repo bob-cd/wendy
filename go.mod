@@ -5,8 +5,8 @@ go 1.25
 require (
 	github.com/charmbracelet/fang v0.4.4
 	github.com/charmbracelet/huh v0.8.0
-	github.com/lispyclouds/climate v0.0.0-20260101094416-80c9e67429a5
-	github.com/pb33f/libopenapi v0.31.1
+	github.com/lispyclouds/climate v0.0.0-20260107083749-d0bbdf84db6c
+	github.com/pb33f/libopenapi v0.31.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.3
