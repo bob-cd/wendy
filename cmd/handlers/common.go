@@ -8,11 +8,11 @@ import (
 
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v3"
 )
 
-func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
-	name, _ := opts.Flags().GetString("name")
+func ListHandler(opts *cli.Command, _ []string, data climate.HandlerData) error {
+	name := opts.String("name")
 
 	params := url.Values{}
 	if name != "" {
@@ -27,8 +27,8 @@ func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) erro
 	return pkg.ShowMessage(res)
 }
 
-func CreateHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
-	payload, _ := opts.Flags().GetString(data.RequestBodyParam.Name)
+func CreateHandler(opts *cli.Command, _ []string, data climate.HandlerData) error {
+	payload := opts.String(data.RequestBodyParam.Name)
 	var rdr io.Reader
 
 	if strings.HasPrefix(payload, "@") {
@@ -50,7 +50,7 @@ func CreateHandler(opts *cobra.Command, _ []string, data climate.HandlerData) er
 	return pkg.ShowMessage(res)
 }
 
-func DeleteHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func DeleteHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Delete(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err

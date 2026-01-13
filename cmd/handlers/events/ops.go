@@ -10,10 +10,10 @@ import (
 
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v3"
 )
 
-func EventsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func EventsHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err

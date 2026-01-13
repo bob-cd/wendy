@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"log/slog"
 	"path"
 
@@ -10,22 +11,25 @@ import (
 	"github.com/bob-cd/wendy/cmd/handlers/pipelines"
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
-	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/urfave/cli/v3"
 )
 
-func placeHandler(_ *cobra.Command, _ []string, _ climate.HandlerData) error {
+func placeHandler(_ *cli.Command, _ []string, _ climate.HandlerData) error {
 	slog.Info("Oooh, you stumbled on a hidden one! I don't do much though!")
 	return nil
 }
 
-var Handlers = map[string]climate.Handler{
+var Handlers = map[string]climate.HandlerUrfaveCli{
 	"ArtifactStoreCreate":    handlers.CreateHandler,
 	"ArtifactStoreDelete":    handlers.DeleteHandler,
 	"ArtifactStoreList":      handlers.ListHandler,
 	"ClusterInfo":            cluster.InfoHandler,
 	"GetEvents":              events.EventsHandler,
 	"HealthCheck":            cluster.HealthCheckHandler,
+	"LoggerCreate":           handlers.CreateHandler,
+	"LoggerDelete":           handlers.DeleteHandler,
+	"LoggerList":             handlers.ListHandler,
 	"PipelineArtifactFetch":  pipelines.ArtifactFetchHandler,
 	"PipelineCreate":         handlers.CreateHandler,
 	"PipelineDelete":         handlers.DeleteHandler,
@@ -40,19 +44,16 @@ var Handlers = map[string]climate.Handler{
 	"ResourceProviderCreate": handlers.CreateHandler,
 	"ResourceProviderDelete": handlers.DeleteHandler,
 	"ResourceProviderList":   handlers.ListHandler,
-	"LoggerCreate":           handlers.CreateHandler,
-	"LoggerDelete":           handlers.DeleteHandler,
-	"LoggerList":             handlers.ListHandler,
 
 	"GetApiSpec": placeHandler,
 	"Query":      placeHandler,
 }
 
-func BootstrapCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "bootstrap",
-		Short: "Bootstrap Wendy's commands from Bob",
-		RunE: func(_ *cobra.Command, _ []string) error {
+func BootstrapCmd() *cli.Command {
+	return &cli.Command{
+		Name:  "bootstrap",
+		Usage: "Bootstrap Wendy's commands from Bob",
+		Action: func(_ context.Context, _ *cli.Command) error {
 			apiDir, err := pkg.GetApiDir()
 			if err != nil {
 				return err

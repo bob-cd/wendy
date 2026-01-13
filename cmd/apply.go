@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -13,7 +14,7 @@ import (
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/pb33f/libopenapi"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v3"
 	"go.yaml.in/yaml/v4"
 )
 
@@ -150,19 +151,20 @@ func apply(model *Model, manifestFile string) error {
 	return nil
 }
 
-func ApplyCmd(model *Model) *cobra.Command {
-	cmd := cobra.Command{
-		Use:   "apply",
-		Short: "Declaratively apply manifests",
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			manifestFile, _ := cmd.Flags().GetString("manifest")
-			return apply(model, manifestFile)
+func ApplyCmd(model *Model) *cli.Command {
+	return &cli.Command{
+		Name:  "apply",
+		Usage: "Declaratively apply manifests",
+		Action: func(_ context.Context, cmd *cli.Command) error {
+			return apply(model, cmd.String("manifest"))
+		},
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:     "manifest",
+				Aliases:  []string{"m"},
+				Usage:    "The manifest file to apply",
+				Required: true,
+			},
 		},
 	}
-
-	cmd.Flags().StringP("manifest", "m", "", "The manifest file to apply")
-
-	cmd.MarkFlagRequired("manifest")
-
-	return &cmd
 }

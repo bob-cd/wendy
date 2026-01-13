@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"context"
+
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/charmbracelet/huh"
-	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/urfave/cli/v3"
 )
 
 func configure(key, prompt string) error {
@@ -30,17 +32,14 @@ func configure(key, prompt string) error {
 	return nil
 }
 
-func ConfigureCmd(options []pkg.Option) *cobra.Command {
-	cmd := cobra.Command{
-		Use:   "configure",
-		Short: "Configure Wendy",
-		Long:  "Configures Wendy interactively or via setting the flags",
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			flags := cmd.Flags()
-
+func ConfigureCmd(options []pkg.Option) *cli.Command {
+	cmd := cli.Command{
+		Name:  "configure",
+		Usage: "Configures Wendy interactively or via setting the flags",
+		Action: func(_ context.Context, cmd *cli.Command) error {
 			for _, option := range options {
-				if flags.Changed(option.Name) {
-					value, _ := flags.GetString(option.Name)
+				if cmd.IsSet(option.Name) {
+					value := cmd.String(option.Name)
 
 					viper.Set(option.Name, value)
 					continue
@@ -56,7 +55,7 @@ func ConfigureCmd(options []pkg.Option) *cobra.Command {
 	}
 
 	for _, option := range options {
-		cmd.Flags().String(option.Name, option.Default, option.Desc)
+		cmd.Set(option.Name, option.Default)
 	}
 
 	return &cmd

@@ -11,13 +11,13 @@ import (
 
 	"github.com/bob-cd/wendy/pkg"
 	"github.com/lispyclouds/climate"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v3"
 )
 
-func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
-	group, _ := opts.Flags().GetString("group")
-	name, _ := opts.Flags().GetString("name")
-	status, _ := opts.Flags().GetString("status")
+func ListHandler(opts *cli.Command, _ []string, data climate.HandlerData) error {
+	group := opts.String("group")
+	name := opts.String("name")
+	status := opts.String("status")
 
 	params := url.Values{}
 	if group != "" {
@@ -38,8 +38,8 @@ func ListHandler(opts *cobra.Command, _ []string, data climate.HandlerData) erro
 	return pkg.ShowMessage(res)
 }
 
-func LogsHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
-	follow, _ := opts.Flags().GetBool("follow")
+func LogsHandler(opts *cli.Command, _ []string, data climate.HandlerData) error {
+	follow := opts.Bool("follow")
 	url := pkg.FullUrl(data.Path)
 
 	if follow {
@@ -79,7 +79,7 @@ func LogsHandler(opts *cobra.Command, _ []string, data climate.HandlerData) erro
 	}
 }
 
-func StartHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func StartHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Post(pkg.FullUrl(data.Path), nil)
 	if err != nil {
 		return err
@@ -88,7 +88,7 @@ func StartHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error 
 	return pkg.ShowMessage(res)
 }
 
-func StopHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func StopHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Post(pkg.FullUrl(data.Path), nil)
 	if err != nil {
 		return err
@@ -97,7 +97,7 @@ func StopHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
 	return pkg.ShowMessage(res)
 }
 
-func RunsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func RunsHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
@@ -106,7 +106,7 @@ func RunsHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
 	return pkg.ShowMessage(res)
 }
 
-func StatusHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func StatusHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Get(pkg.FullUrl(data.Path))
 	if err != nil {
 		return err
@@ -115,7 +115,7 @@ func StatusHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error
 	return pkg.ShowMessage(res)
 }
 
-func PauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func PauseHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Post(pkg.FullUrl(data.Path), nil)
 	if err != nil {
 		return err
@@ -124,7 +124,7 @@ func PauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error 
 	return pkg.ShowMessage(res)
 }
 
-func UnpauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) error {
+func UnpauseHandler(_ *cli.Command, _ []string, data climate.HandlerData) error {
 	res, err := pkg.Post(pkg.FullUrl(data.Path), nil)
 	if err != nil {
 		return err
@@ -133,7 +133,6 @@ func UnpauseHandler(_ *cobra.Command, _ []string, data climate.HandlerData) erro
 	return pkg.ShowMessage(res)
 }
 
-func ArtifactFetchHandler(opts *cobra.Command, _ []string, data climate.HandlerData) error {
-	name, _ := opts.Flags().GetString("artifact-name")
-	return pkg.Download(pkg.FullUrl(data.Path), name+".tar")
+func ArtifactFetchHandler(opts *cli.Command, _ []string, data climate.HandlerData) error {
+	return pkg.Download(pkg.FullUrl(data.Path), opts.String("artifact-name")+".tar")
 }

@@ -8,14 +8,13 @@ import (
 
 	"github.com/bob-cd/wendy/cmd"
 	"github.com/bob-cd/wendy/pkg"
-	"github.com/charmbracelet/fang"
 	"github.com/lispyclouds/climate"
 	"github.com/pb33f/libopenapi"
 	v3 "github.com/pb33f/libopenapi/datamodel/high/v3"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli/v3"
 )
 
-func bootstrap(rootCmd *cobra.Command) (*libopenapi.DocumentModel[v3.Document], error) {
+func bootstrap(rootCmd *cli.Command) (*libopenapi.DocumentModel[v3.Document], error) {
 	apiDir, err := pkg.GetApiDir()
 	if err != nil {
 		return nil, err
@@ -32,7 +31,7 @@ func bootstrap(rootCmd *cobra.Command) (*libopenapi.DocumentModel[v3.Document], 
 		return nil, err
 	}
 
-	if err = climate.BootstrapV3(rootCmd, *model, cmd.Handlers); err != nil {
+	if err = climate.BootstrapV3UrfaveCli(rootCmd, *model, cmd.Handlers); err != nil {
 		return nil, err
 	}
 
@@ -47,10 +46,10 @@ func bailIfErr(err error) {
 }
 
 func main() {
-	rootCmd := cobra.Command{
-		Use:   "wendy",
-		Short: "Bob's other half",
-		Long:  "A comprehensive TUI for Bob allowing for control and complex pipeline orchestrations",
+	rootCmd := cli.Command{
+		Name:        "wendy",
+		Usage:       "Bob's other half",
+		Description: "A comprehensive TUI for Bob allowing for control and complex pipeline orchestrations",
 	}
 	options := []pkg.Option{
 		{Name: "endpoint", Desc: "Bob's endpoint", Default: "http://localhost:7777"},
@@ -61,16 +60,19 @@ func main() {
 	model, err := bootstrap(&rootCmd)
 	bailIfErr(err)
 
-	rootCmd.AddCommand(cmd.ConfigureCmd(options), cmd.BootstrapCmd(), cmd.ApplyCmd(model))
-	rootCmd.Run = func(_ *cobra.Command, _ []string) {
+	rootCmd.Commands = append(rootCmd.Commands, cmd.ConfigureCmd(options), cmd.BootstrapCmd(), cmd.ApplyCmd(model))
+	rootCmd.Action = func(_ context.Context, cmd *cli.Command) error {
+		exitCode := 0
+
 		if model == nil {
 			slog.Warn("Wendy is not bootstrapped, please run the bootstrap command")
+			exitCode = 1
 		}
 
-		rootCmd.Help()
+		cli.ShowSubcommandHelpAndExit(cmd, exitCode)
+
+		return nil
 	}
 
-	if err := fang.Execute(context.TODO(), &rootCmd); err != nil {
-		os.Exit(1)
-	}
+	bailIfErr(rootCmd.Run(context.Background(), os.Args))
 }
