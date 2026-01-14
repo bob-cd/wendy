@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/charmbracelet/huh v0.8.0
-	github.com/lispyclouds/climate v0.0.0-20260112220238-5b349573a9b8
+	github.com/lispyclouds/climate v0.0.0-20260114074356-43b56a255c27
 	github.com/pb33f/libopenapi v0.31.2
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.6.1
@@ -25,7 +25,7 @@ require (
 	github.com/charmbracelet/x/cellbuf v0.0.14 // indirect
 	github.com/charmbracelet/x/conpty v0.2.0 // indirect
 	github.com/charmbracelet/x/exp/golden v0.0.0-20260109001716-2fbdffcb221f // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20260112120226-d84da2a4022f // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20260113142046-c1fa3de7983b // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/xpty v0.1.3 // indirect
 	github.com/clipperhouse/displaywidth v0.7.0 // indirect

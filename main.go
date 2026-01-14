@@ -31,7 +31,7 @@ func bootstrap(rootCmd *cli.Command) (*libopenapi.DocumentModel[v3.Document], er
 		return nil, err
 	}
 
-	if err = climate.BootstrapV3UrfaveCli(rootCmd, *model, cmd.Handlers); err != nil {
+	if err = climate.BootstrapV3UrfaveCliV3(rootCmd, *model, cmd.Handlers); err != nil {
 		return nil, err
 	}
 

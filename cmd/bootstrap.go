@@ -20,7 +20,7 @@ func placeHandler(_ *cli.Command, _ []string, _ climate.HandlerData) error {
 	return nil
 }
 
-var Handlers = map[string]climate.HandlerUrfaveCli{
+var Handlers = map[string]climate.HandlerUrfaveCliV3{
 	"ArtifactStoreCreate":    handlers.CreateHandler,
 	"ArtifactStoreDelete":    handlers.DeleteHandler,
 	"ArtifactStoreList":      handlers.ListHandler,
