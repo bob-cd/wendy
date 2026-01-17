@@ -21,11 +21,11 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
 	github.com/charmbracelet/colorprofile v0.4.1 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
-	github.com/charmbracelet/x/ansi v0.11.3 // indirect
+	github.com/charmbracelet/x/ansi v0.11.4 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.14 // indirect
 	github.com/charmbracelet/x/conpty v0.2.0 // indirect
 	github.com/charmbracelet/x/exp/golden v0.0.0-20260109001716-2fbdffcb221f // indirect
-	github.com/charmbracelet/x/exp/strings v0.0.0-20260113142046-c1fa3de7983b // indirect
+	github.com/charmbracelet/x/exp/strings v0.0.0-20260116010723-b770f9f0bfed // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/xpty v0.1.3 // indirect
 	github.com/clipperhouse/displaywidth v0.7.0 // indirect
