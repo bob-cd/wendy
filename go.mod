@@ -1,11 +1,11 @@
 module github.com/bob-cd/wendy
 
-go 1.25
+go 1.25.0
 
 require (
-	github.com/charmbracelet/huh v0.8.0
-	github.com/lispyclouds/climate v0.0.0-20260301205242-eb987939fcc9
-	github.com/pb33f/libopenapi v0.34.0
+	github.com/charmbracelet/huh v1.0.0
+	github.com/lispyclouds/climate v0.0.0-20260308223731-5b7230c2a5f7
+	github.com/pb33f/libopenapi v0.34.2
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.7.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.4
@@ -19,7 +19,7 @@ require (
 	github.com/catppuccin/go v0.3.0 // indirect
 	github.com/charmbracelet/bubbles v1.0.0 // indirect
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
-	github.com/charmbracelet/colorprofile v0.4.2 // indirect
+	github.com/charmbracelet/colorprofile v0.4.3 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
 	github.com/charmbracelet/x/ansi v0.11.6 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.15 // indirect
@@ -57,7 +57,7 @@ require (
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
-	golang.org/x/sync v0.19.0 // indirect
-	golang.org/x/sys v0.41.0 // indirect
+	golang.org/x/sync v0.20.0 // indirect
+	golang.org/x/sys v0.42.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 )
