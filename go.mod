@@ -4,8 +4,8 @@ go 1.25.0
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20260308223731-5b7230c2a5f7
-	github.com/pb33f/libopenapi v0.34.2
+	github.com/lispyclouds/climate v0.0.0-20260315103239-4a85ffea0d17
+	github.com/pb33f/libopenapi v0.34.3
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.7.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.4
@@ -44,7 +44,7 @@ require (
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
 	github.com/muesli/termenv v0.16.0 // indirect
-	github.com/pb33f/jsonpath v0.8.1 // indirect
+	github.com/pb33f/jsonpath v0.8.2 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
@@ -59,5 +59,5 @@ require (
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 )
