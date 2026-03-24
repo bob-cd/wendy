@@ -1,10 +1,10 @@
 module github.com/bob-cd/wendy
 
-go 1.25.0
+go 1.26
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20260315103239-4a85ffea0d17
+	github.com/lispyclouds/climate v0.0.0-20260320095212-5065c5bb49d1
 	github.com/pb33f/libopenapi v0.34.3
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.7.0
@@ -15,7 +15,7 @@ require (
 	github.com/atotto/clipboard v0.1.4 // indirect
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
-	github.com/buger/jsonparser v1.1.1 // indirect
+	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/catppuccin/go v0.3.0 // indirect
 	github.com/charmbracelet/bubbles v1.0.0 // indirect
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
