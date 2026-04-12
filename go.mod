@@ -4,8 +4,8 @@ go 1.26
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20260406070633-820fe930bda0
-	github.com/pb33f/libopenapi v0.35.1
+	github.com/lispyclouds/climate v0.0.0-20260411085826-51eed4fc6cfe
+	github.com/pb33f/libopenapi v0.36.0
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.8.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.4
@@ -37,9 +37,9 @@ require (
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.4.0 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-isatty v0.0.21 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
-	github.com/mattn/go-runewidth v0.0.22 // indirect
+	github.com/mattn/go-runewidth v0.0.23 // indirect
 	github.com/mitchellh/hashstructure/v2 v2.0.2 // indirect
 	github.com/muesli/ansi v0.0.0-20230316100256-276c6243b2f6 // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
@@ -58,6 +58,6 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.35.0 // indirect
+	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/text v0.36.0 // indirect
 )
