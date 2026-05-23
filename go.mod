@@ -4,8 +4,8 @@ go 1.26
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20260514065926-1058c433c69d
-	github.com/pb33f/libopenapi v0.36.3
+	github.com/lispyclouds/climate v0.0.0-20260522064131-fe1a9862799a
+	github.com/pb33f/libopenapi v0.36.6
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.9.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.4
@@ -58,6 +58,6 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.44.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 )
