@@ -4,7 +4,7 @@ go 1.26
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20260803071346-28ba216b9e97
+	github.com/lispyclouds/climate v0.0.0-20260811075900-ec2bd2bc74c8
 	github.com/pb33f/libopenapi v0.38.7
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.10.1
@@ -21,7 +21,7 @@ require (
 	github.com/charmbracelet/bubbletea v1.3.10 // indirect
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
 	github.com/charmbracelet/lipgloss v1.1.0 // indirect
-	github.com/charmbracelet/x/ansi v0.11.7 // indirect
+	github.com/charmbracelet/x/ansi v0.11.8 // indirect
 	github.com/charmbracelet/x/cellbuf v0.0.15 // indirect
 	github.com/charmbracelet/x/conpty v0.2.0 // indirect
 	github.com/charmbracelet/x/exp/golden v0.0.0-20260109001716-2fbdffcb221f // indirect
@@ -54,10 +54,10 @@ require (
 	github.com/spf13/cobra v1.10.2 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
+	github.com/xo/terminfo v1.0.0 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/exp v0.0.0-20251219203646-944ab1f22d93 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 )
