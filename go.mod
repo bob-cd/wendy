@@ -4,10 +4,10 @@ go 1.26.0
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20260915074846-7f2b0dbfd88f
-	github.com/pb33f/libopenapi v0.38.7
+	github.com/lispyclouds/climate v0.0.0-20260923152626-78c0b59f3945
+	github.com/pb33f/libopenapi v0.40.1
 	github.com/spf13/viper v1.21.0
-	github.com/urfave/cli/v3 v3.12.0
+	github.com/urfave/cli/v3 v3.13.0
 	go.yaml.in/yaml/v4 v4.0.0-rc.6
 )
 
@@ -30,7 +30,7 @@ require (
 	github.com/charmbracelet/x/xpty v0.1.3 // indirect
 	github.com/clipperhouse/displaywidth v0.11.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
-	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/dustin/go-humanize v1.1.0 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
