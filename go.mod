@@ -4,8 +4,8 @@ go 1.26.0
 
 require (
 	github.com/charmbracelet/huh v1.0.0
-	github.com/lispyclouds/climate v0.0.0-20261119205447-fa62f7e98770
-	github.com/pb33f/libopenapi v0.43.2
+	github.com/lispyclouds/climate v0.0.0-20261122133051-e904e8d3f094
+	github.com/pb33f/libopenapi v0.44.0
 	github.com/spf13/viper v1.21.0
 	github.com/urfave/cli/v3 v3.14.0
 	go.yaml.in/yaml/v4 v4.0.0
